@@ -1,0 +1,5 @@
+packrat/lib*/
+.Rproj.user
+marketview.Rproj
+.Rprofile
+.Rbuildignore
