@@ -3,3 +3,4 @@ packrat/lib*/
 marketview.Rproj
 .Rprofile
 .Rbuildignore
+.Rhistory
