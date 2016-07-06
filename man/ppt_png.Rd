@@ -9,7 +9,28 @@ ppt_png(p, filename, w = 22, h = 12, fam = "Calibri", pm = c(0.1, 0.1,
   mvl_foot_colour = mvl_grey, mvl_foot_size = 0.8)
 }
 \arguments{
-\item{mvl_foot_size}{}
+\item{p}{A ggplot object}
+
+\item{filename}{The file_directory/name that the saved png will take}
+
+\item{w}{The width of the saved png}
+
+\item{h}{The height of the saved png}
+
+\item{fam}{Font family to use}
+
+\item{pm}{What margins should the saved plot have?}
+
+\item{mvl_foot}{Should a Marketview footnote be included?}
+
+\item{mvl_foot_text}{Which text should the footnote include?}
+
+\item{mvl_foot_colour}{Which colour should the text be?}
+
+\item{mvl_foot_size}{How large should the footnote be?}
+}
+\value{
+Saves the plot to file
 }
 \description{
 Saves a ggplot object as a PNG that is suitable for a Marketview
