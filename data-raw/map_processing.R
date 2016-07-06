@@ -28,7 +28,7 @@ highways.df <- nz_highways.sldf %>%
 
 devtools::use_data(highways.df)
 
-# 2013 Area Units ---------------------------------------------------------
+# 2013 AREA UNITS ---------------------------------------------------------
 
 # directory for the map data
 gis_dir <- "M:/gisdata/2013 Boundaries/ESRI shapefile Output/2013 Digital Boundaries Generlised Full"
@@ -42,7 +42,7 @@ mb_info.df <- readOGR(dsn = gis_dir, layer = "MB2013_GV_Full", stringsAsFactors 
 
 
 
-# CHRISTCHURCH AREA UNITS -------------------------------------------------
+# Christchurch -------------------------------------------------
 
 chch_meshblocks.df <- mb_info.df %>%
   filter(as.integer(TA2013) %in% c(60, 59, 62))
@@ -58,7 +58,7 @@ chch_cau_13.df <- nz_map.spdf[(nz_map.spdf@data$AU2013 %in% chch_meshblocks.df$A
 devtools::use_data(chch_cau_13.df)
 
 
-# AUCKLAND AREA UNITS -----------------------------------------------------
+# Auckland -----------------------------------------------------
 
 akl_meshblocks.df <- mb_info.df %>%
   filter(as.integer(TA2013) %in% c(76))
@@ -75,7 +75,7 @@ devtools::use_data(akl_cau_13.df)
 
 
 
-# WELLINGTON AREA UNITS ---------------------------------------------------
+# Wellington ---------------------------------------------------
 
 wgtn_meshblocks.df <- mb_info.df %>%
   filter(as.integer(TA2013) %in% c(43:47, 50))
