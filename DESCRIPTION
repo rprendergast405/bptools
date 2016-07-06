@@ -1,9 +1,23 @@
 Package: marketview
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
+Title: Functions and Objects for Analysis & Reporting at Marketview
+Version: 0.0.0.9000
+Authors@R: person("Bert", "Prendergast", email = "robertp@marketview.co.nz",
+                  role = c("aut", "cre"))
+Description: Marketview package contains functions that are used in
+    day-to-day analysis and reporting at Marketview, such as;
+      * Data importing/exporting functions
+      * project creation tool
+      * Marketview colour palette
+      * Common ggplot themes
 License: What license is it under?
 LazyData: TRUE
+
+Imports:
+    cairoDevice,
+    ggplot2,
+    grDevices,
+    grid,
+    png,
+    readr,
+    xlsx
