@@ -5,24 +5,23 @@
 # -------------------------------------------------------------------------
 # Created by Bert on 05-07-2016
 # -------------------------------------------------------------------------
-# Last edited by Bert on 05-07-2016
+# Last edited by Bert on 07-07-2016
 # -------------------------------------------------------------------------
 
 
 
-# create_project
-#   A function to create some common sub-directories used in an R project,
-#   and import some scripts containing headers for common analysis tasks
-#
-# Arguments
-#   - project_name (chr): The name that the project will take
-#   - base_dir (chr): The base directory for the project
-#   - within (chr): Optional path to a subdirectory within base_dir where the project will be located
-#   - sub_dirs (chr): Optional names for any additional sub-direcories that the project should contain
-#
-# Returns
-#   Logical, indicating that the project has been successfully created
-
+#' Create a new R Project
+#'
+#' Create some common sub-directories used in an R project, and import
+#' some scripts containing headers for common analysis tasks.
+#'
+#' @param project_name The name that the project will take
+#' @param base_dir The base directory for the project
+#' @param within Optional path to a subdirectory within base_dir where the project will be located
+#' @param sub_dirs Optional names for any additional sub-direcories that the project should contain
+#'
+#' @return Logical, indicating that the project has been successfully created
+#' @export create_project
 create_project <- function(project_name,
                            base_dir = "M:/clients",
                            within,
@@ -90,13 +89,17 @@ LaTeX: pdfLaTeX"
 }
 
 
-# map_get
-#   A function to load a data frame containing the polygons for a given city
-#
-# Arguments
-#   - city (chr): The city which the map will cover
-#   - census_version (int): From which census definition should the polygons come from?
-#   - map_dir (chr): Where are the RData files located?
+#' Load a map for plotting
+#'
+#' Load a data frame containing the polygons for a given city
+#'
+#' @param city The city which the map will cover
+#' @param census_version From which census definition should the polygons come from?
+#' @param map_dir Where are the RData files located?
+#'
+#' @return \code{map.df} A data frame describing the polygons with the following atributes:
+#'      (long, lat, group, CAU, CAU_NAME)
+#' @export map_get
 map_get <- function(city = "Auckland", census_version = 2013, map_dir = "M:/R/map_data") {
 
   if(!(census_version %in% c(2006, 2013))) {
@@ -116,7 +119,6 @@ map_get <- function(city = "Auckland", census_version = 2013, map_dir = "M:/R/ma
 #' A function to save a plot using dimensions and resolution that are
 #' suitable for a Marketview report
 #'
-#' Arguments
 #' @param p A ggplot object
 #' @param write_dir The directory in which the figure should be saved
 #' @param name A character name that the saved object will have
@@ -125,6 +127,10 @@ map_get <- function(city = "Auckland", census_version = 2013, map_dir = "M:/R/ma
 #' @param width The width of the png
 #' @param res The resolution of the png
 #' @param mvl_footer Should a Marketview footer image be included?
+#'
+#' @return Saves the plot to file
+#' @export save_plot
+
 save_plot <- function(p,
                       write_dir,
                       name,
@@ -153,21 +159,19 @@ save_plot <- function(p,
 #' Saves a ggplot object as a PNG that is suitable for a Marketview
 #' report/presentation in ppt.
 #'
-#' @param p
-#' @param filename
-#' @param w
-#' @param h
-#' @param fam
-#' @param pm
-#' @param mvl_foot
-#' @param mvl_foot_text
-#' @param mvl_foot_colour
-#' @param mvl_foot_size
+#' @param p A ggplot object
+#' @param filename The file_directory/name that the saved png will take
+#' @param w The width of the saved png
+#' @param h The height of the saved png
+#' @param fam Font family to use
+#' @param pm What margins should the saved plot have?
+#' @param mvl_foot Should a Marketview footnote be included?
+#' @param mvl_foot_text Which text should the footnote include?
+#' @param mvl_foot_colour Which colour should the text be?
+#' @param mvl_foot_size How large should the footnote be?
 #'
-#' @return
-#' @export
-#'
-#' @examples
+#' @return Saves the plot to file
+#' @export ppt_png
 ppt_png <- function(p,
                     filename,
                     w = 22,
@@ -206,8 +210,7 @@ ppt_png <- function(p,
 #' @param tab_num A number that preceeds the name
 #'
 #' @return Saves the table to file
-#'
-#' @examples
+#' @export save_table
 save_table <- function(x,
                        write_dir,
                        name,
@@ -220,8 +223,18 @@ save_table <- function(x,
 }
 
 
-# mdollar
-#   A function to label in millions of dollars
+#' Label in millions of dollars
+#'
+#' A modification of the \code{dollar()} function from \code{scales}, which
+#' is more appropriate for plots of large dollar values
+#' @param x A numeric dollar amount
+#'
+#' @return A character representation of x in millions of dollars
+#'
+#' @examples
+#' mdollar(1000000)
+#' mdollar(c(2000000, 15000000))
+#' @export mdollar
 mdollar <- function(x) {
   paste0(scales::dollar(x/1000000), "M")
 }
