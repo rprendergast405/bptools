@@ -4,11 +4,10 @@
 # -------------------------------------------------------------------------
 # Created by Bert on 06-07-2016
 # -------------------------------------------------------------------------
-# Last edited by Bert on 06-07-2016
+# Last edited by Bert on 07-07-2016
 # -------------------------------------------------------------------------
 
-# Marketview Colour Palettes ----
-# primary
+#' @export mvl_blue mvl_pewter mvl_grey mvl_red mvl_orange mvl_green mvl_teal mvl_half_teal mvl_navy mvl_royal mvl_purple mvl_half_purple mvl_half_grey mvl_hay mvl_half_hay
 mvl_blue <- grDevices::rgb(65, 90, 104, maxColorValue = 255)
 mvl_pewter <- grDevices::rgb(152, 148, 130, maxColorValue = 255)
 # background
