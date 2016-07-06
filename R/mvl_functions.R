@@ -89,40 +89,6 @@ LaTeX: pdfLaTeX"
 }
 
 
-#' Load a map for plotting.
-#'
-#' Load a data frame containing the polygons for a given city.
-#'
-#' @param city The city which the map will cover
-#' @param census_version From which census definition should the polygons come from?
-#' @param map_dir Where are the RData files located?
-#'
-#' @return \code{map.df} A data frame describing the polygons with the following atributes:
-#'      \itemize{
-#'      \item long (longitude of the boundary point)
-#'      \item lat (latitude of the boundary point)
-#'      \item group (polygon grouping)
-#'      \item CAU (CAU number)
-#'      \item CAU_NAME (CAU name)
-#'      }
-#' @examples map_get("Auckland")
-#' ggplot(map.df) +
-#'  geom_polygon(aes(x = long, y = lat, group = group))
-#' @export map_get
-map_get <- function(city = "Auckland", census_version = 2013, map_dir = "M:/R/map_data") {
-
-  if(!(census_version %in% c(2006, 2013))) {
-    stop("The census version should be either 2006 or 2013.")
-  }
-
-  map_name <- paste0(tolower(city), "_", census_version, ".RData")
-
-  load(map_name)
-
-  return(map.df)
-}
-
-
 #' Save a ggplot object.
 #'
 #' A function to save a plot using dimensions and resolution that are
