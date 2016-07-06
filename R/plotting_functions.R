@@ -5,15 +5,27 @@
 # -------------------------------------------------------------------------
 # Created by Bert on 05-07-2016
 # -------------------------------------------------------------------------
-# Last edited by Bert on 05-07-2016
+# Last edited by Bert on 07-07-2016
 # -------------------------------------------------------------------------
 
 # Add calibri fonts ----
 grDevices::windowsFonts(calb = "Calibri Bold",
                         cal = "Calibri")
 
-# theme_mvl
-#   general Marketview theme
+#' Marketview ggplot theme
+#'
+#'A minimal theme for plots that looks okay in a Marketview ppt report.
+#'
+#' @param base_size The base size for fonts
+#' @param base_family The base family for fonts
+#'
+#' @return A theme object to be added to ggplot objects
+#' @export theme_mvl
+#'
+#' @examples
+#' library(ggplot2)
+#' p <- ggplot(data.frame(x = 1:5, y = 1:5)) + geom_point(aes(x, y))
+#' p + theme_mvl()
 theme_mvl <- function(base_size = 16, base_family = "calb") {
   ggplot2::`%+replace%`(ggplot2::theme_minimal(base_size = base_size, base_family = base_family),
                         ggplot2::theme(
@@ -31,7 +43,7 @@ theme_mvl <- function(base_size = 16, base_family = "calb") {
                           axis.title.x = ggplot2::element_blank(),
                           axis.title.y = ggplot2::element_blank(),
 
-                          legend.text = ggplot2::element_text(size = base_size - 2, face = "plain", family = "cal"),
+                          legend.text = ggplot2::element_text(size = base_size - 2, face = "plain"),
                           legend.title = ggplot2::element_blank(),
                           legend.position = "top",
                           legend.direction = "horizontal",
@@ -44,8 +56,22 @@ theme_mvl <- function(base_size = 16, base_family = "calb") {
   )
 }
 
-# theme_map
-#   A theme for mapping
+#' Marketview ggplot map theme
+#'
+#'A theme for maps that looks okay in a Marketview ppt report.
+#'Similar to \code{theme_mvl} but it has a blue background, no axis labels,
+#'and a floating legend.
+#'
+#' @param base_size The base size for fonts
+#' @param base_family The base family for fonts
+#'
+#' @return A theme object to be added to ggplot objects
+#' @export theme_map
+#'
+#' @examples
+#' library(ggplot2)
+#' p <- ggplot(data.frame(x = 1:5, y = 1:5)) + geom_point(aes(x, y))
+#' p + theme_map()
 theme_map <- function(base_size = 12, base_family = "calb") {
   ggplot2::`%+replace%`(ggplot2::theme_minimal(base_size = base_size, base_family = base_family),
     ggplot2::theme(
@@ -80,8 +106,20 @@ theme_map <- function(base_size = 12, base_family = "calb") {
   )
 }
 
-# theme_map_minimal
-#   A theme for more minimalist mapping, this is better for faceted maps
+#' Marketview ggplot map theme (minimal)
+#'
+#'A minimal theme for maps that is more suitable for faceted plots
+#'
+#' @param base_size The base size for fonts
+#' @param base_family The base family for fonts
+#'
+#' @return A theme object to be added to ggplot objects
+#' @export theme_map_minimal
+#'
+#' @examples
+#' library(ggplot2)
+#' p <- ggplot(data.frame(x = 1:5, y = 1:5)) + geom_point(aes(x, y))
+#' p + theme_map_minimal()
 theme_map_minimal <- function(base_size = 12, base_family = "calb") {
   ggplot2::`%+replace%`(theme_mvl(base_size = base_size, base_family = base_family),
     ggplot2::theme(
@@ -94,8 +132,20 @@ theme_map_minimal <- function(base_size = 12, base_family = "calb") {
   )
 }
 
-# theme_mcd
-#   A theme for plotting McDonalds results
+#' McDonald's ggplot theme
+#'
+#'A common theme for McDonalds plots
+#'
+#' @param base_size The base size for fonts
+#' @param base_family The base family for fonts
+#'
+#' @return A theme object to be added to ggplot objects
+#' @export theme_mcd
+#'
+#' @examples
+#' library(ggplot2)
+#' p <- ggplot(data.frame(x = 1:5, y = 1:5)) + geom_point(aes(x, y))
+#' p + theme_mcd()
 theme_mcd <- function(base_size = 12, base_family = "") {
   ggplot2::`%+replace%`(ggplot2::theme_bw(base_size = base_size, base_family = base_family),
     ggplot2::theme(
@@ -112,12 +162,15 @@ theme_mcd <- function(base_size = 12, base_family = "") {
 }
 
 
-# bounding_box
-#   Add a bounding box to a ggplot map and set the limits of the plot to the box
-#
-# Arguments
-#   long_limits (num): The longitude range that the map should take
-#   lat_limits (num): The latitude range that the map should take
+
+#' Add a bounding box to a map plot
+#'
+#'Add a bounding box to a ggplot map and set the limits of the plot to the box
+#' @param long_limits The longitude range that the map should take
+#' @param lat_limits The latitude range that the map should take
+#'
+#' @return Adds a box to the outline of the plot sets the plot limits
+#' @export bounding_box
 bounding_box <- function(long_limits, lat_limits) {
 
   if(length(long_limits) != 2) {
@@ -148,9 +201,16 @@ bounding_box <- function(long_limits, lat_limits) {
 }
 
 
-# makeFootnote.R
-# A function to add the Marketview logo and a date stamp to the footer of a ggplot object
-make_footnote <- function(footnoteText = paste(format(Sys.time(), "%d %b %Y")),
+#' Add a Marketview footnote to a plot
+#'
+#' @param footnote_text The text for the footnote to display
+#' @param size The size of the footnote text
+#' @param color The colour of the footnote text
+#' @param mvl_png The location of the Marketview logo
+#'
+#' @return Adds a footnote to the current plot
+#' @export make_footnote
+make_footnote <- function(footnote_text = paste(format(Sys.time(), "%d %b %Y")),
                          size = 0.7,
                          color = "grey",
                          mvl_png = "M:/mvl_office/logo/2012/Marketview_Logo_Horizontal.png") {
@@ -158,7 +218,7 @@ make_footnote <- function(footnoteText = paste(format(Sys.time(), "%d %b %Y")),
 
   grid::pushViewport(grid::viewport())
 
-  grid::grid.text(label= footnoteText ,
+  grid::grid.text(label= footnote_text ,
             x = grid::unit(1,"npc") - grid::unit(2, "mm"),
             y = grid::unit(2, "mm"),
             just = c("right", "bottom"),
