@@ -111,55 +111,113 @@ map_get <- function(city = "Auckland", census_version = 2013, map_dir = "M:/R/ma
 }
 
 
-# save_plot
-#   A function to save a plot using dimensions and resolution that are suitable for a Marketview report
-#
-# Arguments
-#   - p: A ggplot object
-#   - write_dir (chr): The directory in which the figure should be saved
-#   - fig_num (int): A number
+#' Save a ggplot object
+#'
+#' A function to save a plot using dimensions and resolution that are
+#' suitable for a Marketview report
+#'
+#' Arguments
+#' @param p A ggplot object
+#' @param write_dir The directory in which the figure should be saved
+#' @param name A character name that the saved object will have
+#' @param fig_num A figure number that preceeds the name
+#' @param height The height of the png
+#' @param width The width of the png
+#' @param res The resolution of the png
+#' @param mvl_footer Should a Marketview footer image be included?
 save_plot <- function(p,
                       write_dir,
                       name,
                       fig_num = 1,
                       height = 700*4,
                       width = 850*4,
-                      res = 360) {
+                      res = 360,
+                      mvl_footer = FALSE) {
   figure_name <- file.path(write_dir, paste0(fig_num, "_", name, ".png"))
   png(filename = figure_name,
       height = height,
       width = width,
       res = res)
-  print(p)
+
+  if(mvl_foot){
+    print(p +
+            theme(plot.margin = unit(c(.1, .1, .25, .1), units = 'in')))
+    make_footnote()
+  } else  print(p)
+
   dev.off()
 }
 
-# ppt_png
-#   A function to save a plot using dimensions and resolution that are suitable for a Marketview report
-ppt_png <- function(p, filename, w = 22, h = 12, fam = "Calibri", pm = c(.1, .1, .25, .1), mvl_foot = T, mvl_foot_text = "", mvl_foot_colour = mvl_grey,
+#' Save of PNG for PowerPoint
+#'
+#' Saves a ggplot object as a PNG that is suitable for a Marketview
+#' report/presentation in ppt.
+#'
+#' @param p
+#' @param filename
+#' @param w
+#' @param h
+#' @param fam
+#' @param pm
+#' @param mvl_foot
+#' @param mvl_foot_text
+#' @param mvl_foot_colour
+#' @param mvl_foot_size
+#'
+#' @return
+#' @export
+#'
+#' @examples
+ppt_png <- function(p,
+                    filename,
+                    w = 22,
+                    h = 12,
+                    fam = "Calibri",
+                    pm = c(.1, .1, .25, .1),
+                    mvl_foot = TRUE,
+                    mvl_foot_text = "",
+                    mvl_foot_colour = mvl_grey,
                     mvl_foot_size = .8){
   require(cairoDevice)
 
-  png(filename, width = w, height = h, units = 'cm', res = 300, type = 'cairo', family = fam)
-
-  print(p+
-          theme(plot.margin = unit(pm, units = 'in')))
+  png(filename,
+      width = w,
+      height = h,
+      units = 'cm',
+      res = 300,
+      type = 'cairo',
+      family = fam)
 
   if(mvl_foot){
-    makeFootnote(footnoteText = mvl_foot_text, color = mvl_foot_colour, size = mvl_foot_size)
-  }
+    print(p +
+            theme(plot.margin = unit(c(.1, .1, .25, .1), units = 'in')))
+    make_footnote(footnoteText = mvl_foot_text, color = mvl_foot_colour, size = mvl_foot_size)
+  } else print(p + theme(plot.margin = unit(pm, units = 'in')))
 
   dev.off()
 
 }
 
 
+#' Save data.frame to csv & xlsx
+#'
+#' @param x The table to save
+#' @param write_dir The directory in which the tables should be saved
+#' @param name The name of the saved object
+#' @param tab_num A number that preceeds the name
+#'
+#' @return Saves the table to file
+#'
+#' @examples
 save_table <- function(x,
+                       write_dir,
                        name,
-                       tab_num = 1){
-  x %T>%
-    write_csv(path = file.path(output_dir, "tables", paste0(tab_num, "_", name, ".csv"))) %>%
-    write.xlsx(file = file.path(output_dir, "tables", "all_tables.xlsx"), sheetName = name, append = TRUE)
+                       tab_num = 1,
+                       xls_name = "all_tables.xlsx"){
+
+    write_csv(x, path = file.path(write_dir, paste0(tab_num, "_", name, ".csv")))
+
+    write.xlsx(x, file = file.path(write_dir, xls_name), sheetName = name, append = TRUE)
 }
 
 
