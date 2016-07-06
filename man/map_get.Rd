@@ -16,9 +16,20 @@ map_get(city = "Auckland", census_version = 2013,
 }
 \value{
 \code{map.df} A data frame describing the polygons with the following atributes:
-     (long, lat, group, CAU, CAU_NAME)
+     \itemize{
+     \item long (longitude of the boundary point)
+     \item lat (latitude of the boundary point)
+     \item group (polygon grouping)
+     \item CAU (CAU number)
+     \item CAU_NAME (CAU name)
+     }
 }
 \description{
 Load a data frame containing the polygons for a given city.
+}
+\examples{
+map_get("Auckland")
+ggplot(map.df) +
+ geom_polygon(aes(x = long, y = lat, group = group))
 }
 
