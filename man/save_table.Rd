@@ -2,9 +2,10 @@
 % Please edit documentation in R/mvl_functions.R
 \name{save_table}
 \alias{save_table}
-\title{Save data.frame to csv & xlsx}
+\title{Save data.frame to csv & xlsx.}
 \usage{
-save_table(x, write_dir, name, tab_num = 1, xls_name = "all_tables.xlsx")
+save_table(x, write_dir, name, tab_num = 1, xlsx = TRUE,
+  xls_name = "all_tables.xlsx")
 }
 \arguments{
 \item{x}{The table to save}
@@ -19,6 +20,6 @@ save_table(x, write_dir, name, tab_num = 1, xls_name = "all_tables.xlsx")
 Saves the table to file
 }
 \description{
-Save data.frame to csv & xlsx
+Saves copies of a data frame to a given directory.
 }
 

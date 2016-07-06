@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotting_functions.R
 \name{bounding_box}
 \alias{bounding_box}
-\title{Add a bounding box to a map plot}
+\title{Add a bounding box to a map plot.}
 \usage{
 bounding_box(long_limits, lat_limits)
 }
@@ -15,6 +15,6 @@ bounding_box(long_limits, lat_limits)
 Adds a box to the outline of the plot sets the plot limits
 }
 \description{
-Add a bounding box to a ggplot map and set the limits of the plot to the box
+Add a bounding box to a ggplot map and set the limits of the plot to the box.
 }
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotting_functions.R
 \name{theme_map}
 \alias{theme_map}
-\title{Marketview ggplot map theme}
+\title{Marketview ggplot map theme.}
 \usage{
 theme_map(base_size = 12, base_family = "calb")
 }
@@ -16,7 +16,7 @@ A theme object to be added to ggplot objects
 }
 \description{
 A theme for maps that looks okay in a Marketview ppt report.
-Similar to \code{theme_mvl} but it has a blue background, no axis labels,
+Similar to \code{\link{theme_mvl}} but it has a blue background, no axis labels,
 and a floating legend.
 }
 \examples{

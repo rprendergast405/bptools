@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotting_functions.R
 \name{theme_mcd}
 \alias{theme_mcd}
-\title{McDonald's ggplot theme}
+\title{McDonald's ggplot theme.}
 \usage{
 theme_mcd(base_size = 12, base_family = "")
 }
@@ -15,7 +15,7 @@ theme_mcd(base_size = 12, base_family = "")
 A theme object to be added to ggplot objects
 }
 \description{
-A common theme for McDonalds plots
+A common theme for McDonalds plots.
 }
 \examples{
 library(ggplot2)

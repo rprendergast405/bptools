@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotting_functions.R
 \name{make_footnote}
 \alias{make_footnote}
-\title{Add a Marketview footnote to a plot}
+\title{Add a Marketview footnote to a plot.}
 \usage{
 make_footnote(footnote_text = paste(format(Sys.time(), "\%d \%b \%Y")),
   size = 0.7, color = "grey",
@@ -21,6 +21,7 @@ make_footnote(footnote_text = paste(format(Sys.time(), "\%d \%b \%Y")),
 Adds a footnote to the current plot
 }
 \description{
-Add a Marketview footnote to a plot
+Adds a footer to the current plot with a datestamp and the Marketview
+logo.
 }
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotting_functions.R
 \name{theme_mvl}
 \alias{theme_mvl}
-\title{Marketview ggplot theme}
+\title{Marketview ggplot theme.}
 \usage{
 theme_mvl(base_size = 16, base_family = "calb")
 }

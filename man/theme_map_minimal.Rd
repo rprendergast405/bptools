@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotting_functions.R
 \name{theme_map_minimal}
 \alias{theme_map_minimal}
-\title{Marketview ggplot map theme (minimal)}
+\title{Marketview ggplot map theme (minimal).}
 \usage{
 theme_map_minimal(base_size = 12, base_family = "calb")
 }
@@ -15,7 +15,7 @@ theme_map_minimal(base_size = 12, base_family = "calb")
 A theme object to be added to ggplot objects
 }
 \description{
-A minimal theme for maps that is more suitable for faceted plots
+A minimal theme for maps that is more suitable for faceted plots.
 }
 \examples{
 library(ggplot2)

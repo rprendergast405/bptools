@@ -2,7 +2,7 @@
 % Please edit documentation in R/mvl_functions.R
 \name{map_get}
 \alias{map_get}
-\title{Load a map for plotting}
+\title{Load a map for plotting.}
 \usage{
 map_get(city = "Auckland", census_version = 2013,
   map_dir = "M:/R/map_data")
@@ -19,6 +19,6 @@ map_get(city = "Auckland", census_version = 2013,
      (long, lat, group, CAU, CAU_NAME)
 }
 \description{
-Load a data frame containing the polygons for a given city
+Load a data frame containing the polygons for a given city.
 }
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/mvl_functions.R
 \name{ppt_png}
 \alias{ppt_png}
-\title{Save of PNG for PowerPoint}
+\title{Save of PNG for PowerPoint.}
 \usage{
 ppt_png(p, filename, w = 22, h = 12, fam = "Calibri", pm = c(0.1, 0.1,
   0.25, 0.1), mvl_foot = TRUE, mvl_foot_text = "",

@@ -2,7 +2,7 @@
 % Please edit documentation in R/mvl_functions.R
 \name{create_project}
 \alias{create_project}
-\title{Create a new R Project}
+\title{Create a new R Project.}
 \usage{
 create_project(project_name, base_dir = "M:/clients", within,
   sub_dirs = NULL)

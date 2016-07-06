@@ -2,7 +2,7 @@
 % Please edit documentation in R/mvl_functions.R
 \name{save_plot}
 \alias{save_plot}
-\title{Save a ggplot object}
+\title{Save a ggplot object.}
 \usage{
 save_plot(p, write_dir, name, fig_num = 1, height = 700 * 4, width = 850 *
   4, res = 360, mvl_footer = FALSE)
@@ -29,6 +29,6 @@ Saves the plot to file
 }
 \description{
 A function to save a plot using dimensions and resolution that are
-suitable for a Marketview report
+suitable for a Marketview report.
 }
 
