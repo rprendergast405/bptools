@@ -98,7 +98,13 @@ LaTeX: pdfLaTeX"
 #' @param map_dir Where are the RData files located?
 #'
 #' @return \code{map.df} A data frame describing the polygons with the following atributes:
-#'      (long, lat, group, CAU, CAU_NAME)
+#'      \itemise{
+#'      \item long
+#'      \item lat
+#'      \item group
+#'      \item CAU
+#'      \item CAU_NAME
+#'      }
 #' @export map_get
 map_get <- function(city = "Auckland", census_version = 2013, map_dir = "M:/R/map_data") {
 
