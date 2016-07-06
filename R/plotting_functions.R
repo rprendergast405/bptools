@@ -15,38 +15,39 @@ grDevices::windowsFonts(calb = "Calibri Bold",
 # theme_mvl
 #   general Marketview theme
 theme_mvl <- function(base_size = 16, base_family = "calb") {
-  ggplot2::theme_minimal(base_size = base_size, base_family = base_family) %+replace%
-    ggplot2::theme(
-      text = ggplot2::element_text(family = base_family,
-                          face = "plain",
-                          colour = grDevices::rgb(33, 89, 104, maxColorValue = 255),
-                          size = base_size,
-                          hjust = 0.5,
-                          vjust = 0.5,
-                          angle = 0,
-                          lineheight = 0.9,
-                          margin = grid::unit(rep(0.1, 4), "cm"),
-                          debug = FALSE),
+  ggplot2::`%+replace%`(ggplot2::theme_minimal(base_size = base_size, base_family = base_family),
+                        ggplot2::theme(
+                          text = ggplot2::element_text(family = base_family,
+                                                       face = "plain",
+                                                       colour = grDevices::rgb(33, 89, 104, maxColorValue = 255),
+                                                       size = base_size,
+                                                       hjust = 0.5,
+                                                       vjust = 0.5,
+                                                       angle = 0,
+                                                       lineheight = 0.9,
+                                                       margin = grid::unit(rep(0.1, 4), "cm"),
+                                                       debug = FALSE),
 
-      axis.title.x = ggplot2::element_blank(),
-      axis.title.y = ggplot2::element_blank(),
+                          axis.title.x = ggplot2::element_blank(),
+                          axis.title.y = ggplot2::element_blank(),
 
-      legend.text = ggplot2::element_text(size = base_size - 2, face = "plain", family = "cal"),
-      legend.title = ggplot2::element_blank(),
-      legend.position = "top",
-      legend.direction = "horizontal",
+                          legend.text = ggplot2::element_text(size = base_size - 2, face = "plain", family = "cal"),
+                          legend.title = ggplot2::element_blank(),
+                          legend.position = "top",
+                          legend.direction = "horizontal",
 
-      panel.grid.major.x = ggplot2::element_blank(),
+                          panel.grid.major.x = ggplot2::element_blank(),
 
-      plot.title = ggplot2::element_text(size = base_size*1.5, hjust = 0),
-      plot.margin = grid::unit(c(0.1, 0, 1.2, 0.1), "cm")
-    )
+                          plot.title = ggplot2::element_text(size = base_size*1.5, hjust = 0),
+                          plot.margin = grid::unit(c(0.1, 0, 1.2, 0.1), "cm")
+                        )
+  )
 }
 
 # theme_map
 #   A theme for mapping
 theme_map <- function(base_size = 12, base_family = "calb") {
-  ggplot2::theme_minimal(base_size = base_size, base_family = base_family) %+replace%
+  ggplot2::`%+replace%`(ggplot2::theme_minimal(base_size = base_size, base_family = base_family),
     ggplot2::theme(
       line = ggplot2::element_blank(),
       text = ggplot2::element_text(family = base_family,
@@ -76,12 +77,13 @@ theme_map <- function(base_size = 12, base_family = "calb") {
       plot.title = ggplot2::element_text(size = ggplot2::rel(2), hjust = 0),
       plot.margin = grid::unit(c(0.1, 0.1, 0.1, 0.1), "cm")
     )
+  )
 }
 
 # theme_map_minimal
 #   A theme for more minimalist mapping, this is better for faceted maps
 theme_map_minimal <- function(base_size = 12, base_family = "calb") {
-  theme_mvl(base_size = base_size, base_family = base_family) %+replace%
+  ggplot2::`%+replace%`(theme_mvl(base_size = base_size, base_family = base_family),
     ggplot2::theme(
       axis.text = ggplot2::element_blank(),
       axis.title = ggplot2::element_blank(),
@@ -89,12 +91,13 @@ theme_map_minimal <- function(base_size = 12, base_family = "calb") {
       plot.margin = grid::unit(c(0.1, 0.1, 0.1, 0.1), "cm"),
       legend.title = ggplot2::element_text()
     )
+  )
 }
 
 # theme_mcd
 #   A theme for plotting McDonalds results
 theme_mcd <- function(base_size = 12, base_family = "") {
-  ggplot2::theme_bw(base_size = base_size, base_family = base_family) %+replace%
+  ggplot2::`%+replace%`(ggplot2::theme_bw(base_size = base_size, base_family = base_family),
     ggplot2::theme(
       legend.key = ggplot2::element_rect(fill = '#F2F2F2'),
       legend.background = ggplot2::element_rect(fill = '#F2F2F2'),
@@ -105,6 +108,7 @@ theme_mcd <- function(base_size = 12, base_family = "") {
       plot.background = ggplot2::element_rect(fill = '#F2F2F2', colour = '#F2F2F2'),
       plot.title = ggplot2::element_text(face = "bold")
     )
+  )
 }
 
 
