@@ -5,7 +5,7 @@ Version: 0.0.0.9000
 Authors@R: person("Bert", "Prendergast", email = "robertp@marketview.co.nz",
                   role = c("aut", "cre"))
 Description: Marketview package contains functions that are used in
-    day-to-day analysis and reporting at Marketview, such as;
+  day-to-day analysis and reporting at Marketview, such as;
     * Data importing/exporting functions
     * project creation tool
     * Marketview colour palette
