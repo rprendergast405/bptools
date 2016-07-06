@@ -12,7 +12,7 @@
 grDevices::windowsFonts(calb = "Calibri Bold",
                         cal = "Calibri")
 
-#' Marketview ggplot theme
+#' Marketview ggplot theme.
 #'
 #'A minimal theme for plots that looks okay in a Marketview ppt report.
 #'
@@ -56,10 +56,10 @@ theme_mvl <- function(base_size = 16, base_family = "calb") {
   )
 }
 
-#' Marketview ggplot map theme
+#' Marketview ggplot map theme.
 #'
 #'A theme for maps that looks okay in a Marketview ppt report.
-#'Similar to \code{theme_mvl} but it has a blue background, no axis labels,
+#'Similar to \code{\link{theme_mvl}} but it has a blue background, no axis labels,
 #'and a floating legend.
 #'
 #' @param base_size The base size for fonts
@@ -106,9 +106,9 @@ theme_map <- function(base_size = 12, base_family = "calb") {
   )
 }
 
-#' Marketview ggplot map theme (minimal)
+#' Marketview ggplot map theme (minimal).
 #'
-#'A minimal theme for maps that is more suitable for faceted plots
+#'A minimal theme for maps that is more suitable for faceted plots.
 #'
 #' @param base_size The base size for fonts
 #' @param base_family The base family for fonts
@@ -132,9 +132,9 @@ theme_map_minimal <- function(base_size = 12, base_family = "calb") {
   )
 }
 
-#' McDonald's ggplot theme
+#' McDonald's ggplot theme.
 #'
-#'A common theme for McDonalds plots
+#'A common theme for McDonalds plots.
 #'
 #' @param base_size The base size for fonts
 #' @param base_family The base family for fonts
@@ -163,9 +163,9 @@ theme_mcd <- function(base_size = 12, base_family = "") {
 
 
 
-#' Add a bounding box to a map plot
+#' Add a bounding box to a map plot.
 #'
-#'Add a bounding box to a ggplot map and set the limits of the plot to the box
+#'Add a bounding box to a ggplot map and set the limits of the plot to the box.
 #' @param long_limits The longitude range that the map should take
 #' @param lat_limits The latitude range that the map should take
 #'
@@ -201,7 +201,10 @@ bounding_box <- function(long_limits, lat_limits) {
 }
 
 
-#' Add a Marketview footnote to a plot
+#' Add a Marketview footnote to a plot.
+#'
+#' Adds a footer to the current plot with a datestamp and the Marketview
+#' logo.
 #'
 #' @param footnote_text The text for the footnote to display
 #' @param size The size of the footnote text

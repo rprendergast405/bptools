@@ -10,7 +10,7 @@
 
 
 
-#' Create a new R Project
+#' Create a new R Project.
 #'
 #' Create some common sub-directories used in an R project, and import
 #' some scripts containing headers for common analysis tasks.
@@ -89,9 +89,9 @@ LaTeX: pdfLaTeX"
 }
 
 
-#' Load a map for plotting
+#' Load a map for plotting.
 #'
-#' Load a data frame containing the polygons for a given city
+#' Load a data frame containing the polygons for a given city.
 #'
 #' @param city The city which the map will cover
 #' @param census_version From which census definition should the polygons come from?
@@ -114,10 +114,10 @@ map_get <- function(city = "Auckland", census_version = 2013, map_dir = "M:/R/ma
 }
 
 
-#' Save a ggplot object
+#' Save a ggplot object.
 #'
 #' A function to save a plot using dimensions and resolution that are
-#' suitable for a Marketview report
+#' suitable for a Marketview report.
 #'
 #' @param p A ggplot object
 #' @param write_dir The directory in which the figure should be saved
@@ -154,7 +154,7 @@ save_plot <- function(p,
   dev.off()
 }
 
-#' Save of PNG for PowerPoint
+#' Save of PNG for PowerPoint.
 #'
 #' Saves a ggplot object as a PNG that is suitable for a Marketview
 #' report/presentation in ppt.
@@ -202,7 +202,9 @@ ppt_png <- function(p,
 }
 
 
-#' Save data.frame to csv & xlsx
+#' Save data.frame to csv & xlsx.
+#'
+#' Saves copies of a data frame to a given directory.
 #'
 #' @param x The table to save
 #' @param write_dir The directory in which the tables should be saved
@@ -215,11 +217,14 @@ save_table <- function(x,
                        write_dir,
                        name,
                        tab_num = 1,
+                       xlsx = TRUE,
                        xls_name = "all_tables.xlsx"){
 
     write_csv(x, path = file.path(write_dir, paste0(tab_num, "_", name, ".csv")))
 
+  if(xlsx){
     write.xlsx(x, file = file.path(write_dir, xls_name), sheetName = name, append = TRUE)
+  }
 }
 
 
