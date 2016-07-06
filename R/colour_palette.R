@@ -7,22 +7,72 @@
 # Last edited by Bert on 07-07-2016
 # -------------------------------------------------------------------------
 
-#' @export mvl_blue mvl_pewter mvl_grey mvl_red mvl_orange mvl_green mvl_teal mvl_half_teal mvl_navy mvl_royal mvl_purple mvl_half_purple mvl_half_grey mvl_hay mvl_half_hay
+#' Marketview palette.
+#'
+#' Colours described by the \href{file:///M:/mvl_office/templates/Logos/MarketView_ColourGuide_v2.pdf}{Marketview colour palette}.
+#'
+#' @name mvl_colourpal
+NULL
+
+#' @rdname mvl_colourpal
+#' @export mvl_blue
 mvl_blue <- grDevices::rgb(65, 90, 104, maxColorValue = 255)
+
+#' @rdname mvl_colourpal
+#' @export mvl_pewter
 mvl_pewter <- grDevices::rgb(152, 148, 130, maxColorValue = 255)
+
 # background
+#' @rdname mvl_colourpal
+#' @export mvl_grey
 mvl_grey <- grDevices::rgb(128, 130, 133, maxColorValue = 255)
+
 # trend indicators
+#' @rdname mvl_colourpal
+#' @export mvl_red
 mvl_red <- grDevices::rgb(195, 39, 47, maxColorValue = 255)
+
+#' @rdname mvl_colourpal
+#' @export mvl_orange
 mvl_orange <- grDevices::rgb(248, 152, 29, maxColorValue = 255)
+
+#' @rdname mvl_colourpal
+#' @export mvl_green
 mvl_green <- grDevices::rgb(120, 162, 47, maxColorValue = 255)
+
 # qualitative
+#' @rdname mvl_colourpal
+#' @export mvl_teal
 mvl_teal <- grDevices::rgb(0, 160, 175, maxColorValue = 255)
+
+#' @rdname mvl_colourpal
+#' @export mvl_half_teal
 mvl_half_teal <- grDevices::rgb(185, 227, 230, maxColorValue = 255)
+
+#' @rdname mvl_colourpal
+#' @export mvl_navy
 mvl_navy <- grDevices::rgb(9, 52, 122, maxColorValue = 255)
+
+#' @rdname mvl_colourpal
+#' @export mvl_royal
 mvl_royal <- grDevices::rgb(0, 119, 192, maxColorValue = 255)
+
+#' @rdname mvl_colourpal
+#' @export mvl_purple
 mvl_purple <- grDevices::rgb(104, 89, 145, maxColorValue = 255)
+
+#' @rdname mvl_colourpal
+#' @export mvl_half_purple
 mvl_half_purple <- grDevices::rgb(204, 203, 226, maxColorValue = 255)
+
+#' @rdname mvl_colourpal
+#' @export mvl_half_grey
 mvl_half_grey <- grDevices::rgb(190, 192, 194, maxColorValue = 255)
+
+#' @rdname mvl_colourpal
+#' @export mvl_hay
 mvl_hay <- grDevices::rgb(233, 214, 102, maxColorValue = 255)
+
+#' @rdname mvl_colourpal
+#' @export mvl_half_hay
 mvl_half_hay <- grDevices::rgb(242, 234, 176, maxColorValue = 255)
