@@ -6,13 +6,12 @@ Authors@R: person("Bert", "Prendergast", email = "robertp@marketview.co.nz",
                   role = c("aut", "cre"))
 Description: Marketview package contains functions that are used in
     day-to-day analysis and reporting at Marketview, such as;
-      * Data importing/exporting functions
-      * project creation tool
-      * Marketview colour palette
-      * Common ggplot themes
+    * Data importing/exporting functions
+    * project creation tool
+    * Marketview colour palette
+    * Common ggplot themes
 License: What license is it under?
 LazyData: TRUE
-
 Imports:
     cairoDevice,
     ggplot2,
@@ -21,3 +20,4 @@ Imports:
     png,
     readr,
     xlsx
+RoxygenNote: 5.0.1
