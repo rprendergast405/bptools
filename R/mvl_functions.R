@@ -103,7 +103,7 @@ map_get <- function(city = "Auckland", census_version = 2013, map_dir = "M:/R/ma
     stop("The census version should be either 2006 or 2013.")
   }
 
-  map_name <- paste0(tolower(city), "_", version, ".RData")
+  map_name <- paste0(tolower(city), "_", census_version, ".RData")
 
   load(map_name)
 
@@ -178,7 +178,6 @@ ppt_png <- function(p,
                     mvl_foot_text = "",
                     mvl_foot_colour = mvl_grey,
                     mvl_foot_size = .8){
-  require(cairoDevice)
 
   png(filename,
       width = w,
