@@ -168,10 +168,11 @@ theme_mcd <- function(base_size = 12, base_family = "") {
 #'Add a bounding box to a ggplot map and set the limits of the plot to the box.
 #' @param long_limits The longitude range that the map should take
 #' @param lat_limits The latitude range that the map should take
+#' @param draw_border Should the border of the box be drawn?
 #'
 #' @return Adds a box to the outline of the plot sets the plot limits
 #' @export bounding_box
-bounding_box <- function(long_limits, lat_limits) {
+bounding_box <- function(long_limits, lat_limits, draw_border = TRUE) {
 
   if(length(long_limits) != 2) {
     stop("The format for long_limits should be c(minimum, maximum)")
@@ -190,7 +191,8 @@ bounding_box <- function(long_limits, lat_limits) {
   }
 
   # draw the bounding box
-  list(
+  if(draw_border) {
+    list(
     ggplot2::geom_rect(xmin = long_limits[1], xmax = long_limits[2], ymin = lat_limits[1], ymax = lat_limits[2],
                        fill = "transparent",
                        colour = "black"),
@@ -199,7 +201,18 @@ bounding_box <- function(long_limits, lat_limits) {
     # make sure that the axes do not pad the limits past the bounding box
     ggplot2::scale_y_continuous(expand = c(0, 0)),
     ggplot2::scale_x_continuous(expand = c(0, 0))
-  )}
+    )
+    } else {
+      list(
+        # fix the plot limits
+        ggplot2::coord_cartesian(xlim = long_limits, ylim = lat_limits),
+        # make sure that the axes do not pad the limits past the bounding box
+        ggplot2::scale_y_continuous(expand = c(0, 0)),
+        ggplot2::scale_x_continuous(expand = c(0, 0))
+      )
+    }
+
+}
 
 
 #' Add a Marketview footnote to a plot.

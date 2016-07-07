@@ -4,12 +4,14 @@
 \alias{bounding_box}
 \title{Add a bounding box to a map plot.}
 \usage{
-bounding_box(long_limits, lat_limits)
+bounding_box(long_limits, lat_limits, draw_outline = TRUE)
 }
 \arguments{
 \item{long_limits}{The longitude range that the map should take}
 
 \item{lat_limits}{The latitude range that the map should take}
+
+\item{draw_outline}{Should the border of the box be drawn?}
 }
 \value{
 Adds a box to the outline of the plot sets the plot limits
