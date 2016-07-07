@@ -195,6 +195,8 @@ save_table <- function(x,
                        xlsx = TRUE,
                        xls_name = "all_tables.xlsx"){
 
+  x <- as.data.frame(x)
+
     write_csv(x, path = file.path(write_dir, paste0(tab_num, "_", name, ".csv")))
 
   if(xlsx){
