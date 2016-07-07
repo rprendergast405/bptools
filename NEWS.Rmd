@@ -1,7 +1,0 @@
-# Changes in version 0.1.3
-
-## Bug Fixes
-
-* Fixed ```bounding_box()``` and added the ```draw_border``` option to omit the plot border in a ```theme_map_minimal()``` plot.
-* Fixed ```save_plot()``` - one of the inputs was misnamed.
-* ```save_table()``` now cooerces ```x``` to ```data.frame``` first.
