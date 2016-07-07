@@ -120,7 +120,7 @@ save_plot <- function(p,
       width = width,
       res = res)
 
-  if(mvl_foot){
+  if(mvl_footer){
     print(p +
             theme(plot.margin = unit(c(.1, .1, .25, .1), units = 'in')))
     make_footnote()
