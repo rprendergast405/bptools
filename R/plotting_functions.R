@@ -190,15 +190,16 @@ bounding_box <- function(long_limits, lat_limits) {
   }
 
   # draw the bounding box
-  ggplot2::geom_rect(ggplot2::aes(xmin = long_limits[1], xmax = long_limits[2], ymin = lat_limits[1], ymax = lat_limits[2]),
-                     fill = "transparent",
-                     colour = "black") +
+  list(
+    ggplot2::geom_rect(xmin = long_limits[1], xmax = long_limits[2], ymin = lat_limits[1], ymax = lat_limits[2],
+                       fill = "transparent",
+                       colour = "black"),
     # fix the plot limits
-    ggplot2::coord_cartesian(xlim = long_limits, ylim = lat_limits) +
+    ggplot2::coord_cartesian(xlim = long_limits, ylim = lat_limits),
     # make sure that the axes do not pad the limits past the bounding box
-    ggplot2::scale_y_continuous(expand = c(0, 0)) +
+    ggplot2::scale_y_continuous(expand = c(0, 0)),
     ggplot2::scale_x_continuous(expand = c(0, 0))
-}
+  )}
 
 
 #' Add a Marketview footnote to a plot.
