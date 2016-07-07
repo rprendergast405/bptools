@@ -3,7 +3,6 @@
 export(bounding_box)
 export(create_project)
 export(make_footnote)
-export(map_get)
 export(mdollar)
 export(mvl_blue)
 export(mvl_green)
