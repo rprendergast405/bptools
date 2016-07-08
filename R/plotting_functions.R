@@ -51,7 +51,7 @@ theme_mvl <- function(base_size = 16, base_family = "calb") {
                           panel.grid.major.x = ggplot2::element_blank(),
 
                           plot.title = ggplot2::element_text(size = base_size*1.5, hjust = 0),
-                          plot.margin = grid::unit(c(0.1, 0, 1.2, 0.1), "cm")
+                          plot.margin = grid::unit(c(0.1, 0.1, 0.1, 0.1), "cm")
                         )
   )
 }
