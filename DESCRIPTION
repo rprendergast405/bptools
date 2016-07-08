@@ -1,7 +1,7 @@
 Package: marketview
 Type: Package
 Title: Functions and Objects for Analysis & Reporting at Marketview
-Version: 0.1.2.9001
+Version: 0.1.2.9002
 Authors@R: person("Bert", "Prendergast", email = "robertp@marketview.co.nz",
                   role = c("aut", "cre"))
 Description: Marketview package contains functions that are used in
