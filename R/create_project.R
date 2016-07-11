@@ -24,7 +24,7 @@
 #' @export create_project
 create_project <- function(project_name,
                            base_dir = "M:/clients",
-                           within,
+                           within = NULL,
                            sub_dirs = NULL) {
 
   # The default sub-directories that should be created by the function
@@ -211,7 +211,7 @@ create_results_script <- function(project_name, root_dir) {
 #   - Created
 # -------------------------------------------------------------------------
 
-base_dir <- ", root_dir, "
+base_dir <- \"", root_dir, "\"
 archive <- FALSE
 
 # 0. INITIALISE -----------------------------------------------------------
@@ -281,7 +281,7 @@ echo=FALSE, warning=FALSE, message=FALSE)
 ```
 
 ```{r init, results = \"hide\"}
-base_dir <- ", root_dir, "
+base_dir <- \"", root_dir, "\"
 
 # 0. INITIALISE -----------------------------------------------------------
 
