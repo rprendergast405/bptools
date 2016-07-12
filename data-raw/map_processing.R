@@ -106,6 +106,38 @@ ham_cau_13.df <- nz_map.spdf[(nz_map.spdf@data$AU2013 %in% ham_meshblocks.df$AU2
 
 devtools::use_data(ham_cau_13.df)
 
+# Tauranga -------------------------------------------------
+
+tga_meshblocks.df <- mb_info.df %>%
+  filter(as.integer(TA2013) %in% c(22, 23))
+
+# prepare the maps
+tga_cau_13.df <- nz_map.spdf[(nz_map.spdf@data$AU2013 %in% tga_meshblocks.df$AU2013) & !(grepl("Estuary|Marinas|[iI]nlet|[Tt]idal|^[Hh]arbour|[Oo]ceanic|Tamaki Strait|^Bays(?!water)|Water", x = nz_map.spdf@data$AU2013_NAM, perl = TRUE)), ] %>%
+  gSimplify(tol = 25, topologyPreserve = TRUE) %>%
+  fortify(region = "id") %>%
+  left_join(nz_map.spdf@data, by = "id") %>%
+  mutate(AU2013 = as.integer(AU2013)) %>%
+  select(long, lat, group, CAU = AU2013, CAU_NAME = AU2013_NAM)
+
+devtools::use_data(tga_cau_13.df)
+
+# Meshblocks ----
+mb_map.spdf <- readOGR(dsn = gis_dir, layer = "MB2013_GV_Full", stringsAsFactors = FALSE)
+
+mb_map.spdf %<>%
+  subset(as.integer(TA2013) %in% c(22, 23) & !(grepl("Estuary|Marinas|[iI]nlet|[Tt]idal|^[Hh]arbour|[Oo]ceanic|Tamaki Strait|^Bays|Water", x = mb_map.spdf@data$AU2013_NAM)))
+mb_map.spdf$id <- row.names(mb_map.spdf@data)
+
+tga_mb_13.df <- mb_map.spdf %>%
+  gSimplify(tol = 25, topologyPreserve = TRUE) %>%
+  fortify(region = "id") %>%
+  left_join(mb_map.spdf@data, by = "id") %>%
+  mutate(MB = as.integer(MB2013)) %>%
+  select(long, lat, group, MB, CAU = AU2013)
+
+
+devtools::use_data(tga_mb_13.df)
+
 
 # 2006 AREA UNITS ---------------------------------------------------------
 
@@ -183,3 +215,39 @@ ham_cau_06.df <- nz_map.spdf[(nz_map.spdf@data$AU_NO %in% ham_meshblocks) & !(gr
   select(long, lat, group, CAU = AU_NO, CAU_NAME = AU_NAME)
 
 devtools::use_data(ham_cau_06.df)
+
+
+# Tauranga -------------------------------------------------
+
+tga_meshblocks <- mb_info.df %>%
+  filter(as.integer(TA06) %in% c(22, 23)) %>%
+  .$AU06
+
+# prepare the map
+tga_cau_06.df <- nz_map.spdf[(nz_map.spdf@data$AU_NO %in% tga_meshblocks) & !(grepl("Marinas|[iI]nlet|[Tt]idal|^[Hh]arbour|[Oo]ceanic|Tamaki Strait|^Bays(?!water)", x = nz_map.spdf@data$AU_NAME, perl = TRUE)), ] %>%
+  gSimplify(tol = 25, topologyPreserve = TRUE) %>%
+  fortify(region = "id") %>%
+  left_join(nz_map.spdf@data, by = "id") %>%
+  select(long, lat, group, CAU = AU_NO, CAU_NAME = AU_NAME)
+
+devtools::use_data(tga_cau_06.df)
+
+
+
+# Meshblocks ----
+mb_map.spdf <- readOGR(dsn = gis_dir, layer = "mb", stringsAsFactors = FALSE)
+mb_map.spdf$id <- row.names(mb_map.spdf@data)
+mb_map.spdf@data %<>% left_join(nz_map.spdf@data %>% select(AU_NO, AU_NAME), by = c("AU06" = "AU_NO"))
+
+mb_map.spdf %<>%
+  subset(as.integer(TA06) %in% c(22, 23) & !(grepl("Estuary|Marinas|[iI]nlet|[Tt]idal|^[Hh]arbour|[Oo]ceanic|Tamaki Strait|^Bays|Water", x = mb_map.spdf@data$AU_NAME)))
+
+tga_mb_06.df <- mb_map.spdf %>%
+  gSimplify(tol = 25, topologyPreserve = TRUE) %>%
+  fortify(region = "id") %>%
+  left_join(mb_map.spdf@data, by = "id") %>%
+  mutate(MB = as.integer(MB06)) %>%
+  select(long, lat, group, MB, CAU = AU06)
+
+
+devtools::use_data(tga_mb_06.df)
