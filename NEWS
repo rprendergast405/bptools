@@ -1,6 +1,10 @@
 # marketview 0.1.4
 
+## What's New
+* Added shapefiles for NZ CAUs because I had to use that data this morning.
+
 ## Bug Fixes
+* Bug fixes on `ppt_png`
 * `create_project` has been updated to create scripts that are ready to use with the correct project name and directories.
 
 

@@ -42,7 +42,7 @@ save_plot <- function(p,
 
   if(mvl_footer){
     print(p +
-            theme(plot.margin = unit(c(.1, .1, .25, .1), units = 'in')))
+            theme(plot.margin = unit(c(.1, .1, .5, .1), units = 'in')))
     make_footnote()
   } else  print(p)
 
@@ -88,8 +88,8 @@ ppt_png <- function(p,
 
   if(mvl_foot){
     print(p +
-            theme(plot.margin = unit(c(.1, .1, .25, .1), units = 'in')))
-    make_footnote(footnoteText = mvl_foot_text, color = mvl_foot_colour, size = mvl_foot_size)
+            theme(plot.margin = unit(c(.1, .1, .5, .1), units = 'in')))
+    make_footnote(footnote_text = mvl_foot_text, color = mvl_foot_colour, size = mvl_foot_size)
   } else print(p + theme(plot.margin = unit(pm, units = 'in')))
 
   dev.off()

@@ -40,7 +40,8 @@ nz_map.spdf$id <- rownames(nz_map.spdf@data)
 # import the data from the meshblock shapefile
 mb_info.df <- readOGR(dsn = gis_dir, layer = "MB2013_GV_Full", stringsAsFactors = FALSE)@data
 
-
+nz_cau_13.spdf <- nz_map.spdf
+devtools::use_data(nz_cau_13.spdf)
 
 # Auckland -----------------------------------------------------
 
@@ -117,6 +118,8 @@ nz_map.spdf$id <- rownames(nz_map.spdf@data)
 # meshblock data frame
 mb_info.df <- readOGR(dsn = gis_dir, layer = "mb", stringsAsFactors = FALSE)@data
 
+nz_cau_06.spdf <- nz_map.spdf
+devtools::use_data(nz_cau_06.spdf)
 
 
 # Auckland ----------------------------------------------------------------
