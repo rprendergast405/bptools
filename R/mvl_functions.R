@@ -122,7 +122,7 @@ save_table <- function(x,
   if(xlsx){
     write.xlsx(x, file = file.path(write_dir, xls_name), sheetName = name, append = tab_num > 1)
 
-    if(tab_num > 1) warning("An existing .xlsx may have been overwritten.")
+    if(tab_num == 1) warning("An existing .xlsx may have been overwritten.")
   }
 }
 

@@ -110,14 +110,13 @@ spatial_packages <- FALSE
 
 # import packages
 library(magrittr)
-library(plyr)           # data manipulation
 library(dplyr)          # data manipulation
 library(reshape2)       # data manipulation
+library(tidyr)
 library(readr)          # improved data importing
 library(ggplot2)        # grammar of graphics
 library(scales)         # axis labelling functions
 library(lubridate)      # time/date functions
-library(shiny)
 library(grid)
 library(gridExtra)
 library(stringr)
