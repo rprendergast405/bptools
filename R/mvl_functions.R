@@ -120,7 +120,9 @@ save_table <- function(x,
     write_csv(x, path = file.path(write_dir, paste0(tab_num, "_", name, ".csv")))
 
   if(xlsx){
-    write.xlsx(x, file = file.path(write_dir, xls_name), sheetName = name, append = TRUE)
+    write.xlsx(x, file = file.path(write_dir, xls_name), sheetName = name, append = tab_num > 1)
+
+    if(tab_num > 1) warning("An existing .xlsx may have been overwritten.")
   }
 }
 
