@@ -18,6 +18,7 @@ grDevices::windowsFonts(calb = "Calibri Bold",
 #'
 #' @param base_size The base size for fonts
 #' @param base_family The base family for fonts
+#' @param plain_family The plain family for fonts (used in legend text)
 #'
 #' @return A theme object to be added to ggplot objects
 #' @export theme_mvl
@@ -26,7 +27,7 @@ grDevices::windowsFonts(calb = "Calibri Bold",
 #' library(ggplot2)
 #' p <- ggplot(data.frame(x = 1:5, y = 1:5)) + geom_point(aes(x, y))
 #' p + theme_mvl()
-theme_mvl <- function(base_size = 16, base_family = "calb") {
+theme_mvl <- function(base_size = 12, base_family = "calb", plain_family = "cal") {
   ggplot2::`%+replace%`(ggplot2::theme_minimal(base_size = base_size, base_family = base_family),
                         ggplot2::theme(
                           text = ggplot2::element_text(family = base_family,
@@ -43,14 +44,14 @@ theme_mvl <- function(base_size = 16, base_family = "calb") {
                           axis.title.x = ggplot2::element_blank(),
                           axis.title.y = ggplot2::element_blank(),
 
-                          legend.text = ggplot2::element_text(size = base_size - 2, face = "plain"),
+                          legend.text = ggplot2::element_text(size = base_size, face = "plain", family = plain_family),
                           legend.title = ggplot2::element_blank(),
                           legend.position = "top",
                           legend.direction = "horizontal",
 
                           panel.grid.major.x = ggplot2::element_blank(),
 
-                          plot.title = ggplot2::element_text(size = base_size*1.5, hjust = 0),
+                          plot.title = ggplot2::element_text(size = base_size * 2, hjust = 0),
                           plot.margin = grid::unit(c(0.1, 0.1, 0.1, 0.1), "cm")
                         )
   )
@@ -64,6 +65,7 @@ theme_mvl <- function(base_size = 16, base_family = "calb") {
 #'
 #' @param base_size The base size for fonts
 #' @param base_family The base family for fonts
+#' @param plain_family The plain family for fonts (used in legend text)
 #'
 #' @return A theme object to be added to ggplot objects
 #' @export theme_map
@@ -72,7 +74,7 @@ theme_mvl <- function(base_size = 16, base_family = "calb") {
 #' library(ggplot2)
 #' p <- ggplot(data.frame(x = 1:5, y = 1:5)) + geom_point(aes(x, y))
 #' p + theme_map()
-theme_map <- function(base_size = 12, base_family = "calb") {
+theme_map <- function(base_size = 12, base_family = "calb", plain_family = "cal") {
   ggplot2::`%+replace%`(ggplot2::theme_minimal(base_size = base_size, base_family = base_family),
     ggplot2::theme(
       line = ggplot2::element_blank(),
@@ -91,8 +93,8 @@ theme_map <- function(base_size = 12, base_family = "calb") {
       axis.title = ggplot2::element_blank(),
 
       legend.background = ggplot2::element_rect(fill = grDevices::rgb(1, 1, 1, 0.65), colour = "white"),
-      legend.text = ggplot2::element_text(face = "plain", family = "cal"),
-      legend.title = ggplot2::element_blank(),
+      legend.text = ggplot2::element_text(face = "plain", family = plain_family),
+      legend.title = ggplot2::element_text(),
       legend.position = c(1, 1),
       legend.direction = "vertical",
       legend.justification = c(1, 1),
@@ -112,6 +114,7 @@ theme_map <- function(base_size = 12, base_family = "calb") {
 #'
 #' @param base_size The base size for fonts
 #' @param base_family The base family for fonts
+#' @param plain_family The plain family for fonts (used in legend text)
 #'
 #' @return A theme object to be added to ggplot objects
 #' @export theme_map_minimal
@@ -120,14 +123,15 @@ theme_map <- function(base_size = 12, base_family = "calb") {
 #' library(ggplot2)
 #' p <- ggplot(data.frame(x = 1:5, y = 1:5)) + geom_point(aes(x, y))
 #' p + theme_map_minimal()
-theme_map_minimal <- function(base_size = 12, base_family = "calb") {
+theme_map_minimal <- function(base_size = 12, base_family = "calb", plain_family = "cal") {
   ggplot2::`%+replace%`(theme_mvl(base_size = base_size, base_family = base_family),
     ggplot2::theme(
       axis.text = ggplot2::element_blank(),
       axis.title = ggplot2::element_blank(),
       line = ggplot2::element_blank(),
+      plot.title = ggplot2::element_text(size = ggplot2::rel(2), hjust = 0),
       plot.margin = grid::unit(c(0.1, 0.1, 0.1, 0.1), "cm"),
-      legend.title = ggplot2::element_text()
+      legend.text = ggplot2::element_text(face = "plain", family = plain_family)
     )
   )
 }

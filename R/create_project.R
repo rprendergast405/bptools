@@ -301,6 +301,6 @@ load(file.path(data_dir, \"processed\", \"", project_name, "_data.RData\"))
 
 ")
 
-  cat(paste(eda_text, collapse = ""), file = file.path(root_dir, "src", paste0(project_name, "_EDA.Rmd")))
+  cat(paste(eda_text, collapse = ""), file = file.path(root_dir, "src", "rmd", paste0(project_name, "_EDA.Rmd")))
 
 }

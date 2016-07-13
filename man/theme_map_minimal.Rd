@@ -4,12 +4,15 @@
 \alias{theme_map_minimal}
 \title{Marketview ggplot map theme (minimal).}
 \usage{
-theme_map_minimal(base_size = 12, base_family = "calb")
+theme_map_minimal(base_size = 12, base_family = "calb",
+  plain_family = "cal")
 }
 \arguments{
 \item{base_size}{The base size for fonts}
 
 \item{base_family}{The base family for fonts}
+
+\item{plain_family}{The plain family for fonts (used in legend text)}
 }
 \value{
 A theme object to be added to ggplot objects
