@@ -31,17 +31,18 @@ devtools::use_data(highways.df)
 # 2013 AREA UNITS ---------------------------------------------------------
 
 # directory for the map data
-gis_dir <- "M:/gisdata/2013 Boundaries/ESRI shapefile Output/2013 Digital Boundaries Generlised Full"
+gis_dir <- "M:/gisdata/2013 Boundaries/ESRI shapefile Output/2013 Digital Boundaries Generlised Clipped"
 
 # import the full area unit shapefile
-nz_map.spdf <- readOGR(dsn = gis_dir, layer = "AU2013_GV_Full", stringsAsFactors = FALSE)
+nz_map.spdf <- readOGR(dsn = gis_dir, layer = "AU2013_GV_Clipped", stringsAsFactors = FALSE)
 nz_map.spdf$id <- rownames(nz_map.spdf@data)
 
 # import the data from the meshblock shapefile
-mb_info.df <- readOGR(dsn = gis_dir, layer = "MB2013_GV_Full", stringsAsFactors = FALSE)@data
+mb_info.df <- readOGR(dsn = gis_dir, layer = "MB2013_GV_Clipped", stringsAsFactors = FALSE)@data
 
-nz_cau_13.spdf <- nz_map.spdf
-devtools::use_data(nz_cau_13.spdf)
+nz_cau_13.spdf <- nz_map.spdf %>%
+  subset(!grepl("Inland Water", x = nz_map.spdf@data$AU2013_NAM))
+devtools::use_data(nz_cau_13.spdf, overwrite = TRUE)
 
 # Auckland -----------------------------------------------------
 
@@ -49,14 +50,14 @@ akl_meshblocks.df <- mb_info.df %>%
   filter(as.integer(TA2013) %in% c(76))
 
 # prepare the maps
-akl_cau_13.df <- nz_map.spdf[(nz_map.spdf@data$AU2013 %in% akl_meshblocks.df$AU2013) & !(grepl("Estuary|Marinas|[iI]nlet|[Tt]idal|^[Hh]arbour|[Oo]ceanic|Tamaki Strait|^Bays(?!water)|Water", x = nz_map.spdf@data$AU2013_NAM, perl = TRUE)), ] %>%
+akl_cau_13.df <- nz_map.spdf[(nz_map.spdf@data$AU2013 %in% akl_meshblocks.df$AU2013) & !(grepl("Inland Water", x = nz_map.spdf@data$AU2013_NAM, perl = TRUE)), ] %>%
   gSimplify(tol = 25, topologyPreserve = TRUE) %>%
   fortify(region = "id") %>%
   left_join(nz_map.spdf@data, by = "id") %>%
   mutate(AU2013 = as.integer(AU2013)) %>%
   select(long, lat, group, CAU = AU2013, CAU_NAME = AU2013_NAM)
 
-devtools::use_data(akl_cau_13.df)
+devtools::use_data(akl_cau_13.df, overwrite = TRUE)
 
 
 
@@ -66,14 +67,14 @@ wgtn_meshblocks.df <- mb_info.df %>%
   filter(as.integer(TA2013) %in% c(43:47, 50))
 
 # prepare the maps
-wtn_cau_13.df <- nz_map.spdf[(nz_map.spdf@data$AU2013 %in% wgtn_meshblocks.df$AU2013) & !(grepl("Estuary|Marinas|[iI]nlet|[Tt]idal|^[Hh]arbour|[Oo]ceanic|Tamaki Strait|^Bays(?!water)|Water", x = nz_map.spdf@data$AU2013_NAM, perl = TRUE)), ] %>%
+wtn_cau_13.df <- nz_map.spdf[(nz_map.spdf@data$AU2013 %in% wgtn_meshblocks.df$AU2013) & !(grepl("Inland Water", x = nz_map.spdf@data$AU2013_NAM, perl = TRUE)), ] %>%
   gSimplify(tol = 25, topologyPreserve = TRUE) %>%
   fortify(region = "id") %>%
   left_join(nz_map.spdf@data, by = "id") %>%
   mutate(AU2013 = as.integer(AU2013)) %>%
   select(long, lat, group, CAU = AU2013, CAU_NAME = AU2013_NAM)
 
-devtools::use_data(wtn_cau_13.df)
+devtools::use_data(wtn_cau_13.df, overwrite = TRUE)
 
 # Christchurch -------------------------------------------------
 
@@ -81,14 +82,14 @@ chch_meshblocks.df <- mb_info.df %>%
   filter(as.integer(TA2013) %in% c(60, 59, 62))
 
 # prepare the maps
-chch_cau_13.df <- nz_map.spdf[(nz_map.spdf@data$AU2013 %in% chch_meshblocks.df$AU2013) & !(grepl("Estuary|Marinas|[iI]nlet|[Tt]idal|^[Hh]arbour|[Oo]ceanic|Tamaki Strait|^Bays(?!water)|Water", x = nz_map.spdf@data$AU2013_NAM, perl = TRUE)), ] %>%
+chch_cau_13.df <- nz_map.spdf[(nz_map.spdf@data$AU2013 %in% chch_meshblocks.df$AU2013) & !(grepl("Inland Water", x = nz_map.spdf@data$AU2013_NAM, perl = TRUE)), ] %>%
   gSimplify(tol = 25, topologyPreserve = TRUE) %>%
   fortify(region = "id") %>%
   left_join(nz_map.spdf@data, by = "id") %>%
   mutate(AU2013 = as.integer(AU2013)) %>%
   select(long, lat, group, CAU = AU2013, CAU_NAME = AU2013_NAM)
 
-devtools::use_data(chch_cau_13.df)
+devtools::use_data(chch_cau_13.df, overwrite = TRUE)
 
 
 # Hamilton -------------------------------------------------
@@ -97,14 +98,14 @@ ham_meshblocks.df <- mb_info.df %>%
   filter(as.integer(TA2013) %in% c(13, 15:19))
 
 # prepare the maps
-ham_cau_13.df <- nz_map.spdf[(nz_map.spdf@data$AU2013 %in% ham_meshblocks.df$AU2013) & !(grepl("Estuary|Marinas|[iI]nlet|[Tt]idal|^[Hh]arbour|[Oo]ceanic|Tamaki Strait|^Bays(?!water)|Water", x = nz_map.spdf@data$AU2013_NAM, perl = TRUE)), ] %>%
+ham_cau_13.df <- nz_map.spdf[(nz_map.spdf@data$AU2013 %in% ham_meshblocks.df$AU2013) & !(grepl("Inland Water", x = nz_map.spdf@data$AU2013_NAM, perl = TRUE)), ] %>%
   gSimplify(tol = 25, topologyPreserve = TRUE) %>%
   fortify(region = "id") %>%
   left_join(nz_map.spdf@data, by = "id") %>%
   mutate(AU2013 = as.integer(AU2013)) %>%
   select(long, lat, group, CAU = AU2013, CAU_NAME = AU2013_NAM)
 
-devtools::use_data(ham_cau_13.df)
+devtools::use_data(ham_cau_13.df, overwrite = TRUE)
 
 # Tauranga -------------------------------------------------
 
@@ -112,20 +113,20 @@ tga_meshblocks.df <- mb_info.df %>%
   filter(as.integer(TA2013) %in% c(22, 23))
 
 # prepare the maps
-tga_cau_13.df <- nz_map.spdf[(nz_map.spdf@data$AU2013 %in% tga_meshblocks.df$AU2013) & !(grepl("Estuary|Marinas|[iI]nlet|[Tt]idal|^[Hh]arbour|[Oo]ceanic|Tamaki Strait|^Bays(?!water)|Water", x = nz_map.spdf@data$AU2013_NAM, perl = TRUE)), ] %>%
+tga_cau_13.df <- nz_map.spdf[(nz_map.spdf@data$AU2013 %in% tga_meshblocks.df$AU2013) & !(grepl("Inland Water", x = nz_map.spdf@data$AU2013_NAM, perl = TRUE)), ] %>%
   gSimplify(tol = 25, topologyPreserve = TRUE) %>%
   fortify(region = "id") %>%
   left_join(nz_map.spdf@data, by = "id") %>%
   mutate(AU2013 = as.integer(AU2013)) %>%
   select(long, lat, group, CAU = AU2013, CAU_NAME = AU2013_NAM)
 
-devtools::use_data(tga_cau_13.df)
+devtools::use_data(tga_cau_13.df, overwrite = TRUE)
 
 # Meshblocks ----
 mb_map.spdf <- readOGR(dsn = gis_dir, layer = "MB2013_GV_Full", stringsAsFactors = FALSE)
 
 mb_map.spdf %<>%
-  subset(as.integer(TA2013) %in% c(22, 23) & !(grepl("Estuary|Marinas|[iI]nlet|[Tt]idal|^[Hh]arbour|[Oo]ceanic|Tamaki Strait|^Bays|Water", x = mb_map.spdf@data$AU2013_NAM)))
+  subset(as.integer(TA2013) %in% c(22, 23) & !(grepl("Inland Water", x = mb_map.spdf@data$AU2013_NAM)))
 mb_map.spdf$id <- row.names(mb_map.spdf@data)
 
 tga_mb_13.df <- mb_map.spdf %>%
@@ -136,7 +137,7 @@ tga_mb_13.df <- mb_map.spdf %>%
   select(long, lat, group, MB, CAU = AU2013)
 
 
-devtools::use_data(tga_mb_13.df)
+devtools::use_data(tga_mb_13.df, overwrite = TRUE)
 
 
 # 2006 AREA UNITS ---------------------------------------------------------
