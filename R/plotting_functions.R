@@ -50,6 +50,52 @@ theme_mvl <- function(base_size = 12, base_family = "calb", plain_family = "cal"
                           legend.direction = "horizontal",
 
                           panel.grid.major.x = ggplot2::element_blank(),
+                          panel.grid.major.y = ggplot2::element_line(colour = mvl_half_grey, size = 0.1),
+
+                          plot.title = ggplot2::element_text(size = base_size * 2, hjust = 0),
+                          plot.margin = grid::unit(c(0.1, 0.1, 0.1, 0.1), "cm")
+                        )
+  )
+}
+
+#' Old Marketview ggplot theme.
+#'
+#'An old version of a minimal theme for plots that looks okay in a Marketview ppt report.
+#'
+#' @param base_size The base size for fonts
+#' @param base_family The base family for fonts
+#' @param plain_family The plain family for fonts (used in legend text)
+#'
+#' @return A theme object to be added to ggplot objects
+#' @export theme_mvl_old
+#'
+#' @examples
+#' library(ggplot2)
+#' p <- ggplot(data.frame(x = 1:5, y = 1:5)) + geom_point(aes(x, y))
+#' p + theme_mvl_old()
+theme_mvl_old <- function(base_size = 12, base_family = "calb", plain_family = "cal") {
+  ggplot2::`%+replace%`(ggplot2::theme_minimal(base_size = base_size, base_family = base_family),
+                        ggplot2::theme(
+                          text = ggplot2::element_text(family = base_family,
+                                                       face = "plain",
+                                                       colour = grDevices::rgb(33, 89, 104, maxColorValue = 255),
+                                                       size = base_size,
+                                                       hjust = 0.5,
+                                                       vjust = 0.5,
+                                                       angle = 0,
+                                                       lineheight = 0.9,
+                                                       margin = grid::unit(rep(0.1, 4), "cm"),
+                                                       debug = FALSE),
+
+                          axis.title.x = ggplot2::element_blank(),
+                          axis.title.y = ggplot2::element_blank(),
+
+                          legend.text = ggplot2::element_text(size = base_size, face = "plain", family = plain_family),
+                          legend.title = ggplot2::element_blank(),
+                          legend.position = "top",
+                          legend.direction = "horizontal",
+
+                          panel.grid.major.x = ggplot2::element_blank(),
 
                           plot.title = ggplot2::element_text(size = base_size * 2, hjust = 0),
                           plot.margin = grid::unit(c(0.1, 0.1, 0.1, 0.1), "cm")
