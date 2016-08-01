@@ -28,7 +28,7 @@ create_project <- function(project_name,
                            sub_dirs = NULL) {
 
   # The default sub-directories that should be created by the function
-  base_sub_dirs <- c("data", "data/processed", "src", "src/rmd", "src/functions", "src/shiny", "output", "output/tables", "output/figures", "doc")
+  base_sub_dirs <- c("data", "data/processed", "R", "R/rmd", "R/functions", "R/shiny", "output", "output/tables", "output/figures", "Report")
 
   # The root directory for the project takes the project name
   if(!is.null(within)){
@@ -83,7 +83,6 @@ LaTeX: pdfLaTeX"
 #' @param root_dir The root directory of the R project.
 #'
 #' @return Creates a script within the directory specified.
-#' @export create_init_script
 create_init_script <- function(project_name, root_dir) {
   init_text <- c("# 0_", project_name, "_initialise.R
 # Created by ", Sys.info()["user"], ", on ", format(Sys.Date(), "%d %m %Y"), "
@@ -138,7 +137,7 @@ fig_dir <- file.path(output_dir, \"figures\")
 tab_dir <- file.path(output_dir, \"tables\")
 ")
 
-  cat(paste(init_text, collapse = ""), file = file.path(root_dir, "src", paste0("0_", project_name, "_initialise.R")))
+  cat(paste(init_text, collapse = ""), file = file.path(root_dir, "R", paste0("0_", project_name, "_initialise.R")))
 }
 
 
@@ -151,7 +150,6 @@ tab_dir <- file.path(output_dir, \"tables\")
 #' @param root_dir The root directory of the R project.
 #'
 #' @return Creates a script within the directory specified.
-#' @export create_processing_script
 create_processing_script <- function(project_name, root_dir) {
   procces_text <- c("# 1_", project_name, "_processing.R
 # Created by ", Sys.info()["user"], ", on ", format(Sys.Date(), "%d %m %Y"), "
@@ -170,7 +168,7 @@ create_processing_script <- function(project_name, root_dir) {
 
 # 0. INITIALISE -----------------------------------------------------------
 
-source(file.path(base_dir, \"src\", \"0_", project_name, "_initialise.R\"))
+source(file.path(base_dir, \"R\", \"0_", project_name, "_initialise.R\"))
 
 # 1. IMPORT DATA ----------------------------------------------------------
 
@@ -182,7 +180,7 @@ save( ,
 file = file.path(data_dir, \"processed\", \"", project_name, "_data.RData\"))
 ")
 
-  cat(paste(procces_text, collapse = ""), file = file.path(root_dir, "src", paste0("1_", project_name, "_processing.R")))
+  cat(paste(procces_text, collapse = ""), file = file.path(root_dir, "R", paste0("1_", project_name, "_processing.R")))
 
 }
 
@@ -196,7 +194,6 @@ file = file.path(data_dir, \"processed\", \"", project_name, "_data.RData\"))
 #' @param root_dir The root directory of the R project.
 #'
 #' @return Creates a script within the directory specified.
-#' @export create_results_script
 create_results_script <- function(project_name, root_dir) {
   results_text <- c("# 2_", project_name, "_results.R
 # Created by ", Sys.info()["user"], ", on ", format(Sys.Date(), "%d %m %Y"), "
@@ -217,15 +214,15 @@ archive <- FALSE
 
 # 0. INITIALISE -----------------------------------------------------------
 
-source(file.path(base_dir, \"src\", \"0_", project_name, "_initialise.R\"))
+source(file.path(base_dir, \"R\", \"0_", project_name, "_initialise.R\"))
 
 # 1. IMPORT DATA ----------------------------------------------------------
 
-data_refresh <- file.info(file.path(base_dir, \"src\", \"1_", project_name, "_processing.R\"))$mtime > file.info(file.path(data_dir, \"processed\", \"", project_name, "_data.RData\"))$mtime
+data_refresh <- file.info(file.path(base_dir, \"R\", \"1_", project_name, "_processing.R\"))$mtime > file.info(file.path(data_dir, \"processed\", \"", project_name, "_data.RData\"))$mtime
 if(is.na(data_refresh)) data_refresh <- TRUE
 
 if(data_refresh) {
-source(file.path(base_dir, \"src\", \"1_", project_name, "_processing.R\"))
+source(file.path(base_dir, \"R\", \"1_", project_name, "_processing.R\"))
 } else {
 load(file.path(data_dir, \"processed\", \"", project_name, "_data.RData\"))
 }
@@ -255,7 +252,7 @@ tab_num <- 1
 
 ")
 
-  cat(paste(results_text, collapse = ""), file = file.path(root_dir, "src", paste0("2_", project_name, "_results.R")))
+  cat(paste(results_text, collapse = ""), file = file.path(root_dir, "R", paste0("2_", project_name, "_results.R")))
 
 }
 
@@ -269,7 +266,6 @@ tab_num <- 1
 #' @param root_dir The root directory of the R project.
 #'
 #' @return Creates a script within the directory specified.
-#' @export create_eda_script
 create_eda_script <- function(project_name, root_dir) {
   eda_text <- c("---
 title: \"", project_name, " EDA\"
@@ -286,15 +282,15 @@ base_dir <- \"", root_dir, "\"
 
 # 0. INITIALISE -----------------------------------------------------------
 
-source(file.path(base_dir, \"src\", \"0_", project_name, "_initialise.R\"))
+source(file.path(base_dir, \"R\", \"0_", project_name, "_initialise.R\"))
 
 # 1. IMPORT DATA ----------------------------------------------------------
 
-data_refresh <- file.info(file.path(base_dir, \"src\", \"1_", project_name, "_processing.R\"))$mtime > file.info(file.path(data_dir, \"processed\", \"", project_name, "_data.RData\"))$mtime
+data_refresh <- file.info(file.path(base_dir, \"R\", \"1_", project_name, "_processing.R\"))$mtime > file.info(file.path(data_dir, \"processed\", \"", project_name, "_data.RData\"))$mtime
 if(is.na(data_refresh)) data_refresh <- TRUE
 
 if(data_refresh) {
-source(file.path(base_dir, \"src\", \"1_", project_name, "_processing.R\"))
+source(file.path(base_dir, \"R\", \"1_", project_name, "_processing.R\"))
 } else {
 load(file.path(data_dir, \"processed\", \"", project_name, "_data.RData\"))
 }
@@ -303,6 +299,6 @@ load(file.path(data_dir, \"processed\", \"", project_name, "_data.RData\"))
 
 ")
 
-  cat(paste(eda_text, collapse = ""), file = file.path(root_dir, "src", "rmd", paste0(project_name, "_EDA.Rmd")))
+  cat(paste(eda_text, collapse = ""), file = file.path(root_dir, "R", "rmd", paste0(project_name, "_EDA.Rmd")))
 
 }

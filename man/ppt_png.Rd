@@ -5,7 +5,7 @@
 \title{Save of PNG for PowerPoint.}
 \usage{
 ppt_png(p, filename, w = 22, h = 12, fam = "Calibri", pm = c(0.1, 0.1,
-  0.25, 0.1), mvl_foot = TRUE, mvl_foot_text = "",
+  0.25, 0.1), mvl_foot = FALSE, mvl_foot_text = "",
   mvl_foot_colour = mvl_grey, mvl_foot_size = 0.8)
 }
 \arguments{
