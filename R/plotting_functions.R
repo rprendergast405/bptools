@@ -50,7 +50,7 @@ theme_mvl <- function(base_size = 12, base_family = "calb", plain_family = "cal"
                           legend.direction = "horizontal",
 
                           panel.grid.major.x = ggplot2::element_blank(),
-                          panel.grid.major.y = ggplot2::element_line(colour = mvl_half_grey, size = 0.1),
+                          panel.grid.major.y = ggplot2::element_line(colour = mvl_grey, size = 0.2),
 
                           plot.title = ggplot2::element_text(size = base_size * 2, hjust = 0),
                           plot.margin = grid::unit(c(0.1, 0.1, 0.1, 0.1), "cm")

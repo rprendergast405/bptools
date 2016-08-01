@@ -73,7 +73,7 @@ ppt_png <- function(p,
                     h = 12,
                     fam = "Calibri",
                     pm = c(.1, .1, .25, .1),
-                    mvl_foot = TRUE,
+                    mvl_foot = FALSE,
                     mvl_foot_text = "",
                     mvl_foot_colour = mvl_grey,
                     mvl_foot_size = .8){

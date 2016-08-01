@@ -3,6 +3,8 @@
 ## What's new
 * Updated theme_mvl to include more distinct grid lines - the version without them is theme_mvl_old
 
+## Other Changes
+* Default mvl_foot for ppt_png is now FALSE
 
 # marketview 0.1.5
 
