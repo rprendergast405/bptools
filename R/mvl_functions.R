@@ -18,10 +18,10 @@
 #' @param write_dir The directory in which the figure should be saved
 #' @param name A character name that the saved object will have
 #' @param fig_num A figure number that preceeds the name
-#' @param height The height of the png
-#' @param width The width of the png
+#' @param shape The shape of the png ("square" for a figure in ppt with the text to the side, and "wide" for a figure in ppt with the text underneath)
 #' @param res The resolution of the png
 #' @param mvl_footer Should a Marketview footer image be included?
+#' @param ... if 'shape'
 #'
 #' @return Saves the plot to file
 #' @export save_plot
@@ -30,10 +30,17 @@ save_plot <- function(p,
                       write_dir,
                       name,
                       fig_num = 1,
-                      height = 700*4,
-                      width = 850*4,
+                      shape = "square",
                       res = 360,
-                      mvl_footer = FALSE) {
+                      mvl_footer = FALSE,
+                      ...) {
+  if(shape == "square"){
+    height = 700*4
+    width = 850*4
+  } else if(shape == "wide"){
+    height = (11.07*35/0.77)*4
+    width = (23.92*35/0.77)*4
+  }
   figure_name <- file.path(write_dir, paste0(fig_num, "_", name, ".png"))
   png(filename = figure_name,
       height = height,

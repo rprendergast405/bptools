@@ -4,8 +4,8 @@
 \alias{save_plot}
 \title{Save a ggplot object.}
 \usage{
-save_plot(p, write_dir, name, fig_num = 1, height = 700 * 4, width = 850 *
-  4, res = 360, mvl_footer = FALSE)
+save_plot(p, write_dir, name, fig_num = 1, shape = "square", res = 360,
+  mvl_footer = FALSE, ...)
 }
 \arguments{
 \item{p}{A ggplot object}
@@ -16,13 +16,13 @@ save_plot(p, write_dir, name, fig_num = 1, height = 700 * 4, width = 850 *
 
 \item{fig_num}{A figure number that preceeds the name}
 
-\item{height}{The height of the png}
-
-\item{width}{The width of the png}
+\item{shape}{The shape of the png ("square" for a figure in ppt with the text to the side, and "wide" for a figure in ppt with the text underneath)}
 
 \item{res}{The resolution of the png}
 
 \item{mvl_footer}{Should a Marketview footer image be included?}
+
+\item{...}{if 'shape'}
 }
 \value{
 Saves the plot to file
