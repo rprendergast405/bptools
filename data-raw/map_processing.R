@@ -33,6 +33,29 @@ devtools::use_data(highways.df)
 # directory for the map data
 gis_dir <- "M:/gisdata/2013 Boundaries/ESRI shapefile Output/2013 Digital Boundaries Generlised Clipped"
 
+# Import the TLA shapefile
+nz_tla_13.spdf <- readOGR(dsn = gis_dir, layer = "TA2013_GV_Clipped", stringsAsFactors = FALSE)
+nz_tla_13.spdf$id <- rownames(nz_tla_13.spdf@data)
+
+# Save the TLA data ----
+nz_tla_13.spdf %<>%
+  gSimplify(tol = 25, topologyPreserve = TRUE) %>%
+  SpatialPolygonsDataFrame(nz_tla_13.spdf@data)
+
+# save the tla shapefile
+devtools::use_data(nz_tla_13.spdf, overwrite = TRUE)
+
+# Write a data.frame of the TLAs ----
+nz_tla_13.df <- nz_tla_13.spdf %>%
+  fortify(region = "id") %>%
+  left_join(nz_tla_13.spdf@data, by = "id") %>%
+  mutate(TA2013 = as.integer(TA2013)) %>%
+  select(long, lat, group, TLA = TA2013, TLA_NAME = TA2013_NAM) %>%
+  filter(TLA_NAME != "Chatham Islands Territory")
+
+devtools::use_data(nz_tla_13.df, overwrite = TRUE)
+
+
 # import the full area unit shapefile
 nz_map.spdf <- readOGR(dsn = gis_dir, layer = "AU2013_GV_Clipped", stringsAsFactors = FALSE)
 nz_map.spdf$id <- rownames(nz_map.spdf@data)
@@ -169,6 +192,33 @@ mb_info.df <- readOGR(dsn = gis_dir, layer = "mb", stringsAsFactors = FALSE)@dat
 
 nz_cau_06.spdf <- nz_map.spdf
 devtools::use_data(nz_cau_06.spdf)
+
+# Write the 2006 TLA data ----
+nz_tla_06.spdf <- readOGR(dsn = gis_dir, layer = "ta", stringsAsFactors = FALSE)
+nz_tla_06.spdf$id <- rownames(nz_tla_06.spdf@data)
+
+# Save the TLA data ----
+nz_tla_06.spdf %<>%
+  gSimplify(tol = 25, topologyPreserve = TRUE) %>%
+  SpatialPolygonsDataFrame(nz_tla_06.spdf@data)
+
+# save the tla shapefile
+devtools::use_data(nz_tla_06.spdf, overwrite = TRUE)
+
+# Write a data.frame of the TLAs ----
+nz_tla_06.df <- nz_tla_06.spdf %>%
+  fortify(region = "id") %>%
+  left_join(nz_tla_06.spdf@data, by = "id") %>%
+  mutate(TA_NO = as.integer(TA_NO)) %>%
+  select(long, lat, group, TLA = TA_NO, TLA_NAME = TA_NAME) %>%
+  filter(!(TLA_NAME %in% c("Tasman District", "Marlborough District"))) %>%
+  bind_rows(
+    nz_tla_13.df %>%
+      filter(TLA_NAME %in% c("Tasman District", "Marlborough District"))
+  )
+
+devtools::use_data(nz_tla_06.df, overwrite = TRUE)
+
 
 
 # Auckland ----------------------------------------------------------------
