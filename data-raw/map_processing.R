@@ -55,6 +55,28 @@ nz_tla_13.df <- nz_tla_13.spdf %>%
 
 devtools::use_data(nz_tla_13.df, overwrite = TRUE)
 
+# Import the Region shapefile ----
+nz_regions.spdf <- readOGR(dsn = gis_dir, layer = "REGC2013_GV_Clipped", stringsAsFactors = FALSE)
+nz_regions.spdf$id <- rownames(nz_regions.spdf@data)
+
+# Save the TLA data ----
+nz_regions.spdf %<>%
+  gSimplify(tol = 25, topologyPreserve = TRUE) %>%
+  SpatialPolygonsDataFrame(nz_regions.spdf@data)
+
+# save the tla shapefile
+devtools::use_data(nz_regions.spdf, overwrite = TRUE)
+
+# Write a data.frame of the Regions ----
+nz_regions.df <- nz_regions.spdf %>%
+  fortify(region = "id") %>%
+  left_join(nz_regions.spdf@data, by = "id") %>%
+  mutate(REGC2013 = as.integer(REGC2013)) %>%
+  select(long, lat, group, REGION = REGC2013, REGION_NAME = REGC2013_N) %>%
+  filter(REGION_NAME != "Area Outside Region")
+
+devtools::use_data(nz_regions.df, overwrite = TRUE)
+
 
 # import the full area unit shapefile
 nz_map.spdf <- readOGR(dsn = gis_dir, layer = "AU2013_GV_Clipped", stringsAsFactors = FALSE)
@@ -215,7 +237,8 @@ nz_tla_06.df <- nz_tla_06.spdf %>%
   bind_rows(
     nz_tla_13.df %>%
       filter(TLA_NAME %in% c("Tasman District", "Marlborough District"))
-  )
+  ) %>%
+  mutate(group = ifelse(TLA == 13, 999, group))
 
 devtools::use_data(nz_tla_06.df, overwrite = TRUE)
 
