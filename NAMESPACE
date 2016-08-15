@@ -3,6 +3,7 @@
 export(bounding_box)
 export(create_project)
 export(make_footnote)
+export(mcd_process)
 export(mdollar)
 export(mvl_blue)
 export(mvl_green)

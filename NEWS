@@ -2,9 +2,12 @@
 
 ## What's new
 * Updated theme_mvl to include more distinct grid lines - the version without them is theme_mvl_old
+* Added NZ TLA shapefiles and data.frames
+* Added mcd_process, to perform common processing on raw McDonald's data
 
 ## Other Changes
 * Default mvl_foot for ppt_png is now FALSE
+* save_plot now has an argument to select wide/square plots for ppt
 
 # marketview 0.1.5
 
