@@ -9,6 +9,9 @@
 * Default mvl_foot for ppt_png is now FALSE
 * save_plot now has an argument to select wide/square plots for ppt
 
+## Bug fixes
+* Fixed the theme_mcd
+
 # marketview 0.1.5
 
 ## What's new

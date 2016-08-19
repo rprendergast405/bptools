@@ -283,7 +283,7 @@ base_dir <- \"", root_dir, "\"
 # 0. INITIALISE -----------------------------------------------------------
 
 source(file.path(base_dir, \"R\", \"0_", project_name, "_initialise.R\"))
-
+library(knitr)
 # 1. IMPORT DATA ----------------------------------------------------------
 
 data_refresh <- file.info(file.path(base_dir, \"R\", \"1_", project_name, "_processing.R\"))$mtime > file.info(file.path(data_dir, \"processed\", \"", project_name, "_data.RData\"))$mtime

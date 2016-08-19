@@ -199,18 +199,29 @@ theme_map_minimal <- function(base_size = 12, base_family = "calb", plain_family
 theme_mcd <- function(base_size = 12, base_family = "") {
   ggplot2::`%+replace%`(ggplot2::theme_bw(base_size = base_size, base_family = base_family),
     ggplot2::theme(
-      legend.key = ggplot2::element_rect(fill = '#F2F2F2'),
-      legend.background = ggplot2::element_rect(fill = '#F2F2F2'),
+      text = ggplot2::element_text(family = base_family,
+                                   face = "plain",
+                                   colour = "black",
+                                   size = base_size,
+                                   hjust = 0.5,
+                                   vjust = 0.5,
+                                   angle = 0,
+                                   lineheight = 0.9,
+                                   margin = grid::unit(rep(0.1, 4), "cm"),
+                                   debug = FALSE),
 
-      panel.background = ggplot2::element_rect(fill = '#F2F2F2'),
-      panel.grid.major = ggplot2::element_line(colour = "white", size = 1),
+      plot.background = ggplot2::element_rect(fill = grDevices::rgb(242, 242, 242, maxColorValue = 255), colour = NA),
+      panel.background = ggplot2::element_rect(fill = grDevices::rgb(242, 242, 242, maxColorValue = 255), colour = NA),
+      legend.background = ggplot2::element_rect(fill = grDevices::rgb(242, 242, 242, maxColorValue = 255), colour = NA),
 
-      plot.background = ggplot2::element_rect(fill = '#F2F2F2', colour = '#F2F2F2'),
-      plot.title = ggplot2::element_text(face = "bold")
+      panel.margin = grid::unit(rep(0.1, 4), "cm"),
+      plot.margin = grid::unit(rep(0.1, 4), "cm"),
+
+      legend.position = "top",
+      legend.direction = "horizontal"
     )
   )
 }
-
 
 
 #' Add a bounding box to a map plot.
