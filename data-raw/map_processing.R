@@ -89,6 +89,7 @@ mb_info.df <- mb_map.spdf@data
 
 nz_cau_13.spdf <- nz_map.spdf %>%
   subset(!grepl("Inland Water", x = nz_map.spdf@data$AU2013_NAM))
+names(nz_cau_13.spdf) <- c("CAU", "CAU_NAME", "id")
 devtools::use_data(nz_cau_13.spdf, overwrite = TRUE)
 
 # Auckland -----------------------------------------------------
@@ -213,7 +214,8 @@ nz_map.spdf$id <- rownames(nz_map.spdf@data)
 mb_info.df <- readOGR(dsn = gis_dir, layer = "mb", stringsAsFactors = FALSE)@data
 
 nz_cau_06.spdf <- nz_map.spdf
-devtools::use_data(nz_cau_06.spdf)
+names(nz_cau_06.spdf) <- c("CAU", "CAU_NAME", "id")
+devtools::use_data(nz_cau_06.spdf, overwrite = TRUE)
 
 # Write the 2006 TLA data ----
 nz_tla_06.spdf <- readOGR(dsn = gis_dir, layer = "ta", stringsAsFactors = FALSE)
