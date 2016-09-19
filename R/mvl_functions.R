@@ -149,3 +149,21 @@ save_table <- function(x,
 mdollar <- function(x) {
   paste0(scales::dollar(x/1000000), "M")
 }
+
+
+#' Label in billions of dollars
+#'
+#' A modification of the \code{dollar()} function from \code{scales}, which
+#' is more appropriate for plots of large dollar values
+#' @param x A numeric dollar amount
+#'
+#' @return A character representation of x in billions of dollars
+#'
+#' @examples
+#' bdollar(1000000000)
+#' bdollar(c(2000000000, 15000000000))
+#' @export bdollar
+bdollar <- function (x)
+{
+  paste0(scales::dollar(x/1e+09), "B")
+}
