@@ -1,3 +1,15 @@
+# marketview 0.2.0
+
+## What's new
+* Added catchment_picker() - a shiny app to identify and save a catchment for a merchant (requires shiny, leaflet, sp, rgeos, rgdal)
+* Added bnz_spend_origin() - to get the spending by CAU for a given merchant + time period
+* Added get_merch_location() - a function to get the coordinates of a merchant from Fozzie
+* Added bdollar() function - use is the same as mdollar()
+
+## Other Changes
+* mcd_process imputes "" when CUST_TYPE is null
+* renamed the attributes of nz_cau_13.spdf & nz_cau_06.spdf to be consistent
+
 # marketview 0.1.6
 
 ## What's new
