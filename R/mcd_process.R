@@ -44,6 +44,7 @@ mcd_process <- function(dat){
 
   #Format HVC
   if("CUST_TYPE" %in% colnames(dat)){
+    dat[is.na(dat[, "CUST_TYPE"]), "CUST_TYPE"] <- ""
     dat[dat[,"CUST_TYPE"] == "H", "CUST_TYPE"] <- "HVC"
     dat[dat[,"CUST_TYPE"] == "", "CUST_TYPE"] <- "non-HVC"
 
