@@ -146,9 +146,10 @@ save_table <- function(x,
 #' mdollar(1000000)
 #' mdollar(c(2000000, 15000000))
 #' @export mdollar
-mdollar <- function(x) {
-  paste0(scales::dollar(x/1000000), "M")
+mdollar <- function(x, dp = 2, form = "f", ...){
+  paste0("$", formatC(x/1e6, digits = dp, format = form, ...), "B")
 }
+
 
 
 #' Label in billions of dollars
@@ -163,7 +164,6 @@ mdollar <- function(x) {
 #' bdollar(1000000000)
 #' bdollar(c(2000000000, 15000000000))
 #' @export bdollar
-bdollar <- function (x)
-{
-  paste0(scales::dollar(x/1e+09), "B")
+bdollar <- function(x, dp = 2, form = "f", ...){
+  paste0("$", formatC(x/1e9, digits = dp, format = form, ...), "B")
 }

@@ -4,7 +4,7 @@
 \alias{mdollar}
 \title{Label in millions of dollars}
 \usage{
-mdollar(x)
+mdollar(x, dp = 2, form = "f", ...)
 }
 \arguments{
 \item{x}{A numeric dollar amount}

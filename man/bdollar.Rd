@@ -4,7 +4,7 @@
 \alias{bdollar}
 \title{Label in billions of dollars}
 \usage{
-bdollar(x)
+bdollar(x, dp = 2, form = "f", ...)
 }
 \arguments{
 \item{x}{A numeric dollar amount}
