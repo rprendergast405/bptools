@@ -1,9 +1,14 @@
 # marketview 0.2.1
 
+## What's New
+* Added zoom_definition() to make selecting plot areas in maps easier
+
 ## Small Changes
 * Removed underscores from file names in create_project()
 * Processing script created by create_project() now saves the workspace by default
 * More consistency in mdollar() and bdollar()
+* Added regional aggregation and a QSR indicator to mcd_process()
+
 
 # marketview 0.2.0
 
