@@ -41,6 +41,7 @@ create_project <- function(project_name,
   sub_dirs <- c(base_sub_dirs, sub_dirs)
 
   # create the directories
+  cat("Creating directories\n")
   sapply(sub_dirs, FUN = function(x) {dir.create(file.path(root_dir, x), recursive = TRUE)})
 
   # create the .Rproj file with default specifications
@@ -58,17 +59,27 @@ Encoding: UTF-8
 RnwWeave: Sweave
 LaTeX: pdfLaTeX"
 
+  cat("Creating .RProj file\n")
   cat(paste(rproject_specs), file = file.path(root_dir, paste(project_name, "Rproj", sep = ".")))
 
   # import the script templates to the root directory
-
+  cat("Creating script templates:\n")
+  cat(paste0("  0 ", project_name, " initialise.R ..."))
   create_init_script(project_name = project_name, root_dir = root_dir)
+  cat(" Done\n")
 
+  cat(paste0("  1 ", project_name, " processing.R ..."))
   create_processing_script(project_name = project_name, root_dir = root_dir)
+  cat(" Done\n")
 
+  cat(paste0("  2 ", project_name, " results.R ..."))
   create_results_script(project_name = project_name, root_dir = root_dir)
+  cat(" Done\n")
 
+  cat(paste0("  R/rmd/", project_name, " EDA.Rmd ..."))
   create_eda_script(project_name = project_name, root_dir = root_dir)
+  cat(" Done\n")
+  cat("Project created successfully")
 }
 
 
