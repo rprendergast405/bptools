@@ -40,7 +40,10 @@ mcd_process <- function(dat){
   dat[dat[,"IEO_SEGMENT"] == "QSR Competitors - Burger", "IEO_SEGMENT"] <- "QSR - Burger"
 
   dat[,"IEO_SEGMENT"] <- factor(dat[["IEO_SEGMENT"]], levels = c("McDonald's", "QSR - Burger", "QSR - Chicken/Pizza/Sandwich",
-                                                        "Independent Takeaway", "Coffee Cafes Bakeries", "Restaurants"))}
+                                                        "Independent Takeaway", "Coffee Cafes Bakeries", "Restaurants"))
+
+  dat[, "QSR"] <- dat[["IEO_SEGMENT"]] %in% c("McDonald's", "QSR Competitors - Chicken/ Pizza/ Sandwich", "QSR - Chicken/Pizza/Sandwich")
+  }
 
   #Format HVC
   if("CUST_TYPE" %in% colnames(dat)){
@@ -59,6 +62,22 @@ mcd_process <- function(dat){
   if("SEQDAY" %in% colnames(dat)){
     dat[,"DATE"] <- as.Date(as.character(dat[["SEQDAY"]]), format = "%Y%m%d")
   }
+
+  # Format the MCD_REGION attribute
+  if("MCD_REGION" %in% colnames(dat)){
+    dat[, "MCD_REGION"] <- factor(dat[["MCD_REGION"]], levels = c("Auckland", "NIPS", "Wellington", "South Island"))
+  }
+
+  # Add a mcd_region attribute if it doesn't already exist
+  if("MERCH_TLA" %in% colnames(dat) & !("MCD_REGION" %in% colnames(dat))){
+    dat[, "MCD_REGION"] <- ifelse(dat[, "MERCH_TLA"] %in% c(1:11, 76), "Auckland",
+                                  ifelse(dat[, "MERCH_TLA"] %in% 12:39, "NIPS",
+                                         ifelse(dat[, "MERCH_TLA"] %in% 40:50, "Wellington", "South Island")))
+    dat[, "MCD_REGION"] <- factor(dat[["MCD_REGION"]], levels = c("Auckland", "NIPS", "Wellington", "South Island"))
+  }
+
+  # add a QSR indicator
+
 
   return(dat)
 }
