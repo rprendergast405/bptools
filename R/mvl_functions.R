@@ -147,7 +147,7 @@ save_table <- function(x,
 #' mdollar(c(2000000, 15000000))
 #' @export mdollar
 mdollar <- function(x, dp = 2, form = "f", ...){
-  paste0("$", formatC(x/1e6, digits = dp, format = form, ...), "B")
+  paste0("$", formatC(x/1e6, digits = dp, format = form, ...), "M")
 }
 
 
