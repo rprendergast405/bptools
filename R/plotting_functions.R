@@ -313,3 +313,39 @@ make_footnote <- function(footnote_text = paste(format(Sys.time(), "%d %b %Y")),
 
 
 
+
+#' Define a Zooming Function for Plotting Maps.
+#'
+#' For a shapefile in NZTM format return a 'zoom' function (a wrapper to coord_fixed()) which displays a square area centred on the shapefile.
+#'
+#' @param shp_dat A shapefile on which to base the plot window
+#' @param x The name of the attribute in shp_dat which describes the horizontal coordinates
+#' @param y The name of the attribute in shp_dat which describes the vertical coordinates
+#'
+#' @export zoom_definition
+#'
+#' @examples akl_zoom <- zoom_definition(akl_cau_13.df)
+#' ggplot()+
+#' geom_polygon(data = nz_tla_13.df,
+#' aes(long, lat, group = group, fill = TLA == 76))+
+#' akl_zoom()
+zoom_definition <- function(shp_dat, x = 'long', y = 'lat'){
+
+  #Calculate the longest dimension, x or y
+  wl <- max(c(max(shp_dat[[x]]) - min(shp_dat[[x]]), max(shp_dat[[y]]) - min(shp_dat[[y]])))/2
+
+  #Calculate the box coordinates
+  max_coords <- c(mean(c(max(shp_dat[[x]]), min(shp_dat[[x]]))), mean(c(max(shp_dat[[y]]), min(shp_dat[[y]])))) + wl
+  min_coords <- c(mean(c(max(shp_dat[[x]]), min(shp_dat[[x]]))), mean(c(max(shp_dat[[y]]), min(shp_dat[[y]])))) - wl
+
+  #Function to apply the zoom
+  zoom_fn <- function(){
+    ggplot2::coord_fixed(xlim = c(min_coords[1], max_coords[1]),
+                         ylim = c(min_coords[2], max_coords[2]),
+                         expand = FALSE)
+  }
+
+  return(zoom_fn)
+
+}
+
