@@ -176,8 +176,8 @@ source(file.path(base_dir, \"R\", \"0 ", project_name, " initialise.R\"))
 # 2. SAVE THE PROCESSED DATA ----------------------------------------------
 
 
-save( ,
-file = file.path(data_dir, \"processed\", \"", project_name, " data.RData\"))
+save(list = ls(all.names = TRUE),
+     file = file.path(data_dir, \"processed\", \"", project_name, " data.RData\"))
 ")
 
   cat(paste(procces_text, collapse = ""), file = file.path(root_dir, "R", paste0("1 ", project_name, " processing.R")))
