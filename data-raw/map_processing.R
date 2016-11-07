@@ -33,6 +33,19 @@ devtools::use_data(highways.df)
 # directory for the map data
 gis_dir <- "M:/gisdata/2013 Boundaries/ESRI shapefile Output/2013 Digital Boundaries Generlised Clipped"
 
+# import the full area unit shapefile
+nz_map.spdf <- readOGR(dsn = gis_dir, layer = "AU2013_GV_Clipped", stringsAsFactors = FALSE)
+nz_map.spdf$id <- rownames(nz_map.spdf@data)
+
+inland_water.df <- nz_map.spdf %>%
+  subset(grepl("Inland Water", x = nz_map.spdf@data$AU2013_NAM)) %>%
+  fortify %>%
+  select(long, lat, group)
+# save the tla shapefile
+devtools::use_data(inland_water.df, overwrite = TRUE)
+
+
+
 # Import the TLA shapefile
 nz_tla_13.spdf <- readOGR(dsn = gis_dir, layer = "TA2013_GV_Clipped", stringsAsFactors = FALSE)
 nz_tla_13.spdf$id <- rownames(nz_tla_13.spdf@data)
@@ -78,9 +91,7 @@ nz_regions.df <- nz_regions.spdf %>%
 devtools::use_data(nz_regions.df, overwrite = TRUE)
 
 
-# import the full area unit shapefile
-nz_map.spdf <- readOGR(dsn = gis_dir, layer = "AU2013_GV_Clipped", stringsAsFactors = FALSE)
-nz_map.spdf$id <- rownames(nz_map.spdf@data)
+
 
 # import the data from the meshblock shapefile
 mb_map.spdf <- readOGR(dsn = gis_dir, layer = "MB2013_GV_Clipped", stringsAsFactors = FALSE)
