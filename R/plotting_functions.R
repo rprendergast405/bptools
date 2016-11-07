@@ -177,7 +177,9 @@ theme_map_minimal <- function(base_size = 12, base_family = "calb", plain_family
       line = ggplot2::element_blank(),
       plot.title = ggplot2::element_text(size = ggplot2::rel(2), hjust = 0),
       plot.margin = grid::unit(c(0.1, 0.1, 0.1, 0.1), "cm"),
-      legend.text = ggplot2::element_text(face = "plain", family = plain_family)
+      legend.text = ggplot2::element_text(face = "plain", family = plain_family),
+      panel.grid = ggplot2::element_blank(),
+      panel.grid.major.y = ggplot2::element_blank()
     )
   )
 }
