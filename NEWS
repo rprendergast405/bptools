@@ -1,3 +1,20 @@
+# marketview 0.2.2
+
+## What's New
+* Added some wrappers for ReporteRs functions which make dealing with FlexTables easier
+* Added kdollar() - for labelling in thousands of dollars
+* Added output_archive() - a function to archive the existing results in a project directory
+* Added trim_ws() - a function to remove leading/trailing whitespace from character values
+
+## Updates
+* Added more parameters to zoom_definition() - now possible to specify margins and the aspect ratio of the plot
+* create_project() has had an overhaul:
+  - results.R now loads processed_data.RData and gives a warning about the processing date, rather than sourcing the processing script when required
+  - report.R is now created, for saving results directly as a powerpoint presentation via ReporteRs
+  - creates a RUN SCRIPT which will run all the project scripts in sequence
+  - imports mvl_template.pptx to the base directory for use with ReporteRs
+  - output_archive is now moved to its own function, rather than ad-hoc code
+
 # marketview 0.2.1
 
 ## What's New
