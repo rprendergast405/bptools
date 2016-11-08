@@ -323,6 +323,9 @@ make_footnote <- function(footnote_text = paste(format(Sys.time(), "%d %b %Y")),
 #' @param shp_dat A shapefile on which to base the plot window
 #' @param x The name of the attribute in shp_dat which describes the horizontal coordinates
 #' @param y The name of the attribute in shp_dat which describes the vertical coordinates
+#' @param margin The margin that should be added to the plot area
+#' @param expand If TRUE, adds a small expansion factor to the limits to ensure that data and axes don't overlap. If FALSE, limits are taken exactly from the data or xlim/ylim.
+#' @param ratio The aspect ratio (x/y) that the resultant plot area should have
 #'
 #' @export zoom_definition
 #'
@@ -331,20 +334,20 @@ make_footnote <- function(footnote_text = paste(format(Sys.time(), "%d %b %Y")),
 #' geom_polygon(data = nz_tla_13.df,
 #' aes(long, lat, group = group, fill = TLA == 76))+
 #' akl_zoom()
-zoom_definition <- function(shp_dat, x = 'long', y = 'lat'){
+zoom_definition <- function(shp_dat, x = 'long', y = 'lat', margin = 0, expand = FALSE, ratio = 1){
 
   #Calculate the longest dimension, x or y
-  wl <- max(c(max(shp_dat[[x]]) - min(shp_dat[[x]]), max(shp_dat[[y]]) - min(shp_dat[[y]])))/2
+  wl <- max(c(max(shp_dat[[x]]) - min(shp_dat[[x]]), max(shp_dat[[y]]) - min(shp_dat[[y]])))/2 + margin
 
   #Calculate the box coordinates
-  max_coords <- c(mean(c(max(shp_dat[[x]]), min(shp_dat[[x]]))), mean(c(max(shp_dat[[y]]), min(shp_dat[[y]])))) + wl
-  min_coords <- c(mean(c(max(shp_dat[[x]]), min(shp_dat[[x]]))), mean(c(max(shp_dat[[y]]), min(shp_dat[[y]])))) - wl
+  max_coords <- c(mean(c(max(shp_dat[[x]]), min(shp_dat[[x]]))), mean(c(max(shp_dat[[y]]), min(shp_dat[[y]])))) + c(ratio * wl, wl)
+  min_coords <- c(mean(c(max(shp_dat[[x]]), min(shp_dat[[x]]))), mean(c(max(shp_dat[[y]]), min(shp_dat[[y]])))) - c(ratio * wl, wl)
 
   #Function to apply the zoom
   zoom_fn <- function(){
     ggplot2::coord_fixed(xlim = c(min_coords[1], max_coords[1]),
                          ylim = c(min_coords[2], max_coords[2]),
-                         expand = FALSE)
+                         expand = expand)
   }
 
   return(zoom_fn)

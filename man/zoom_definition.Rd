@@ -4,7 +4,8 @@
 \alias{zoom_definition}
 \title{Define a Zooming Function for Plotting Maps.}
 \usage{
-zoom_definition(shp_dat, x = "long", y = "lat")
+zoom_definition(shp_dat, x = "long", y = "lat", margin = 0,
+  expand = FALSE, ratio = 1)
 }
 \arguments{
 \item{shp_dat}{A shapefile on which to base the plot window}
@@ -12,6 +13,12 @@ zoom_definition(shp_dat, x = "long", y = "lat")
 \item{x}{The name of the attribute in shp_dat which describes the horizontal coordinates}
 
 \item{y}{The name of the attribute in shp_dat which describes the vertical coordinates}
+
+\item{margin}{The margin that should be added to the plot area}
+
+\item{expand}{If TRUE, adds a small expansion factor to the limits to ensure that data and axes don't overlap. If FALSE, limits are taken exactly from the data or xlim/ylim.}
+
+\item{ratio}{The aspect ratio (x/y) that the resultant plot area should have}
 }
 \description{
 For a shapefile in NZTM format return a 'zoom' function (a wrapper to coord_fixed()) which displays a square area centred on the shapefile.
