@@ -76,9 +76,23 @@ LaTeX: pdfLaTeX"
   create_results_script(project_name = project_name, root_dir = root_dir)
   cat(" Done\n")
 
+  cat(paste0("  3 ", project_name, " report.R ..."))
+  create_report_script(project_name = project_name, root_dir = root_dir)
+  cat(" Done\n")
+
+  cat(paste0("  ", project_name, " RUN SCRIPT.R ..."))
+  create_run_script(project_name = project_name, root_dir = root_dir)
+  cat(" Done\n")
+
   cat(paste0("  R/rmd/", project_name, " EDA.Rmd ..."))
   create_eda_script(project_name = project_name, root_dir = root_dir)
   cat(" Done\n")
+
+  cat(paste0("Copying mvl_template.pptx to ", root_dir, " ..."))
+  file.copy(from = file.path("M:/R/mvl_template.pptx"),
+            to = root_dir)
+  cat(" Done\n")
+
   cat("Project created successfully")
 }
 
@@ -187,7 +201,7 @@ source(file.path(base_dir, \"R\", \"0 ", project_name, " initialise.R\"))
 # 2. SAVE THE PROCESSED DATA ----------------------------------------------
 
 
-save(list = ls(all.names = TRUE),
+save(list = ls(all.names = TRUE)[!grepl(\"dir\", ls(all.names = TRUE))],
      file = file.path(data_dir, \"processed\", \"", project_name, " data.RData\"))
 ")
 
@@ -221,7 +235,6 @@ create_results_script <- function(project_name, root_dir) {
 # -------------------------------------------------------------------------
 
 base_dir <- \"", root_dir, "\"
-archive <- FALSE
 
 # 0. INITIALISE -----------------------------------------------------------
 
@@ -229,29 +242,13 @@ source(file.path(base_dir, \"R\", \"0 ", project_name, " initialise.R\"))
 
 # 1. IMPORT DATA ----------------------------------------------------------
 
-data_refresh <- file.info(file.path(base_dir, \"R\", \"1 ", project_name, " processing.R\"))$mtime > file.info(file.path(data_dir, \"processed\", \"", project_name, " data.RData\"))$mtime
-if(is.na(data_refresh)) data_refresh <- TRUE
-
-if(data_refresh) {
-source(file.path(base_dir, \"R\", \"1 ", project_name, " processing.R\"))
-} else {
 load(file.path(data_dir, \"processed\", \"", project_name, " data.RData\"))
+warning(paste(\"Processing script last updated\", file.info(file.path(base_dir, \"R\", \"1 ", project_name, " processing.R\"))$mtime))
+warning(paste(\"Data last updated\", file.info(file.path(data_dir, \"processed\", \"", project_name, " data.RData\"))$mtime))
+if (file.info(file.path(base_dir, \"R\", \"1 ", project_name, " processing.R\"))$mtime > file.info(file.path(data_dir, \"processed\", \"", project_name, " data.RData\"))$mtime){
+  warning(\"Your processing script has been updated more recently than your data.\")
 }
 
-
-
-if(archive) {
-# Archive previous versions of the outputs
-archive_time <- Sys.time() %>%
-gsub(x = ., pattern = \" \", repl = \"_\") %>%
-gsub(x = ., pattern = \"[^0-9a-z_]\", repl = \"\")
-# create an archive for old files
-dir.create(path = file.path(base_dir, \"archive\", archive_time), recursive = TRUE)
-# copy the old files
-file.copy(from = output_dir, to = file.path(base_dir, \"archive\", archive_time), recursive = TRUE)
-# remove the files once they are archived
-file.remove(list.files(output_dir, full.names = TRUE, recursive = TRUE))
-}
 
 # initialise the labelling and set the output subdirectory
 fig_num <- 1
@@ -297,19 +294,150 @@ source(file.path(base_dir, \"R\", \"0 ", project_name, " initialise.R\"))
 library(knitr)
 # 1. IMPORT DATA ----------------------------------------------------------
 
-data_refresh <- file.info(file.path(base_dir, \"R\", \"1 ", project_name, " processing.R\"))$mtime > file.info(file.path(data_dir, \"processed\", \"", project_name, " data.RData\"))$mtime
-if(is.na(data_refresh)) data_refresh <- TRUE
 
-if(data_refresh) {
-source(file.path(base_dir, \"R\", \"1 ", project_name, " processing.R\"))
-} else {
 load(file.path(data_dir, \"processed\", \"", project_name, " data.RData\"))
+warning(paste(\"Data last updated\", file.info(file.path(base_dir, \"R\", \"1 ", project_name, " processing.R\"))$mtime)
+warning(paste(\"Data last updated\", file.info(file.path(data_dir, \"processed\", \"", project_name, " data.RData\"))$mtime))
+if (file.info(file.path(base_dir, \"R\", \"1 ", project_name, " processing.R\"))$mtime > file.info(file.path(data_dir, \"processed\", \"", project_name, " data.RData\"))$mtime){
+  warning(\"Your processing script has been updated more recently than your data.\")
 }
+
 
 ```
 
 ")
 
   cat(paste(eda_text, collapse = ""), file = file.path(root_dir, "R", "rmd", paste0(project_name, " EDA.Rmd")))
+
+}
+
+
+#' Create a report script.
+#'
+#' Builds the skeleton of a script that creates a powerpoint report in the specified root directory.
+#' Primarily for internal use in create_project().
+#'
+#' @param project_name The name of the R project.
+#' @param root_dir The root directory of the R project.
+#'
+#' @return Creates a script within the directory specified.
+create_report_script <- function(project_name, root_dir) {
+  report_text <- c("# 3 ", project_name, " report.R
+# Created by ", Sys.info()["user"], ", on ", format(Sys.Date(), "%d %m %Y"), "
+# -------------------------------------------------------------------------
+# A script designed to compile a powerpoint report containing the
+# ", project_name, " results.
+# -------------------------------------------------------------------------
+# WORKFLOW
+#   0. INITIALISE
+#   1. IMPORT DATA
+#   2. COMPILE THE REPORT
+# -------------------------------------------------------------------------
+# Last edited ", format(Sys.Date(), "%d %m %Y"), " by create_project()
+#   - Created
+# -------------------------------------------------------------------------
+base_dir <- \"", root_dir, "\"
+
+# 0. INITIALISE -----------------------------------------------------------
+
+source(file.path(base_dir, \"R\", \"0 ", project_name, " initialise.R\"))
+library(ReporteRs)
+
+# 1. IMPORT DATA ----------------------------------------------------------
+
+load(file.path(data_dir, \"processed\", \"", project_name, " data.RData\"))
+warning(paste(\"Processing script last updated\", file.info(file.path(base_dir, \"R\", \"1 ", project_name, " processing.R\"))$mtime))
+warning(paste(\"Data last updated\", file.info(file.path(data_dir, \"processed\", \"", project_name, " data.RData\"))$mtime))
+if (file.info(file.path(base_dir, \"R\", \"1 ", project_name, " processing.R\"))$mtime > file.info(file.path(data_dir, \"processed\", \"", project_name, " data.RData\"))$mtime){
+  warning(\"Your processing script has been updated more recently than your data.\")
+}
+
+
+# 2. COMPILE THE REPORT ---------------------------------------------------------
+
+# create the report object ----
+ppt_report <- pptx(\" \", \"mvl_template.pptx\")
+
+
+# Add a title slide ----
+ppt_report <- spring_report %>%
+  addSlide(slide.layout = \"Title Slide\") %>%
+  addTitle(\"", project_name, "\") %>%
+  addSubtitle(paste(\"Prepared for: CONTACT,\", \"CLIENT\", Sys.Date() %>% format(\"%d %B, %Y\"), sep = \"\\n\"))
+
+
+# Add Content -------------------------------------------------------------
+
+
+# Save the finished report ------------------------------------------------
+
+writeDoc(ppt_report, file = file.path(base_dir, \"Report/", project_name, ".pptx\"))
+")
+
+  cat(paste(report_text, collapse = ""), file = file.path(root_dir, "R", paste0("3 ", project_name, " report.R")))
+
+}
+
+
+
+#' Create a run script.
+#'
+#' Builds the skeleton of a run script in the specified root directory.
+#' Primarily for internal use in create_project().
+#'
+#' @param project_name The name of the R project.
+#' @param root_dir The root directory of the R project.
+#'
+#' @return Creates a script within the directory specified.
+create_run_script <- function(project_name, root_dir) {
+  run_text <- c("# ", project_name, " RUN SCRIPT.R
+# Created by ", Sys.info()["user"], ", on ", format(Sys.Date(), "%d %m %Y"), "
+# -------------------------------------------------------------------------
+# A script designed to run the ", project_name, " project from start to
+# finish
+# -------------------------------------------------------------------------
+# WORKFLOW
+#   0. INITIALISE
+#   1. IMPORT DATA
+#   2. PRODUCE THE RESULTS
+#   3. COMPILE THE REPORT
+# -------------------------------------------------------------------------
+# Last edited ", format(Sys.Date(), "%d %m %Y"), " by create_project()
+#   - Created
+# -------------------------------------------------------------------------
+
+base_dir <- \"", root_dir, "\"
+
+# 0. INITIALISE -----------------------------------------------------------
+
+source(file.path(base_dir, \"R\", \"0 ", project_name, " initialise.R\"))
+
+# 1. IMPORT DATA ----------------------------------------------------------
+
+# Update the processed data if necessary ----
+
+data_refresh <- file.info(file.path(base_dir, \"R\", \"1 ", project_name, " processing.R\"))$mtime > file.info(file.path(data_dir, \"processed\", \"", project_name, " data.RData\"))$mtime
+if(is.na(data_refresh)) data_refresh <- TRUE
+
+if(data_refresh) {
+  source(file.path(base_dir, \"R\", \"1 ", project_name, " processing.R\"))
+}
+
+# 2. PRODUCE THE RESULTS --------------------------------------------------
+
+# Archive the old results ----
+output_archive(base_dir)
+
+# Re-run the results script ----
+source(file.path(base_dir, \"R\", \"2 ", project_name, " results.R\"))
+
+
+# 3. COMPILE THE REPORT ---------------------------------------------------
+
+# Re-run the results script ----
+source(file.path(base_dir, \"R\", \"3 ", project_name, " report.R\"))
+")
+
+  cat(paste(run_text, collapse = ""), file = file.path(root_dir, "R", paste0(project_name, " RUN SCRIPT.R")))
 
 }
