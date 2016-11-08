@@ -167,3 +167,64 @@ mdollar <- function(x, dp = 2, form = "f", ...){
 bdollar <- function(x, dp = 2, form = "f", ...){
   paste0("$", formatC(x/1e9, digits = dp, format = form, ...), "B")
 }
+
+#' Label in thousands of dollars
+#'
+#' A modification of the \code{dollar()} function from \code{scales}, which
+#' is more appropriate for plots of large dollar values
+#' @param x A numeric dollar amount
+#'
+#' @return A character representation of x in thousands of dollars
+#'
+#' @examples
+#' kdollar(10000)
+#' kdollar(c(2000, 1500000))
+#' @export kdollar
+kdollar <- function(x, dp = 0, form = "f", ...){
+  paste0("$", formatC(x/1e3, digits = dp, format = form, ...), "k")
+}
+
+#' Remove whitespace from character vectors
+#'
+#' @param x A character vector
+#'
+#' @return Text vector with leading and trailing whitespace removed
+#' @export trim_ws
+#'
+#' @examples
+#' trim_ws(c("test_name", "text_artifact       "))
+trim_ws <- function (x){
+  gsub("^\\s+|\\s+$", "", x)
+}
+
+
+#' Archive previous results from a project
+#'
+#' @param base_dir The base directory of the project
+#'
+#' @export output_archive
+
+output_archive <- function(base_dir) {
+  # The directory containing the outputs
+  output_dir <- file.path(base_dir, "output")
+
+  # Archive previous versions of the outputs
+  archive_time <- Sys.time() %>%
+    gsub(x = ., pattern = " ", repl = "_") %>%
+    gsub(x = ., pattern = "[^0-9a-z_]", repl = "")
+
+  # create an archive for old files
+  dir.create(path = file.path(base_dir, "archive", archive_time), recursive = TRUE)
+
+  # copy the old files
+  file.copy(from = output_dir, to = file.path(base_dir, "archive", archive_time), recursive = TRUE)
+
+  # remove the files once they are archived
+  file.remove(list.files(output_dir, full.names = TRUE, recursive = TRUE))
+}
+
+
+
+processed_time <- function(base_dir) {
+
+}
