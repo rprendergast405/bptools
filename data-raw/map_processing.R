@@ -37,14 +37,15 @@ gis_dir <- "M:/gisdata/2013 Boundaries/ESRI shapefile Output/2013 Digital Bounda
 nz_map.spdf <- readOGR(dsn = gis_dir, layer = "AU2013_GV_Clipped", stringsAsFactors = FALSE)
 nz_map.spdf$id <- rownames(nz_map.spdf@data)
 
-inland_water.df <- nz_map.spdf %>%
-  subset(grepl("Inland Water", x = nz_map.spdf@data$AU2013_NAM)) %>%
-  fortify %>%
-  select(long, lat, group)
-# save the tla shapefile
+
+inland_water.df <- readOGR(dsn = "M:/gisdata/2013 Boundaries/ESRI shapefile Output/2013 Digital Boundaries Generlised Full", layer = "AU2013_GV_Full", stringsAsFactors = FALSE) %>%
+  .[(grepl("Marinas|[iI]nlet|[Tt]idal|^[Hh]arbour|[Oo]ceanic|Tamaki Strait|^Bays(?!water)|Bay of Islands",
+           x = .@data$AU2013_NAM, perl = TRUE)), ] %>%
+  gSimplify(tol = 25, topologyPreserve = TRUE) %>%
+  fortify
+
+# save the water data frame
 devtools::use_data(inland_water.df, overwrite = TRUE)
-
-
 
 # Import the TLA shapefile
 nz_tla_13.spdf <- readOGR(dsn = gis_dir, layer = "TA2013_GV_Clipped", stringsAsFactors = FALSE)
