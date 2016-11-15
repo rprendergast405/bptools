@@ -75,7 +75,7 @@ flextable_row_highlight <- function(ft, rows){
 #' @param colour The colour that the bold text should have
 #'
 #' @return ft A modified FlexTable with the specified cells highlighted with bold text in the given colour
-#' @export flextable_row_highlight
+#' @export flextable_cell_bold
 #'
 #' @examples
 #' df_ex <- head(cars)
