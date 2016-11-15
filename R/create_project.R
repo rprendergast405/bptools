@@ -242,12 +242,7 @@ source(file.path(base_dir, \"R\", \"0 ", project_name, " initialise.R\"))
 
 # 1. IMPORT DATA ----------------------------------------------------------
 
-load(file.path(data_dir, \"processed\", \"", project_name, " data.RData\"))
-warning(paste(\"Processing script last updated\", file.info(file.path(base_dir, \"R\", \"1 ", project_name, " processing.R\"))$mtime))
-warning(paste(\"Data last updated\", file.info(file.path(data_dir, \"processed\", \"", project_name, " data.RData\"))$mtime))
-if (file.info(file.path(base_dir, \"R\", \"1 ", project_name, " processing.R\"))$mtime > file.info(file.path(data_dir, \"processed\", \"", project_name, " data.RData\"))$mtime){
-  warning(\"Your processing script has been updated more recently than your data.\")
-}
+data_import(base_dir)
 
 
 # initialise the labelling and set the output subdirectory
@@ -295,12 +290,7 @@ library(knitr)
 # 1. IMPORT DATA ----------------------------------------------------------
 
 
-load(file.path(data_dir, \"processed\", \"", project_name, " data.RData\"))
-warning(paste(\"Data last updated\", file.info(file.path(base_dir, \"R\", \"1 ", project_name, " processing.R\"))$mtime)
-warning(paste(\"Data last updated\", file.info(file.path(data_dir, \"processed\", \"", project_name, " data.RData\"))$mtime))
-if (file.info(file.path(base_dir, \"R\", \"1 ", project_name, " processing.R\"))$mtime > file.info(file.path(data_dir, \"processed\", \"", project_name, " data.RData\"))$mtime){
-  warning(\"Your processing script has been updated more recently than your data.\")
-}
+data_import(base_dir)
 
 
 ```
@@ -345,12 +335,8 @@ library(ReporteRs)
 
 # 1. IMPORT DATA ----------------------------------------------------------
 
-load(file.path(data_dir, \"processed\", \"", project_name, " data.RData\"))
-warning(paste(\"Processing script last updated\", file.info(file.path(base_dir, \"R\", \"1 ", project_name, " processing.R\"))$mtime))
-warning(paste(\"Data last updated\", file.info(file.path(data_dir, \"processed\", \"", project_name, " data.RData\"))$mtime))
-if (file.info(file.path(base_dir, \"R\", \"1 ", project_name, " processing.R\"))$mtime > file.info(file.path(data_dir, \"processed\", \"", project_name, " data.RData\"))$mtime){
-  warning(\"Your processing script has been updated more recently than your data.\")
-}
+
+data_import(base_dir)
 
 
 # 2. COMPILE THE REPORT ---------------------------------------------------------
@@ -360,7 +346,7 @@ ppt_report <- pptx(\" \", \"mvl_template.pptx\")
 
 
 # Add a title slide ----
-ppt_report <- spring_report %>%
+ppt_report <- ppt_report %>%
   addSlide(slide.layout = \"Title Slide\") %>%
   addTitle(\"", project_name, "\") %>%
   addSubtitle(paste(\"Prepared for: CONTACT,\", \"CLIENT\", Sys.Date() %>% format(\"%d %B, %Y\"), sep = \"\\n\"))
@@ -421,7 +407,7 @@ if(is.na(data_refresh)) data_refresh <- TRUE
 
 if(data_refresh) {
   source(file.path(base_dir, \"R\", \"1 ", project_name, " processing.R\"))
-}
+} else data_import(base_dir)
 
 # 2. PRODUCE THE RESULTS --------------------------------------------------
 
