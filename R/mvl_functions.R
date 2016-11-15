@@ -225,6 +225,33 @@ output_archive <- function(base_dir) {
 
 
 
-processed_time <- function(base_dir) {
+#' Import the processed data for a project
+#'
+#' @param base_dir
+#' @param data_name
+#'
+#' @return
+#' @export
+#'
+#' @examples
+data_import <- function(base_dir, data_name = paste(gsub(".*/(?!$)|/$", "", base_dir, perl = TRUE), "data.RData")) {
+
+  # When was the processing script last updated?
+  processing_time <- file.info(file.path(base_dir, "R", paste("1", gsub(".*/(?!$)|/$", "", base_dir, perl = TRUE), "processing.R")))$mtime
+
+  # When was the data last updated?
+  data_time <- file.info(file.path(data_dir, "processed", paste(gsub(".*/(?!$)|/$", "", base_dir, perl = TRUE), "data.RData")))$mtime
+
+
+  # Import the data
+  load(file.path(data_dir, "processed", data_name), envir = .GlobalEnv)
+
+  warning(paste("Data processing script last updated", processing_time))
+
+  warning(paste("Data last updated", data_time))
+
+  if (processing_time > data_time){
+    warning("Your processing script has been updated more recently than your data.")
+  }
 
 }
