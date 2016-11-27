@@ -42,6 +42,41 @@ flextable_teal <- function(df, size = 12, padding = size / 2) {
 }
 
 
+#' Create a dark-themed FlexTable
+#'
+#' A function to create a FlexTable object for use in MS Office type outputs via the ReporteRs package
+#'
+#' @param df The data which should populate the flextable
+#' @param size Which size should the resulting FlexTable's text be?
+#' @param padding How much padding should there be around the text?
+#'
+#' @export flextable_dark
+#'
+#' @examples
+#' flextable_dark(head(cars))
+flextable_dark <- function(df, size = 12, padding = size / 2) {
+  # Create the FlexTable of the data
+  df_ft <- ReporteRs::FlexTable(df, header.cell.props = ReporteRs::cellProperties(background.color = marketview::mvl_blue, padding.top = padding, padding.bottom = padding),
+                                header.text.props = ReporteRs::textProperties(color = "white", font.size = size, font.family = "Calibri", font.weight = "bold"),
+                                header.par.props = ReporteRs::parProperties(text.align = "center"),
+                                body.cell.props = ReporteRs::cellProperties(padding.top = padding, padding.bottom = padding),
+                                body.par.props = ReporteRs::parProperties(text.align = "center"),
+                                body.text.props = ReporteRs::textProperties(color = marketview::mvl_blue, font.size = size, font.family = "Calibri")
+  )
+
+  # Add the 'zebra' cell fill
+  df_ft <- ReporteRs::setZebraStyle(df_ft, odd = "grey95", even = marketview::mvl_half_grey)
+
+  # Set the cell borders
+  df_ft <- ReporteRs::setFlexTableBorders(df_ft, inner.vertical = ReporteRs::borderProperties( color = "white", style= "solid"),
+                                          inner.horizontal = ReporteRs::borderProperties( color = "white", style = "solid" ),
+                                          outer.vertical = ReporteRs::borderProperties( color = "white", style = "solid" ),
+                                          outer.horizontal = ReporteRs::borderProperties( color = "white", style = "solid"))
+
+  return(df_ft)
+}
+
+
 #' Highlight given rows of a flextable
 #'
 #' A function to highlight particular rows of a FlexTable with gold borders
@@ -56,11 +91,11 @@ flextable_teal <- function(df, size = 12, padding = size / 2) {
 #' df_ex <- head(cars)
 #' ft_ex <- flextable_teal(df_ex)
 #' ft_ex <- flextable_row_highlight(ft_ex, which(df_ex$dist == max(df_ex$dist)))
-flextable_row_highlight <- function(ft, rows){
-  ft[rows, side = "top"] = ReporteRs::borderProperties(color = "gold", width = 2)
-  ft[rows, side = "bottom"] = ReporteRs::borderProperties(color = "gold", width = 2)
-  ft[rows, 1, side = "left"] = ReporteRs::borderProperties(color = "gold", width = 2)
-  ft[rows, ft$numcol, side = "right"] = ReporteRs::borderProperties(color = "gold", width = 2)
+flextable_row_highlight <- function(ft, rows, cols = 1:ft$numcol){
+  ft[rows, cols, side = "top"] = ReporteRs::borderProperties(color = "gold", width = 2)
+  ft[rows, cols, side = "bottom"] = ReporteRs::borderProperties(color = "gold", width = 2)
+  ft[rows, min(cols), side = "left"] = ReporteRs::borderProperties(color = "gold", width = 2)
+  ft[rows, max(cols), side = "right"] = ReporteRs::borderProperties(color = "gold", width = 2)
 
   return(ft)
 }
