@@ -4,7 +4,7 @@
 \alias{flextable_row_highlight}
 \title{Highlight given rows of a flextable}
 \usage{
-flextable_row_highlight(ft, rows)
+flextable_row_highlight(ft, rows, cols = 1:ft$numcol)
 }
 \arguments{
 \item{ft}{The flextable object to highlight}
