@@ -184,6 +184,12 @@ kdollar <- function(x, dp = 0, form = "f", ...){
   paste0("$", formatC(x/1e3, digits = dp, format = form, ...), "k")
 }
 
+#' @export percent
+percent <- function(x, dp = 1, form = "f", ...){
+  paste0(formatC(x * 100, digits = dp, format = form, big.mark = ",", ...), "%")
+}
+
+
 #' Remove whitespace from character vectors
 #'
 #' @param x A character vector
