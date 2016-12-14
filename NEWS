@@ -1,11 +1,15 @@
 # marketview 0.2.3
 
 ## What's New:
+* Added get_meshblock_data() to import meshblock shapefiles
+* Added make_cau_df() to create a data frame of area units
+* Added make_mb_df() to create a data frame of meshblocks
 * Added flextable_dark() for a dark-themed flextable
 * Added inland_water.df to plot lakes 'n shit on maps
 * Added water.df to plot the sea on maps
-* Added data_input() to tidy up importing processed data for an R project
+* Added data_import() to tidy up importing processed data for an R project
 * Added percent() function which gives better control over the decimal places than scales::percent()
+* Added source_dir() function to source all scripts in a directory (this has been added to the initialisation scripts in create_project())
 
 ## Updates
 * Updated flextable_row_highlight() to be able to highlight particular cells, rather than entire rows only
