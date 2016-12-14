@@ -160,6 +160,9 @@ data_dir <- file.path(base_dir, \"data\")
 output_dir <- file.path(base_dir, \"output\")
 fig_dir <- file.path(output_dir, \"figures\")
 tab_dir <- file.path(output_dir, \"tables\")
+
+# Source any function scripts
+source_dir(file.path(base_dir, \"R/functions\"))
 ")
 
   cat(paste(init_text, collapse = ""), file = file.path(root_dir, "R", paste0("0 ", project_name, " initialise.R")))
