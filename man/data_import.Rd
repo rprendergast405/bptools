@@ -8,7 +8,12 @@ data_import(base_dir, data_name = paste(gsub(".*/(?!$)|/$", "", base_dir, perl
   = TRUE), "data.RData"))
 }
 \arguments{
-\item{data_name}{}
+\item{base_dir}{The base directory of the project}
+
+\item{data_name}{The name that the data object has. Defaults to "project name data.RData"}
+}
+\value{
+imports the processed data into the global environment
 }
 \description{
 Import the processed data for a project
