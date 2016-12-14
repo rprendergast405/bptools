@@ -89,3 +89,82 @@ GROUP BY    c.CAU"
 
   return(dat)
 }
+
+
+
+#' Import a meshblock shapefile
+#'
+#' A function to import a shapefile of meshblock boundaries for a given census definition.
+#'
+#' @param census Which census meshblocks should be retrieved?
+#'
+#' @return SpatialPolygonsDataFrame describing the meshblock boundaries
+#' @export get_meshblock_data
+#'
+#' @examples mb_map.df <- get_meshblock_data(2013)
+get_meshblock_data <- function(census = 2013) {
+  if (census == 2013) {
+    dat <- rgdal::readOGR(dsn = "M:/gisdata/2013 Boundaries/ESRI shapefile Output/2013 Digital Boundaries Generlised Clipped",
+                           layer = "MB2013_GV_Clipped", stringsAsFactors = FALSE)
+    # Add a MB column describing the meshblock
+    dat$MB <- as.integer(dat$MB2013)
+
+    # Add an ID column for fortifying
+    dat$id <- rownames(dat@data)
+
+  } else if (census == 2006) {
+    dat <- rgdal::readOGR(dsn = "M:/gisdata/census2006",
+                            layer = "mb", stringsAsFactors = FALSE)
+
+    # Add a MB column describing the meshblock
+    dat$MB <- as.integer(dat$MB06)
+
+    # Add an ID column for fortifying
+    dat$id <- rownames(dat@data)
+
+  } else stop("census should be either 2013 or 2006.")
+return(dat)
+}
+
+
+
+#' Create a data.frame of meshblock boundaries
+#'
+#' Given a meshblock shapefile and a list of meshblocks, make_mb_df selects the meshblocks and fortifies them into a data.frame for plotting
+#'
+#' @param mb_map.spdf shapefile of the meshblock boundaries
+#' @param mbs subset of the meshblocks to get
+#'
+#' @export make_mb_df
+make_mb_df <- function(mb_map.spdf, mbs){
+  # simplify and fortify the data
+  mb_df <- mb_map.spdf %>%
+    subset(MB %in% mbs) %>%
+    rgeos::gSimplify(tol = 25, topologyPreserve = TRUE) %>%
+    ggplot2::fortify(region = "id") %>%
+    dplyr::left_join(mb_map.spdf@data, by = "id") %>%
+    dplyr::select(long, lat, group, MB)
+
+  return(mb_df)
+}
+
+#' Create a data.frame of area unit boundaries
+#'
+#' Given a CAU shapefile and a list of area units, make_cau_df selects the area units and fortifies them into a data.frame for plotting
+#'
+#' @param mb_map.spdf shapefile of the area unit boundaries
+#' @param mbs subset of the area units to get
+#'
+#' @export make_cau_df
+make_cau_df <- function(caus) {
+
+  cau_df <- nz_cau_13.spdf %>%
+    subset(CAU %in% caus) %>%
+    rgeos::gSimplify(tol = 25, topologyPreserve = TRUE) %>%
+    ggplot2::fortify(region = "id") %>%
+    dplyr::left_join(nz_cau_13.spdf@data, by = "id") %>%
+    dplyr::select(long, lat, group, CAU, CAU_NAME) %>%
+    dplyr::mutate(CAU = as.integer(CAU))
+
+  return(cau_df)
+}
