@@ -13,7 +13,7 @@ kdollar(x, dp = 0, form = "f", ...)
 A character representation of x in thousands of dollars
 }
 \description{
-A modification of the \code{dollar()} function from \code{scales}, which
+A modification of the \code{\link[scales]{dollar}} function from \code{scales}, which
 is more appropriate for plots of large dollar values
 }
 \examples{

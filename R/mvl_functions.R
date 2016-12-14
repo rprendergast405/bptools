@@ -136,7 +136,7 @@ save_table <- function(x,
 
 #' Label in millions of dollars
 #'
-#' A modification of the \code{dollar()} function from \code{scales}, which
+#' A modification of the \code{\link[scales]{dollar}} function from \code{scales}, which
 #' is more appropriate for plots of large dollar values
 #' @param x A numeric dollar amount
 #'
@@ -154,7 +154,7 @@ mdollar <- function(x, dp = 2, form = "f", ...){
 
 #' Label in billions of dollars
 #'
-#' A modification of the \code{dollar()} function from \code{scales}, which
+#' A modification of the \code{\link[scales]{dollar}} function from \code{scales}, which
 #' is more appropriate for plots of large dollar values
 #' @param x A numeric dollar amount
 #'
@@ -170,7 +170,7 @@ bdollar <- function(x, dp = 2, form = "f", ...){
 
 #' Label in thousands of dollars
 #'
-#' A modification of the \code{dollar()} function from \code{scales}, which
+#' A modification of the \code{\link[scales]{dollar}} function from \code{scales}, which
 #' is more appropriate for plots of large dollar values
 #' @param x A numeric dollar amount
 #'
@@ -184,7 +184,24 @@ kdollar <- function(x, dp = 0, form = "f", ...){
   paste0("$", formatC(x/1e3, digits = dp, format = form, ...), "k")
 }
 
+#' Convert numeric values to percentages
+#'
+#' A modification of the \code{\link[scales]{percent}} function from \code{scales}, which
+#' gives better control over the decimal places displayed
+#' @param x numeric representation of a percentage
+#' @param dp the number of decimal places to display in the output
+#' @param form Same as the \code{format} parameter in \code{\link{formatC}}
+#' @param ... Additional options for formatC
+#'
+#' @return A character representation of \code{x} as a percentage
 #' @export percent
+#'
+#' @examples
+#' percent(0.01)
+#' percent(c(0.001, 0.23423452, 0.2, 1.124, 1213.34))
+#'
+#' Compare to scales implementation:
+#' scales::percent(c(0.001, 0.23423452, 0.2, 1.124, 1213.34))
 percent <- function(x, dp = 1, form = "f", ...){
   paste0(formatC(x * 100, digits = dp, format = form, big.mark = ",", ...), "%")
 }
@@ -233,13 +250,11 @@ output_archive <- function(base_dir) {
 
 #' Import the processed data for a project
 #'
-#' @param base_dir
-#' @param data_name
+#' @param base_dir The base directory of the project
+#' @param data_name The name that the data object has. Defaults to "project name data.RData"
 #'
-#' @return
-#' @export
-#'
-#' @examples
+#' @return imports the processed data into the global environment
+#' @export data_import
 data_import <- function(base_dir, data_name = paste(gsub(".*/(?!$)|/$", "", base_dir, perl = TRUE), "data.RData")) {
 
   # When was the processing script last updated?
@@ -260,4 +275,21 @@ data_import <- function(base_dir, data_name = paste(gsub(".*/(?!$)|/$", "", base
     warning("Your processing script has been updated more recently than your data.")
   }
 
+}
+
+
+
+#' Source all scripts in a directory
+#'
+#' @param path The directory containing the scripts
+#' @param trace Print status to the console?
+#' @param ... Other options
+#'
+#' @export source_dir
+source_dir <- function(path, trace = TRUE, ...) {
+  for (nm in list.files(path, pattern = "\\.[RrSsQq]$")) {
+    if(trace) cat(nm,":")
+    source(file.path(path, nm), ...)
+    if(trace) cat("\n")
+  }
 }
