@@ -91,6 +91,9 @@ LaTeX: pdfLaTeX"
   cat(paste0("Copying mvl_template.pptx to ", root_dir, " ..."))
   file.copy(from = file.path("M:/R/mvl_template.pptx"),
             to = root_dir)
+
+  file.copy(from = file.path("M:/R/mvl_template_old.pptx"),
+            to = root_dir)
   cat(" Done\n")
 
   cat("Project created successfully")
