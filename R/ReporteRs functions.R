@@ -129,3 +129,74 @@ flextable_cell_bold <- function(ft, rows, cols, colour = "black"){
 
   return(ft)
 }
+
+
+
+#' Create a black-themed FlexTable
+#'
+#' A function to create a FlexTable object for use in MS Office type outputs via the ReporteRs package
+#'
+#' @param df The data which should populate the flextable
+#' @param size Which size should the resulting FlexTable's text be?
+#' @param padding How much padding should there be around the text?
+#'
+#' @export flextable_black
+#'
+#' @examples
+#' flextable_black(head(cars))
+flextable_black <- function(df, size = 12, padding = size / 2) {
+  # Create the FlexTable of the data
+  df_ft <- ReporteRs::FlexTable(df, header.cell.props = ReporteRs::cellProperties(background.color = "black", padding.top = padding, padding.bottom = padding),
+                                header.text.props = ReporteRs::textProperties(color = "white", font.size = size, font.family = "Helvetica Neue", font.weight = "bold"),
+                                header.par.props = ReporteRs::parProperties(text.align = "center"),
+                                body.cell.props = ReporteRs::cellProperties(padding.top = padding, padding.bottom = padding),
+                                body.par.props = ReporteRs::parProperties(text.align = "center"),
+                                body.text.props = ReporteRs::textProperties(color = "black", font.size = size, font.family = "Helvetica Neue")
+  )
+
+  # Add the 'zebra' cell fill
+  df_ft <- ReporteRs::setZebraStyle(df_ft, odd = "grey90", even = marketview::mvl_half_grey)
+
+  # Set the cell borders
+  df_ft <- ReporteRs::setFlexTableBorders(df_ft, inner.vertical = ReporteRs::borderProperties( color="white", style="solid"),
+                                          inner.horizontal = ReporteRs::borderProperties( color = "white", style = "solid" ),
+                                          outer.vertical = ReporteRs::borderProperties( color = "white", style = "solid" ),
+                                          outer.horizontal = ReporteRs::borderProperties( color = "white", style = "solid"))
+
+  return(df_ft)
+}
+
+
+#' Create a leaf-themed FlexTable
+#'
+#' A function to create a FlexTable object for use in MS Office type outputs via the ReporteRs package
+#'
+#' @param df The data which should populate the flextable
+#' @param size Which size should the resulting FlexTable's text be?
+#' @param padding How much padding should there be around the text?
+#'
+#' @export flextable_leaf
+#'
+#' @examples
+#' flextable_leaf(head(cars))
+flextable_leaf <- function(df, size = 12, padding = size / 2) {
+  # Create the FlexTable of the data
+  df_ft <- ReporteRs::FlexTable(df, header.cell.props = ReporteRs::cellProperties(background.color = marketview::mvl_leaf, padding.top = padding, padding.bottom = padding),
+                                header.text.props = ReporteRs::textProperties(color = "white", font.size = size, font.family = "Helvetica Neue", font.weight = "bold"),
+                                header.par.props = ReporteRs::parProperties(text.align = "center"),
+                                body.cell.props = ReporteRs::cellProperties(padding.top = padding, padding.bottom = padding),
+                                body.par.props = ReporteRs::parProperties(text.align = "center"),
+                                body.text.props = ReporteRs::textProperties(color = "black", font.size = size, font.family = "Helvetica Neue")
+  )
+
+  # Add the 'zebra' cell fill
+  df_ft <- ReporteRs::setZebraStyle(df_ft, odd = grDevices::rgb(236, 241, 233, maxColorValue = 255), even = grDevices::rgb(214, 226, 207, maxColorValue = 255))
+
+  # Set the cell borders
+  df_ft <- ReporteRs::setFlexTableBorders(df_ft, inner.vertical = ReporteRs::borderProperties( color="white", style="solid"),
+                                          inner.horizontal = ReporteRs::borderProperties( color = "white", style = "solid" ),
+                                          outer.vertical = ReporteRs::borderProperties( color = "white", style = "solid" ),
+                                          outer.horizontal = ReporteRs::borderProperties( color = "white", style = "solid"))
+
+  return(df_ft)
+}
