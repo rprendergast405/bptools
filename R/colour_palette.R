@@ -76,3 +76,27 @@ mvl_hay <- grDevices::rgb(233, 214, 102, maxColorValue = 255)
 #' @rdname mvl_colourpal
 #' @export mvl_half_hay
 mvl_half_hay <- grDevices::rgb(242, 234, 176, maxColorValue = 255)
+
+#' @rdname mvl_colourpal
+#' @export mvl_leaf
+mvl_leaf <- grDevices::rgb(120, 170, 66, maxColorValue = 255)
+
+#' @rdname mvl_colourpal
+#' @export mvl_half_leaf
+mvl_half_leaf <- grDevices::rgb(140, 198, 63, maxColorValue = 255)
+
+#' @rdname mvl_colourpal
+#' @export mvl_stone
+mvl_stone <- grDevices::rgb(88, 89, 91, maxColorValue = 255)
+
+#' @rdname mvl_colourpal
+#' @export mvl_citrus
+mvl_citrus <- grDevices::rgb(215, 223, 35, maxColorValue = 255)
+
+#' @rdname mvl_colourpal
+#' @export mvl_sky
+mvl_sky <- grDevices::rgb(0, 185, 242, maxColorValue = 255)
+
+#' @rdname mvl_colourpal
+#' @export mvl_plum
+mvl_plum <- grDevices::rgb(145, 39, 143, maxColorValue = 255)

@@ -3,20 +3,26 @@
 \docType{data}
 \name{mvl_colourpal}
 \alias{mvl_blue}
+\alias{mvl_citrus}
 \alias{mvl_colourpal}
 \alias{mvl_green}
 \alias{mvl_grey}
 \alias{mvl_half_grey}
 \alias{mvl_half_hay}
+\alias{mvl_half_leaf}
 \alias{mvl_half_purple}
 \alias{mvl_half_teal}
 \alias{mvl_hay}
+\alias{mvl_leaf}
 \alias{mvl_navy}
 \alias{mvl_orange}
 \alias{mvl_pewter}
+\alias{mvl_plum}
 \alias{mvl_purple}
 \alias{mvl_red}
 \alias{mvl_royal}
+\alias{mvl_sky}
+\alias{mvl_stone}
 \alias{mvl_teal}
 \title{Marketview palette.}
 \format{An object of class \code{character} of length 1.}
@@ -50,6 +56,18 @@ mvl_half_grey
 mvl_hay
 
 mvl_half_hay
+
+mvl_leaf
+
+mvl_half_leaf
+
+mvl_stone
+
+mvl_citrus
+
+mvl_sky
+
+mvl_plum
 }
 \description{
 Colours described by the \href{file:///M:/mvl_office/templates/Logos/MarketView_ColourGuide_v2.pdf}{Marketview colour palette}.
