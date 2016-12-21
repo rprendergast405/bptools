@@ -4,7 +4,8 @@
 \alias{theme_mvl_old}
 \title{Old Marketview ggplot theme.}
 \usage{
-theme_mvl_old(base_size = 12, base_family = "calb", plain_family = "cal")
+theme_mvl_old(base_size = 12, base_family = "calb", plain_family = "cal",
+  text_colour = "black")
 }
 \arguments{
 \item{base_size}{The base size for fonts}

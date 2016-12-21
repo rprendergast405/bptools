@@ -4,7 +4,8 @@
 \alias{theme_map}
 \title{Marketview ggplot map theme.}
 \usage{
-theme_map(base_size = 12, base_family = "calb", plain_family = "cal")
+theme_map(base_size = 12, base_family = "hnb", plain_family = "hn",
+  text_colour = "black")
 }
 \arguments{
 \item{base_size}{The base size for fonts}

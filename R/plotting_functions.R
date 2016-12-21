@@ -10,7 +10,9 @@
 
 # Add calibri fonts ----
 grDevices::windowsFonts(calb = "Calibri Bold",
-                        cal = "Calibri")
+                        cal = "Calibri",
+                        hn = "Helvetica Neue",
+                        hnb = "Helvetica Neue Bold")
 
 #' Marketview ggplot theme.
 #'
@@ -27,12 +29,19 @@ grDevices::windowsFonts(calb = "Calibri Bold",
 #' library(ggplot2)
 #' p <- ggplot(data.frame(x = 1:5, y = 1:5)) + geom_point(aes(x, y))
 #' p + theme_mvl()
-theme_mvl <- function(base_size = 12, base_family = "calb", plain_family = "cal") {
+theme_mvl <- function(base_size = 12, base_family = "hnb", plain_family = "hn", text_colour = "black") {
+  if(!all(c("hn", "hnb") %in% names(grDevices::windowsFonts()))) {
+    grDevices::windowsFonts(hn = "Helvetica Neue",
+                            hnb = "Helvetica Neue Bold")
+
+  }
+
+
   ggplot2::`%+replace%`(ggplot2::theme_minimal(base_size = base_size, base_family = base_family),
                         ggplot2::theme(
                           text = ggplot2::element_text(family = base_family,
                                                        face = "plain",
-                                                       colour = grDevices::rgb(33, 89, 104, maxColorValue = 255),
+                                                       colour = text_colour,
                                                        size = base_size,
                                                        hjust = 0.5,
                                                        vjust = 0.5,
@@ -73,12 +82,19 @@ theme_mvl <- function(base_size = 12, base_family = "calb", plain_family = "cal"
 #' library(ggplot2)
 #' p <- ggplot(data.frame(x = 1:5, y = 1:5)) + geom_point(aes(x, y))
 #' p + theme_mvl_old()
-theme_mvl_old <- function(base_size = 12, base_family = "calb", plain_family = "cal") {
+theme_mvl_old <- function(base_size = 12, base_family = "calb", plain_family = "cal", text_colour = "black") {
+  if(!all(c("cal", "calb") %in% names(grDevices::windowsFonts()))) {
+    grDevices::windowsFonts(calb = "Calibri Bold",
+                            cal = "Calibri")
+
+  }
+
+
   ggplot2::`%+replace%`(ggplot2::theme_minimal(base_size = base_size, base_family = base_family),
                         ggplot2::theme(
                           text = ggplot2::element_text(family = base_family,
                                                        face = "plain",
-                                                       colour = grDevices::rgb(33, 89, 104, maxColorValue = 255),
+                                                       colour = text_colour,
                                                        size = base_size,
                                                        hjust = 0.5,
                                                        vjust = 0.5,
@@ -120,13 +136,19 @@ theme_mvl_old <- function(base_size = 12, base_family = "calb", plain_family = "
 #' library(ggplot2)
 #' p <- ggplot(data.frame(x = 1:5, y = 1:5)) + geom_point(aes(x, y))
 #' p + theme_map()
-theme_map <- function(base_size = 12, base_family = "calb", plain_family = "cal") {
+theme_map <- function(base_size = 12, base_family = "hnb", plain_family = "hn", text_colour = "black") {
+  if(!all(c("hn", "hnb") %in% names(grDevices::windowsFonts()))) {
+    grDevices::windowsFonts(hn = "Helvetica Neue",
+                            hnb = "Helvetica Neue Bold")
+
+  }
+
   ggplot2::`%+replace%`(ggplot2::theme_minimal(base_size = base_size, base_family = base_family),
     ggplot2::theme(
       line = ggplot2::element_blank(),
       text = ggplot2::element_text(family = base_family,
                           face = "plain",
-                          colour = rgb(33, 89, 104, maxColorValue = 255),
+                          colour = text_colour,
                           size = base_size,
                           hjust = 0.5,
                           vjust = 0.5,
@@ -169,8 +191,8 @@ theme_map <- function(base_size = 12, base_family = "calb", plain_family = "cal"
 #' library(ggplot2)
 #' p <- ggplot(data.frame(x = 1:5, y = 1:5)) + geom_point(aes(x, y))
 #' p + theme_map_minimal()
-theme_map_minimal <- function(base_size = 12, base_family = "calb", plain_family = "cal") {
-  ggplot2::`%+replace%`(theme_mvl(base_size = base_size, base_family = base_family),
+theme_map_minimal <- function(base_size = 12, base_family = "hnb", plain_family = "hn", text_colour = "black") {
+  ggplot2::`%+replace%`(theme_mvl(base_size = base_size, base_family = base_family, text_colour = text_colour),
     ggplot2::theme(
       axis.text = ggplot2::element_blank(),
       axis.title = ggplot2::element_blank(),
