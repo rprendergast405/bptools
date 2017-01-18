@@ -29,6 +29,14 @@ mcd_process <- function(dat){
   if("AGE" %in% colnames(dat)){
   dat[,"AGE"] <- factor(dat[["AGE"]])}
 
+
+  if ("AGEX" %in% toupper(colnames(dat))) {
+    dat[, "AGEX"] <- factor(dat[["AGEX"]])
+    if("AGE" %in% toupper(colnames(dat))) {
+      dat[,"AGE"] <- as.integer(dat[["AGE"]])
+    }
+  }
+
   #Format Gender Factor
   if("GENDER" %in% colnames(dat)){
   dat[,"GENDER"] <- factor(dat[["GENDER"]], levels = c("M", "F"), labels = c("Male", "Female"))}
