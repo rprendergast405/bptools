@@ -147,7 +147,7 @@ save_table <- function(x,
 #' mdollar(c(2000000, 15000000))
 #' @export mdollar
 mdollar <- function(x, dp = 2, form = "f", ...){
-  paste0("$", formatC(x/1e6, digits = dp, format = form, ...), "M")
+  paste0("$", formatC(x/1e6, digits = dp, format = form, big.mark = ",", ...), "M")
 }
 
 
@@ -165,7 +165,7 @@ mdollar <- function(x, dp = 2, form = "f", ...){
 #' bdollar(c(2000000000, 15000000000))
 #' @export bdollar
 bdollar <- function(x, dp = 2, form = "f", ...){
-  paste0("$", formatC(x/1e9, digits = dp, format = form, ...), "B")
+  paste0("$", formatC(x/1e9, digits = dp, format = form, big.mark = ",", ...), "B")
 }
 
 #' Label in thousands of dollars
@@ -181,7 +181,7 @@ bdollar <- function(x, dp = 2, form = "f", ...){
 #' kdollar(c(2000, 1500000))
 #' @export kdollar
 kdollar <- function(x, dp = 0, form = "f", ...){
-  paste0("$", formatC(x/1e3, digits = dp, format = form, ...), "k")
+  paste0("$", formatC(x/1e3, digits = dp, format = form, big.mark = ",", ...), "k")
 }
 
 #' Convert numeric values to percentages
