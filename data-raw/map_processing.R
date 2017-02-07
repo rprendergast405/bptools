@@ -278,9 +278,10 @@ akl_cau_06.df <- nz_map.spdf[(nz_map.spdf@data$AU_NO %in% akl_meshblocks) & !(gr
   gSimplify(tol = 25, topologyPreserve = TRUE) %>%
   fortify(region = "id") %>%
   left_join(nz_map.spdf@data, by = "id") %>%
-  select(long, lat, group, CAU = AU_NO, CAU_NAME = AU_NAME)
+  mutate(CAU = as.integer(AU_NO)) %>%
+  select(long, lat, group, CAU, CAU_NAME = AU_NAME)
 
-devtools::use_data(akl_cau_06.df)
+devtools::use_data(akl_cau_06.df, overwrite = TRUE)
 
 
 # Wellington --------------------------------------------------------------
@@ -294,9 +295,10 @@ wtn_cau_06.df <- nz_map.spdf[(nz_map.spdf@data$AU_NO %in% wtn_meshblocks) & !(gr
   gSimplify(tol = 25, topologyPreserve = TRUE) %>%
   fortify(region = "id") %>%
   left_join(nz_map.spdf@data, by = "id") %>%
-  select(long, lat, group, CAU = AU_NO, CAU_NAME = AU_NAME)
+  mutate(CAU = as.integer(AU_NO)) %>%
+  select(long, lat, group, CAU, CAU_NAME = AU_NAME)
 
-devtools::use_data(wtn_cau_06.df)
+devtools::use_data(wtn_cau_06.df, overwrite = TRUE)
 
 
 # Christchurch ------------------------------------------------------------
@@ -310,9 +312,10 @@ chch_cau_06.df <- nz_map.spdf[(nz_map.spdf@data$AU_NO %in% chch_meshblocks) & !(
   gSimplify(tol = 25, topologyPreserve = TRUE) %>%
   fortify(region = "id") %>%
   left_join(nz_map.spdf@data, by = "id") %>%
-  select(long, lat, group, CAU = AU_NO, CAU_NAME = AU_NAME)
+  mutate(CAU = as.integer(AU_NO)) %>%
+  select(long, lat, group, CAU, CAU_NAME = AU_NAME)
 
-devtools::use_data(chch_cau_06.df)
+devtools::use_data(chch_cau_06.df, overwrite = TRUE)
 
 # Hamilton ------------------------------------------------------------
 
@@ -325,9 +328,10 @@ ham_cau_06.df <- nz_map.spdf[(nz_map.spdf@data$AU_NO %in% ham_meshblocks) & !(gr
   gSimplify(tol = 25, topologyPreserve = TRUE) %>%
   fortify(region = "id") %>%
   left_join(nz_map.spdf@data, by = "id") %>%
-  select(long, lat, group, CAU = AU_NO, CAU_NAME = AU_NAME)
+  mutate(CAU = as.integer(AU_NO)) %>%
+  select(long, lat, group, CAU, CAU_NAME = AU_NAME)
 
-devtools::use_data(ham_cau_06.df)
+devtools::use_data(ham_cau_06.df, overwrite = TRUE)
 
 
 # Tauranga -------------------------------------------------
@@ -341,9 +345,10 @@ tga_cau_06.df <- nz_map.spdf[(nz_map.spdf@data$AU_NO %in% tga_meshblocks) & !(gr
   gSimplify(tol = 25, topologyPreserve = TRUE) %>%
   fortify(region = "id") %>%
   left_join(nz_map.spdf@data, by = "id") %>%
-  select(long, lat, group, CAU = AU_NO, CAU_NAME = AU_NAME)
+  mutate(CAU = as.integer(AU_NO)) %>%
+  select(long, lat, group, CAU, CAU_NAME = AU_NAME)
 
-devtools::use_data(tga_cau_06.df)
+devtools::use_data(tga_cau_06.df, overwrite = TRUE)
 
 
 
