@@ -1,3 +1,18 @@
+# marketview 0.3.9000
+
+## What's New:
+* Added mvl_process() to treat the new standard analytics atributes
+
+## Small changes:
+* Updated mcd_process() to deal with the AGEX attribute, if it exists
+* Changed default font sizes in mvl ggplot themes
+* Added comma formatting to *dollar() functions
+* Adjusted the treatment for negative values in *dollar() functions
+
+## Bug Fixes:
+* Fixed the QSR flag in mcd_process()
+* Changed the attribute type in 06 CAU data frames from character to integer
+
 # marketview 0.3.0
 
 ## What's New:
