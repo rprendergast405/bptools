@@ -29,7 +29,7 @@ grDevices::windowsFonts(calb = "Calibri Bold",
 #' library(ggplot2)
 #' p <- ggplot(data.frame(x = 1:5, y = 1:5)) + geom_point(aes(x, y))
 #' p + theme_mvl()
-theme_mvl <- function(base_size = 12, base_family = "hnb", plain_family = "hn", text_colour = "black") {
+theme_mvl <- function(base_size = 11, base_family = "hnb", plain_family = "hn", text_colour = "black") {
   if(!all(c("hn", "hnb") %in% names(grDevices::windowsFonts()))) {
     grDevices::windowsFonts(hn = "Helvetica Neue",
                             hnb = "Helvetica Neue Bold")
@@ -61,7 +61,7 @@ theme_mvl <- function(base_size = 12, base_family = "hnb", plain_family = "hn", 
                           panel.grid.major.x = ggplot2::element_blank(),
                           panel.grid.major.y = ggplot2::element_line(colour = mvl_grey, size = 0.2),
 
-                          plot.title = ggplot2::element_text(size = base_size * 2, hjust = 0),
+                          plot.title = ggplot2::element_text(size = round(base_size * 1.5), hjust = 0),
                           plot.margin = grid::unit(c(0.1, 0.1, 0.1, 0.1), "cm")
                         )
   )
@@ -136,7 +136,7 @@ theme_mvl_old <- function(base_size = 12, base_family = "calb", plain_family = "
 #' library(ggplot2)
 #' p <- ggplot(data.frame(x = 1:5, y = 1:5)) + geom_point(aes(x, y))
 #' p + theme_map()
-theme_map <- function(base_size = 12, base_family = "hnb", plain_family = "hn", text_colour = "black") {
+theme_map <- function(base_size = 11, base_family = "hnb", plain_family = "hn", text_colour = "black") {
   if(!all(c("hn", "hnb") %in% names(grDevices::windowsFonts()))) {
     grDevices::windowsFonts(hn = "Helvetica Neue",
                             hnb = "Helvetica Neue Bold")
@@ -191,7 +191,7 @@ theme_map <- function(base_size = 12, base_family = "hnb", plain_family = "hn", 
 #' library(ggplot2)
 #' p <- ggplot(data.frame(x = 1:5, y = 1:5)) + geom_point(aes(x, y))
 #' p + theme_map_minimal()
-theme_map_minimal <- function(base_size = 12, base_family = "hnb", plain_family = "hn", text_colour = "black") {
+theme_map_minimal <- function(base_size = 11, base_family = "hnb", plain_family = "hn", text_colour = "black") {
   ggplot2::`%+replace%`(theme_mvl(base_size = base_size, base_family = base_family, text_colour = text_colour),
     ggplot2::theme(
       axis.text = ggplot2::element_blank(),
