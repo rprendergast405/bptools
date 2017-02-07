@@ -4,7 +4,7 @@
 \alias{theme_map}
 \title{Marketview ggplot map theme.}
 \usage{
-theme_map(base_size = 12, base_family = "hnb", plain_family = "hn",
+theme_map(base_size = 11, base_family = "hnb", plain_family = "hn",
   text_colour = "black")
 }
 \arguments{
