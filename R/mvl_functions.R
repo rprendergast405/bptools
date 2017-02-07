@@ -133,6 +133,23 @@ save_table <- function(x,
   }
 }
 
+#' Label in dollars
+#'
+#' A modification of the \code{\link[scales]{dollar}} function from \code{scales}, which
+#' is more appropriate for negative values
+#' @param x A numeric dollar amount
+#'
+#' @return A character representation of x in dollars
+#'
+#' @examples
+#' dollar(1000000)
+#' dollar(c(-2000000, 15000000))
+#' @export dollar
+dollar <- function(x, dp = 0, form = "f", ...){
+  paste0(ifelse(x < 0, "-", ""), "$", formatC(abs(x), digits = dp, format = form, big.mark = ",", ...))
+}
+
+
 
 #' Label in millions of dollars
 #'
@@ -147,7 +164,7 @@ save_table <- function(x,
 #' mdollar(c(2000000, 15000000))
 #' @export mdollar
 mdollar <- function(x, dp = 2, form = "f", ...){
-  paste0("$", formatC(x/1e6, digits = dp, format = form, big.mark = ",", ...), "M")
+  paste0(ifelse(x < 0, "-", ""), "$", formatC(abs(x)/1e6, digits = dp, format = form, big.mark = ",", ...), "M")
 }
 
 
@@ -165,7 +182,7 @@ mdollar <- function(x, dp = 2, form = "f", ...){
 #' bdollar(c(2000000000, 15000000000))
 #' @export bdollar
 bdollar <- function(x, dp = 2, form = "f", ...){
-  paste0("$", formatC(x/1e9, digits = dp, format = form, big.mark = ",", ...), "B")
+  paste0(ifelse(x < 0, "-", ""), "$", formatC(abs(x)/1e9, digits = dp, format = form, big.mark = ",", ...), "B")
 }
 
 #' Label in thousands of dollars
@@ -181,7 +198,7 @@ bdollar <- function(x, dp = 2, form = "f", ...){
 #' kdollar(c(2000, 1500000))
 #' @export kdollar
 kdollar <- function(x, dp = 0, form = "f", ...){
-  paste0("$", formatC(x/1e3, digits = dp, format = form, big.mark = ",", ...), "k")
+  paste0(ifelse(x < 0, "-", ""), "$", formatC(abs(x)/1e3, digits = dp, format = form, big.mark = ",", ...), "k")
 }
 
 #' Convert numeric values to percentages
