@@ -50,7 +50,7 @@ mcd_process <- function(dat){
   dat[,"IEO_SEGMENT"] <- factor(dat[["IEO_SEGMENT"]], levels = c("McDonald's", "QSR - Burger", "QSR - Chicken/Pizza/Sandwich",
                                                         "Independent Takeaway", "Coffee Cafes Bakeries", "Restaurants"))
 
-  dat[, "QSR"] <- dat[["IEO_SEGMENT"]] %in% c("McDonald's", "QSR Competitors - Chicken/ Pizza/ Sandwich", "QSR - Chicken/Pizza/Sandwich")
+  dat[, "QSR"] <- dat[["IEO_SEGMENT"]] %in% c("McDonald's", "QSR - Burger", "QSR - Chicken/Pizza/Sandwich")
   }
 
   #Format HVC
