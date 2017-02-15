@@ -137,24 +137,19 @@ spatial_packages <- FALSE
 
 # import packages
 library(magrittr)
-library(dplyr)          # data manipulation
-library(reshape2)       # data manipulation
-library(tidyr)
-library(readr)          # improved data importing
-library(ggplot2)        # grammar of graphics
+library(tidyverse)      # imports the 'tidyverse' libraries
+library(stringr)
+library(forcats)
 library(scales)         # axis labelling functions
 library(lubridate)      # time/date functions
-library(grid)
-library(gridExtra)
-library(stringr)
 library(xlsx)
 library(marketview)
 if(spatial_packages){
-library(sp)
-library(rgdal)
-library(rgeos)
-library(maptools)
-library(spatstat)
+  library(sp)
+  library(rgdal)
+  library(rgeos)
+  library(maptools)
+  library(spatstat)
 }
 rm(spatial_packages)
 
