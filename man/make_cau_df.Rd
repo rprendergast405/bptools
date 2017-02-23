@@ -4,7 +4,7 @@
 \alias{make_cau_df}
 \title{Create a data.frame of area unit boundaries}
 \usage{
-make_cau_df(caus)
+make_cau_df(cau_map, caus)
 }
 \arguments{
 \item{mb_map.spdf}{shapefile of the area unit boundaries}

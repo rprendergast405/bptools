@@ -4,12 +4,12 @@
 \alias{make_mb_df}
 \title{Create a data.frame of meshblock boundaries}
 \usage{
-make_mb_df(mb_map.spdf, mbs)
+make_mb_df(mb_map, mbs)
 }
 \arguments{
-\item{mb_map.spdf}{shapefile of the meshblock boundaries}
-
 \item{mbs}{subset of the meshblocks to get}
+
+\item{mb_map.spdf}{shapefile of the meshblock boundaries}
 }
 \description{
 Given a meshblock shapefile and a list of meshblocks, make_mb_df selects the meshblocks and fortifies them into a data.frame for plotting
