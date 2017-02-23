@@ -136,13 +136,15 @@ return(dat)
 #' @param mbs subset of the meshblocks to get
 #'
 #' @export make_mb_df
-make_mb_df <- function(mb_map.spdf, mbs){
+#'
+#' @import sp
+make_mb_df <- function(mb_map, mbs){
   # simplify and fortify the data
-  mb_df <- mb_map.spdf %>%
+  mb_df <- mb_map %>%
     subset(MB %in% mbs) %>%
     rgeos::gSimplify(tol = 25, topologyPreserve = TRUE) %>%
     ggplot2::fortify(region = "id") %>%
-    dplyr::left_join(mb_map.spdf@data, by = "id") %>%
+    dplyr::left_join(mb_map@data, by = "id") %>%
     dplyr::select(long, lat, group, MB)
 
   return(mb_df)
@@ -156,15 +158,98 @@ make_mb_df <- function(mb_map.spdf, mbs){
 #' @param mbs subset of the area units to get
 #'
 #' @export make_cau_df
-make_cau_df <- function(caus) {
+#'
+#' @import sp
+make_cau_df <- function(cau_map, caus) {
 
-  cau_df <- nz_cau_13.spdf %>%
+  cau_df <- cau_map %>%
     subset(CAU %in% caus) %>%
     rgeos::gSimplify(tol = 25, topologyPreserve = TRUE) %>%
     ggplot2::fortify(region = "id") %>%
-    dplyr::left_join(nz_cau_13.spdf@data, by = "id") %>%
+    dplyr::left_join(cau_map@data, by = "id") %>%
     dplyr::select(long, lat, group, CAU, CAU_NAME) %>%
     dplyr::mutate(CAU = as.integer(CAU))
 
   return(cau_df)
+}
+
+
+
+#' Parse a String Vector for SQL Queries
+#'
+#' @param vec A vector of strings to convert to a SQL list
+#'
+#' @return A string containing the values in \code{vec} in SQL-list format
+#' @export vec_sql_string
+
+vec_sql_string <- function(vec){
+
+  #Only accept classes which can be interpretted as strings
+  stopifnot(is.numeric(vec) | is.character(vec) | is.factor(vec))
+
+  if(any(grepl(";|'(!?=')", vec, perl = TRUE))) stop("You need to sanitise your input vector - semicolons and unescaped quotations are not allowed")
+
+  if(is.numeric(vec)){
+    sql_vec <- paste0("(", paste(vec, collapse = ", "), ")")
+  }
+
+  if(is.character(vec) | is.factor(vec)){
+    sql_vec <- paste0("(", paste(paste0("'", as.character(vec), "'"), collapse = ", "), ")")
+  }
+
+  return(sql_vec)
+
+}
+
+
+#A function to find all the merchants within a radius (in m) of a given location (in NZTM)
+#Optionally include merchants with imputed location from MB centroid
+
+#' Find Merchants Within a Given Radius
+#'
+#' A function to find all the merchants within a radius (in m) of a given location (in NZTM).
+#' Optionally include merchants with imputed location from MB centroid.
+#'
+#' @param DB An ODBC connection to bespoke
+#' @param x X coordinate of the centroid
+#' @param y Y coordinate of the centroid
+#' @param rad The radius in which to find merchants
+#' @param impute Should merchants with imputed location be included in the results?
+#'
+#' @return A \code{data.frame} of the Fozzie IDs and locations of all merchants within the given radius
+#' @export merch_radius_locator
+#'
+#' @examples
+merch_radius_locator <- function(DB, x, y, rad, impute = T){
+
+  if(!is.numeric(c(x, y, rad))) stop("Your inputs need to be numeric")
+  if(length(x) != 1 | length(y) != 1) stop("You must only supply a single location")
+  if(length(rad) != 1) stop("You can only search within a single radius")
+
+
+  #If exact do not use imputed location
+  if(!impute){
+    merchants <- sqlQuery(DB, paste("select group_id, x_coord as x, y_coord as y
+                     from fozzie.grouped_receiver_location
+                     where round(sqrt(power((X_coord -",
+                                    x,
+                                    "),2)+power((Y_COORD - ",
+                                    y,
+                                    "),2))) < ",
+                                    rad))
+  } else{
+    merchants <- sqlQuery(DB, paste("select a.group_id, coalesce(x_coord, x_nztm) as x, coalesce(y_coord, y_nztm) as y
+                                    from fozzie.grouped_receiver_location a
+                                    left join CENSUS.MB06_CENTROIDS b on a.MESHBLOCK = b.MB06_NUM
+                                    where round(sqrt(power((coalesce(x_coord, x_nztm) -",
+                                    x,
+                                    "),2)+power((coalesce(y_coord, y_nztm) - ",
+                                    y,
+                                    "),2))) < ",
+                                    rad
+    ))
+  }
+
+  return(merchants)
+
 }
