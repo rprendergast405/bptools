@@ -191,6 +191,7 @@ create_processing_script <- function(project_name, root_dir) {
 #   - Created
 # -------------------------------------------------------------------------
 
+base_dir <- \"", root_dir, "\"
 
 # 0. INITIALISE -----------------------------------------------------------
 
@@ -349,8 +350,9 @@ ppt_report <- pptx(\" \", \"mvl_template.pptx\")
 # Add a title slide ----
 ppt_report <- ppt_report %>%
   addSlide(slide.layout = \"Title Slide\") %>%
-  addTitle(\"", project_name, "\") %>%
-  addSubtitle(paste(\"Prepared for: CONTACT,\", \"CLIENT\", Sys.Date() %>% format(\"%d %B, %Y\"), sep = \"\\n\"))
+  addTitle(\"CLIENT\") %>%
+  addSubtitle(\"", project_name, "\") %>%
+  addSubtitle(paste(\"Prepared for: CONTACT,\", Sys.Date() %>% format(\"%d %B, %Y\"))
 
 
 # Add Content -------------------------------------------------------------
