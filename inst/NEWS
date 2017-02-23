@@ -1,17 +1,27 @@
-# marketview 0.3.9000
+# marketview 0.4.0
 
 ## What's New:
 * Added mvl_process() to treat the new standard analytics atributes
+* Added merch_radius_locator() to find all Fozzie merchants within a given radius
+* Added vec_sql_string() to convert vectors into SQL lists for queries
+* Added flextable_negatives() to highlight negative values in red
+* flextable_joined() for merged flextables
+
 
 ## Small changes:
 * Updated mcd_process() to deal with the AGEX attribute, if it exists
 * Changed default font sizes in mvl ggplot themes
 * Added comma formatting to *dollar() functions
 * Adjusted the treatment for negative values in *dollar() functions
+* Updates to the default packages imported in create_project()
+* Added base_dir() to the processing script in create_project()
+* Upadted the default title slide values in the report script from create_project()
+* Tidied up the create_project() initialisation script
 
 ## Bug Fixes:
 * Fixed the QSR flag in mcd_process()
 * Changed the attribute type in 06 CAU data frames from character to integer
+* Fixed bugs with make_cau_df() and make_mb_df()
 
 # marketview 0.3.0
 
