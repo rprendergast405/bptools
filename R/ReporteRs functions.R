@@ -280,7 +280,7 @@ flextable_leaf_joined <- function(df, pr, hr,
 flextable_negatives <- function(ftbl, col_names) {
 
   # Get the original data.frame from the flextable object
-  df <- ftbl$vals
+  df <- as.data.frame(ftbl$vals)
 
   for(column in col_names) {
     # Get the specified columns

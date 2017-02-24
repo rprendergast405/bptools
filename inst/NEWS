@@ -17,6 +17,7 @@
 * Added base_dir() to the processing script in create_project()
 * Upadted the default title slide values in the report script from create_project()
 * Tidied up the create_project() initialisation script
+* FlexTables created by any of the flextable_*() functions now have an additional value: .$vals, which contains the original data used to build the flextable
 
 ## Bug Fixes:
 * Fixed the QSR flag in mcd_process()
