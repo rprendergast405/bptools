@@ -4,7 +4,7 @@
 \alias{flextable_cell_bold}
 \title{Bold cells of a flextable}
 \usage{
-flextable_cell_bold(ft, rows, cols, colour = "black")
+flextable_cell_bold(ft, rows, cols, colour = marketview::mvl_text)
 }
 \arguments{
 \item{ft}{The flextable object to highlight}

@@ -24,6 +24,7 @@
 \alias{mvl_sky}
 \alias{mvl_stone}
 \alias{mvl_teal}
+\alias{mvl_text}
 \title{Marketview palette.}
 \format{An object of class \code{character} of length 1.}
 \usage{
@@ -68,6 +69,8 @@ mvl_citrus
 mvl_sky
 
 mvl_plum
+
+mvl_text
 }
 \description{
 Colours described by the \href{file:///M:/mvl_office/templates/Logos/MarketView_ColourGuide_v2.pdf}{Marketview colour palette}.

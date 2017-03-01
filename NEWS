@@ -1,3 +1,8 @@
+# marketview 0.4.9000
+
+- Added mvl_text colour for text in reports
+- Default text colour for plats and flextables is now mvl_text
+
 # marketview 0.4.0
 
 ## What's New:

@@ -123,7 +123,7 @@ flextable_row_highlight <- function(ft, rows, cols = 1:ft$numcol){
 #' ft_ex <- flextable_teal(df_ex)
 #' ft_ex <- flextable_cell_bold(ft_ex, which(df_ex$speed > 7), "speed", "forestgreen")
 
-flextable_cell_bold <- function(ft, rows, cols, colour = "black"){
+flextable_cell_bold <- function(ft, rows, cols, colour = marketview::mvl_text){
   existing_props <- ReporteRs::textProperties(font.size = ft$body.text.props[]$font.size,
                                               font.weight = ft$body.text.props[]$font.weight,
                                               font.style = ft$body.text.props[]$font.style,
@@ -157,7 +157,7 @@ flextable_black <- function(df, size = 12, padding = size / 2) {
                                 header.par.props = ReporteRs::parProperties(text.align = "center"),
                                 body.cell.props = ReporteRs::cellProperties(padding.top = padding, padding.bottom = padding),
                                 body.par.props = ReporteRs::parProperties(text.align = "center"),
-                                body.text.props = ReporteRs::textProperties(color = "black", font.size = size, font.family = "Helvetica Neue")
+                                body.text.props = ReporteRs::textProperties(color = marketview::mvl_text, font.size = size, font.family = "Helvetica Neue")
   )
 
   # Add the 'zebra' cell fill
@@ -195,7 +195,7 @@ flextable_leaf <- function(df, size = 12, padding = size / 2) {
                                 header.par.props = ReporteRs::parProperties(text.align = "center"),
                                 body.cell.props = ReporteRs::cellProperties(padding.top = padding, padding.bottom = padding),
                                 body.par.props = ReporteRs::parProperties(text.align = "center"),
-                                body.text.props = ReporteRs::textProperties(color = "black", font.size = size, font.family = "Helvetica Neue")
+                                body.text.props = ReporteRs::textProperties(color = marketview::mvl_text, font.size = size, font.family = "Helvetica Neue")
   )
 
   # Add the 'zebra' cell fill
@@ -234,7 +234,7 @@ flextable_leaf_joined <- function(df, pr, hr,
                                 header.columns = F,
                                 body.cell.props = ReporteRs::cellProperties(padding.top = padding,
                                                                             padding.bottom = padding), body.par.props = ReporteRs::parProperties(text.align = "center"),
-                                body.text.props = ReporteRs::textProperties(color = "black",
+                                body.text.props = ReporteRs::textProperties(color = marketview::mvl_text,
                                                                             font.size = size, font.family = "Helvetica Neue"))
 
   df_ft <- ReporteRs::setZebraStyle(df_ft, odd = grDevices::rgb(236,

@@ -100,3 +100,8 @@ mvl_sky <- grDevices::rgb(0, 185, 242, maxColorValue = 255)
 #' @rdname mvl_colourpal
 #' @export mvl_plum
 mvl_plum <- grDevices::rgb(145, 39, 143, maxColorValue = 255)
+
+
+#' @rdname mvl_colourpal
+#' @export mvl_text
+mvl_text <- "#404040"
