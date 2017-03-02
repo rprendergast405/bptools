@@ -352,7 +352,7 @@ ppt_report <- ppt_report %>%
   addSlide(slide.layout = \"Title Slide\") %>%
   addTitle(\"CLIENT\") %>%
   addSubtitle(\"", project_name, "\") %>%
-  addSubtitle(paste(\"Prepared for: CONTACT,\", Sys.Date() %>% format(\"%d %B, %Y\"))
+  addSubtitle(paste(\"Prepared for: CONTACT,\", Sys.Date() %>% format(\"%d %B, %Y\")))
 
 
 # Add Content -------------------------------------------------------------
