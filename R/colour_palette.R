@@ -105,3 +105,16 @@ mvl_plum <- grDevices::rgb(145, 39, 143, maxColorValue = 255)
 #' @rdname mvl_colourpal
 #' @export mvl_text
 mvl_text <- "#404040"
+
+
+#' @rdname mvl_colourpal
+#' @export mvl_fire
+mvl_fire <- "#f01000"
+
+#' @rdname mvl_colourpal
+#' @export mvl_royal2
+mvl_royal2 <- "#3124e0"
+
+#' @rdname mvl_colourpal
+#' @export mvl_fuchsia
+mvl_fuchsia <- "#e024d3"

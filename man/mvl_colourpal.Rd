@@ -5,6 +5,8 @@
 \alias{mvl_blue}
 \alias{mvl_citrus}
 \alias{mvl_colourpal}
+\alias{mvl_fire}
+\alias{mvl_fuchsia}
 \alias{mvl_green}
 \alias{mvl_grey}
 \alias{mvl_half_grey}
@@ -21,6 +23,7 @@
 \alias{mvl_purple}
 \alias{mvl_red}
 \alias{mvl_royal}
+\alias{mvl_royal2}
 \alias{mvl_sky}
 \alias{mvl_stone}
 \alias{mvl_teal}
@@ -71,6 +74,12 @@ mvl_sky
 mvl_plum
 
 mvl_text
+
+mvl_fire
+
+mvl_royal2
+
+mvl_fuchsia
 }
 \description{
 Colours described by the \href{file:///M:/mvl_office/templates/Logos/MarketView_ColourGuide_v2.pdf}{Marketview colour palette}.
