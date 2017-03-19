@@ -1,7 +1,25 @@
-# marketview 0.4.9000
+# marketview 0.5
 
+## What's New
+- Added scale_mvl() functions for creating using MVL branded colour/fill scales
+- Data objects are now found in the new mvldata package
+
+## Small Changes
+- Additional MVL colours: mvl_fire, mvl_royal2, & mvl_fuchsia
 - Added mvl_text colour for text in reports
 - Default text colour for plats and flextables is now mvl_text
+- Added cagr() for Compound Annual Growth Rate
+- theme_mvl() now has y axis title by default
+- catchment_picker() now has support for Primary, Secondary, and Tertiary catchment areas
+- A few updates to the default scripts in create_project()
+- flextable_joined() now adds .$vars to the object
+- make_footnote() now refers to the new logo by default
+
+
+## Bug Fixes
+- Missing bracket in the code templates from create_project()
+- mcd_process() will only process columns that are character variables, and leaves factors unchanged
+- better theme_mcd()
 
 # marketview 0.4.0
 

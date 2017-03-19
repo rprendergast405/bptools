@@ -1,7 +1,7 @@
 Package: marketview
 Type: Package
 Title: Functions and Objects for Analysis & Reporting at Marketview
-Version: 0.4.9000
+Version: 0.5.0
 Authors@R: c(person("Bert", "Prendergast", email = "robertp@marketview.co.nz",
                     role = c("aut", "cre")),
              person("Sam", "Harvey", email = "samh@marketview.co.nz",
@@ -15,7 +15,6 @@ Description: Marketview package contains functions that are used in
 License: What license is it under?
 LazyData: TRUE
 Imports:
-    cairoDevice,
     scales,
     RODBC,
     ggplot2,

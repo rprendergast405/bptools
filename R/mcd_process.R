@@ -15,52 +15,68 @@
 mcd_process <- function(dat){
 
     #Format Daypart Factor
-  if("DAYPART" %in% colnames(dat) & is.character(dat[, "DAYPART"])){
-  dat[,"DAYPART"] <- factor(dat[["DAYPART"]], levels = c("Breakfast", "Snack AM", "Lunch",
-                                                "Snack PM", "Dinner", "Snack Later", "Extended"))}
-
+  if("DAYPART" %in% colnames(dat)){
+    if(is.character(dat[, "DAYPART"])) {
+      dat[,"DAYPART"] <- factor(dat[["DAYPART"]], levels = c("Breakfast", "Snack AM", "Lunch",
+                                                             "Snack PM", "Dinner", "Snack Later", "Extended"))
+      }
+  }
   # Format the basket size attribute
-  if("SPEND_BKT" %in% colnames(dat) & is.character(dat[, "SPEND_BKT"])){
-    dat[, "SPEND_BKT"] <- reorder(factor(dat[["SPEND_BKT"]]),  as.numeric(gsub(x = gsub(x = dat[["SPEND_BKT"]], pattern = " -.*", replacement = ""),
-                                                        pattern = "[^0-9\\.]", replacement = "")))
+  if("SPEND_BKT" %in% colnames(dat)){
+    if(is.character(dat[, "SPEND_BKT"])) {
+      dat[, "SPEND_BKT"] <- reorder(factor(dat[["SPEND_BKT"]]),  as.numeric(gsub(x = gsub(x = dat[["SPEND_BKT"]], pattern = " -.*", replacement = ""),
+                                                                                 pattern = "[^0-9\\.]", replacement = "")))
+    }
   }
 
   #Format Age Factor
-  if("AGE" %in% colnames(dat) & is.character(dat[, "AGE"])){
-  dat[,"AGE"] <- factor(dat[["AGE"]])}
-
-
-  if ("AGEX" %in% toupper(colnames(dat)) & is.character(dat[, "AGEX"])) {
-    dat[, "AGEX"] <- factor(dat[["AGEX"]])
-    if("AGE" %in% toupper(colnames(dat))) {
-      dat[,"AGE"] <- as.integer(dat[["AGE"]])
+  if("AGE" %in% colnames(dat)) {
+    if(is.character(dat[, "AGE"])){
+      dat[,"AGE"] <- factor(dat[["AGE"]])
     }
   }
 
+  if ("AGEX" %in% toupper(colnames(dat))) {
+    if(is.character(dat[, "AGEX"])) {
+      dat[, "AGEX"] <- factor(dat[["AGEX"]])
+      if("AGE" %in% toupper(colnames(dat))) {
+        dat[,"AGE"] <- as.integer(dat[["AGE"]])
+      }
+    }
+  }
   #Format Gender Factor
-  if("GENDER" %in% colnames(dat) & is.character(dat[, "AGEX"])){
-  dat[,"GENDER"] <- factor(dat[["GENDER"]], levels = c("M", "F"), labels = c("Male", "Female"))}
+  if("GENDER" %in% colnames(dat)){
+    if(is.character(dat[, "GENDER"])) {
+      dat[,"GENDER"] <- factor(dat[["GENDER"]], levels = c("M", "F"), labels = c("Male", "Female"))
+    }
+  }
 
   #Format IEO group factor
-  if("IEO_SEGMENT" %in% colnames(dat) & is.character(dat[, "IEO_SEGMENT"])){
-  dat[dat[,"IEO_SEGMENT"] == "McDonalds NZ", "IEO_SEGMENT"] <- "McDonald's"
-  dat[dat[,"IEO_SEGMENT"] == "QSR Competitors - Chicken/ Pizza/ Sandwich", "IEO_SEGMENT"] <- "QSR - Chicken/Pizza/Sandwich"
-  dat[dat[,"IEO_SEGMENT"] == "QSR Competitors - Burger", "IEO_SEGMENT"] <- "QSR - Burger"
+  if("IEO_SEGMENT" %in% colnames(dat)){
+    if(is.character(dat[, "IEO_SEGMENT"])) {
+      dat[dat[,"IEO_SEGMENT"] == "McDonalds NZ", "IEO_SEGMENT"] <- "McDonald's"
+      dat[dat[,"IEO_SEGMENT"] == "QSR Competitors - Chicken/ Pizza/ Sandwich", "IEO_SEGMENT"] <- "QSR - Chicken/Pizza/Sandwich"
+      dat[dat[,"IEO_SEGMENT"] == "QSR Competitors - Burger", "IEO_SEGMENT"] <- "QSR - Burger"
 
-  dat[,"IEO_SEGMENT"] <- factor(dat[["IEO_SEGMENT"]], levels = c("McDonald's", "QSR - Burger", "QSR - Chicken/Pizza/Sandwich",
-                                                        "Independent Takeaway", "Coffee Cafes Bakeries", "Restaurants"))
+      dat[,"IEO_SEGMENT"] <- factor(dat[["IEO_SEGMENT"]], levels = c("McDonald's", "QSR - Burger", "QSR - Chicken/Pizza/Sandwich",
+                                                                     "Independent Takeaway", "Coffee Cafes Bakeries", "Restaurants"))
 
-  dat[, "QSR"] <- grepl("McD|QSR", dat[["IEO_SEGMENT"]])
+      dat[, "QSR"] <- grepl("McD|QSR", dat[["IEO_SEGMENT"]])
+    }
   }
 
   #Format HVC
-  if("CUST_TYPE" %in% colnames(dat) & is.character(dat[, "CUST_TYPE"])){
-    if("H" %in% unique(dat[, "CUST_TYPE"])){
-      dat[is.na(dat[, "CUST_TYPE"]), "CUST_TYPE"] <- ""
-      dat[dat[,"CUST_TYPE"] == "H", "CUST_TYPE"] <- "HVC"
-      dat[dat[,"CUST_TYPE"] == "", "CUST_TYPE"] <- "non-HVC"
+  if("CUST_TYPE" %in% colnames(dat)){
+    if(is.character(dat[, "CUST_TYPE"])) {
+      if("H" %in% unique(dat[, "CUST_TYPE"])){
+        dat[is.na(dat[, "CUST_TYPE"]), "CUST_TYPE"] <- ""
+        dat[dat[,"CUST_TYPE"] == "H", "CUST_TYPE"] <- "HVC"
+        dat[dat[,"CUST_TYPE"] == "", "CUST_TYPE"] <- "non-HVC"
+      }
+      dat[,"CUST_TYPE"] <- factor(dat[["CUST_TYPE"]], levels = c("HVC", "non-HVC"))
     }
-    dat[,"CUST_TYPE"] <- factor(dat[["CUST_TYPE"]], levels = c("HVC", "non-HVC"))}
+  }
+
 
   #Format NZDep scale
   if("DEPRIVATION" %in% colnames(dat)){
@@ -73,8 +89,10 @@ mcd_process <- function(dat){
   }
 
   # Format the MCD_REGION attribute
-  if("MCD_REGION" %in% colnames(dat) & is.character(dat[, "MCD_REGION"])){
-    dat[, "MCD_REGION"] <- factor(dat[["MCD_REGION"]], levels = c("Auckland", "NIPS", "Wellington", "South Island"))
+  if("MCD_REGION" %in% colnames(dat)){
+    if(is.character(dat[, "MCD_REGION"])){
+      dat[, "MCD_REGION"] <- factor(dat[["MCD_REGION"]], levels = c("Auckland", "NIPS", "Wellington", "South Island"))
+    }
   }
 
   # Add a mcd_region attribute if it doesn't already exist
