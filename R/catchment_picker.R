@@ -220,18 +220,18 @@ catchment_picker <- function(spending, location, map_shapefile = mvldata::nz_cau
           write.csv(spend_map.spdf@data %>%
                       filter(CAU %in% data$primary_catchment) %>%
                       mutate(catchment = "Primary") %>%
-                      select(CAU, CAU_NAME) %>%
+                      select(CAU, CAU_NAME, catchment) %>%
                       bind_rows(
                         spend_map.spdf@data %>%
                           filter(CAU %in% data$secondary_catchment) %>%
                           mutate(catchment = "Secondary") %>%
-                          select(CAU, CAU_NAME)
+                          select(CAU, CAU_NAME, catchment)
                       ) %>%
                       bind_rows(
                         spend_map.spdf@data %>%
                           filter(CAU %in% data$tertiary_catchment) %>%
                           mutate(catchment = "Tertiary") %>%
-                          select(CAU, CAU_NAME)
+                          select(CAU, CAU_NAME, catchment)
                       ), file, row.names = FALSE)
         }
       )
