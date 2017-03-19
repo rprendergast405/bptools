@@ -218,8 +218,6 @@ vec_sql_string <- function(vec){
 #'
 #' @return A \code{data.frame} of the Fozzie IDs and locations of all merchants within the given radius
 #' @export merch_radius_locator
-#'
-#' @examples
 merch_radius_locator <- function(DB, x, y, rad, impute = T){
 
   if(!is.numeric(c(x, y, rad))) stop("Your inputs need to be numeric")
