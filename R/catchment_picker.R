@@ -7,7 +7,7 @@
 #' @param map_shapefile A shapefile from which to draw the map (default is 2013 CAU)
 #'
 #' @export catchment_picker
-catchment_picker <- function(spending, location, map_shapefile = nz_cau_13.spdf){
+catchment_picker <- function(spending, location, map_shapefile = mvldata::nz_cau_13.spdf){
   require(shiny)
   require(dplyr)
   require(leaflet)
@@ -17,7 +17,11 @@ catchment_picker <- function(spending, location, map_shapefile = nz_cau_13.spdf)
   shinyApp(
     ui = fluidPage(
       column(8, leafletOutput("map", width = 1000, height = 1000)),
-      column(4, downloadLink('downloadData', 'Download'), tableOutput("catchment_info"))
+      column(4, downloadLink('downloadData', 'Download'),
+             selectInput(inputId = "catchment_name", label = "Catchment Name",
+                         choices = c("Primary", "Secondary", "Tertiary"),
+                         selected = "Primary"),
+             tableOutput("catchment_info"))
     ),
 
     server = function(input, output, session) {
@@ -54,7 +58,8 @@ catchment_picker <- function(spending, location, map_shapefile = nz_cau_13.spdf)
               summarise_each(funs(sum_na), SPEND, prop)
           ) %>%
           mutate(SPEND = dollar(SPEND),
-                 prop = percent(prop))
+                 prop = percent(prop),
+                 catchment = input$catchment_name)
       )
 
       click_tract <- eventReactive(input$map_shape_click, {
@@ -135,9 +140,12 @@ catchment_picker <- function(spending, location, map_shapefile = nz_cau_13.spdf)
         SpatialPolygonsDataFrame(spend_map.spdf@data) %>%
         spTransform(CRS("+proj=longlat +datum=WGS84"))
 
+      spend_map.spdf$CAU <- as.character(spend_map.spdf$CAU)
+      spending$CAU <- as.character(spending$CAU)
+
       cat("Adding Spend Data\n")
       spend_map.spdf@data <<-spend_map.spdf@data %>%
-        left_join(spending %>% mutate(CAU = as.character(CAU)))
+        left_join(spending)
 
       cat("Finishing Up")
       pal <<- colorNumeric(
