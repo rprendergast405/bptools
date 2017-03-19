@@ -50,13 +50,13 @@ theme_mvl <- function(base_size = 11, base_family = "hnb", plain_family = "hn", 
                                                        margin = grid::unit(rep(0.1, 4), "cm"),
                                                        debug = FALSE),
 
-                          axis.title.x = ggplot2::element_blank(),
-                          axis.title.y = ggplot2::element_blank(),
 
                           legend.text = ggplot2::element_text(size = base_size, face = "plain", family = plain_family),
                           legend.title = ggplot2::element_blank(),
                           legend.position = "top",
                           legend.direction = "horizontal",
+
+                          axis.title.x = ggplot2::element_blank(),
 
                           panel.grid.major.x = ggplot2::element_blank(),
                           panel.grid.major.y = ggplot2::element_line(colour = mvl_grey, size = 0.2),
@@ -169,6 +169,7 @@ theme_map <- function(base_size = 11, base_family = "hnb", plain_family = "hn", 
 
       strip.text = ggplot2::element_blank(),
       panel.background = ggplot2::element_rect(fill = 'lightblue'),
+      panel.grid.major.y = ggplot2::element_blank(),
 
       plot.title = ggplot2::element_text(size = ggplot2::rel(2), hjust = 0),
       plot.margin = grid::unit(c(0.1, 0.1, 0.1, 0.1), "cm")
@@ -220,31 +221,28 @@ theme_map_minimal <- function(base_size = 11, base_family = "hnb", plain_family 
 #' library(ggplot2)
 #' p <- ggplot(data.frame(x = 1:5, y = 1:5)) + geom_point(aes(x, y))
 #' p + theme_mcd()
-theme_mcd <- function(base_size = 12, base_family = "") {
-  ggplot2::`%+replace%`(ggplot2::theme_bw(base_size = base_size, base_family = base_family),
+theme_mcd <- function (base_size = 11, base_family = "cenb", plain_family = "cen",
+                       text_colour = 'black')
+{
+  if (!all(c("cen", "cenb") %in% names(grDevices::windowsFonts()))) {
+    grDevices::windowsFonts(cen = "Century Gothic", cenb = "Century Gothic Bold")
+  }
+  ggplot2::`%+replace%`(ggplot2::theme_minimal(
+    base_size = base_size,
+    base_family = base_family),
     ggplot2::theme(
-      text = ggplot2::element_text(family = base_family,
-                                   face = "plain",
-                                   colour = "black",
-                                   size = base_size,
-                                   hjust = 0.5,
-                                   vjust = 0.5,
-                                   angle = 0,
-                                   lineheight = 0.9,
-                                   margin = grid::unit(rep(0.1, 4), "cm"),
-                                   debug = FALSE),
-
-      plot.background = ggplot2::element_rect(fill = grDevices::rgb(242, 242, 242, maxColorValue = 255), colour = NA),
-      panel.background = ggplot2::element_rect(fill = grDevices::rgb(242, 242, 242, maxColorValue = 255), colour = NA),
-      legend.background = ggplot2::element_rect(fill = grDevices::rgb(242, 242, 242, maxColorValue = 255), colour = NA),
-
-      panel.margin = grid::unit(rep(0.1, 4), "cm"),
-      plot.margin = grid::unit(rep(0.1, 4), "cm"),
-
-      legend.position = "top",
-      legend.direction = "horizontal"
-    )
-  )
+      text = ggplot2::element_text(family = base_family, face = "plain", colour = text_colour, size = base_size,
+                                   hjust = 0.5, vjust = 0.5, angle = 0, lineheight = 0.9, margin = grid::unit(rep(0.1, 4), "cm"), debug = FALSE),
+      legend.text = ggplot2::element_text(size = base_size, face = "plain", family = plain_family),
+      legend.title = ggplot2::element_blank(),
+      legend.position = "top", legend.direction = "horizontal",
+      panel.grid.major.x = ggplot2::element_blank(),
+      panel.grid.major.y = ggplot2::element_line(colour = marketview::mvl_grey, size = 0.2),
+      plot.title = ggplot2::element_text(size = round(base_size * 1.5), hjust = 0),
+      plot.margin = grid::unit(c(0.1, 0.1, 0.1, 0.1), "cm"),
+      plot.background = element_rect(fill = '#f2f2f2', colour = NA),
+      panel.background = element_rect(fill = '#f2f2f2', colour = NA),
+      strip.background = element_rect(fill = '#f2f2f2', colour = NA)))
 }
 
 
@@ -315,7 +313,7 @@ bounding_box <- function(long_limits, lat_limits, draw_border = TRUE) {
 make_footnote <- function(footnote_text = paste(format(Sys.time(), "%d %b %Y")),
                          size = 0.7,
                          color = "grey",
-                         mvl_png = "M:/mvl_office/logo/2012/Marketview_Logo_Horizontal.png") {
+                         mvl_png = "M:/mvl_office/Rebrand/Logo PNGs/Marketview_Logo.png") {
 
 
   grid::pushViewport(grid::viewport())
