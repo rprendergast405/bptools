@@ -255,11 +255,15 @@ flextable_leaf_joined <- function(df, pr, hr,
                                              font.size = size, font.family = "Helvetica Neue", font.weight = "bold")
 
   #Format borders
-  df_ft <- ReporteRs::setFlexTableBorders(df_ft, inner.vertical = ReporteRs::borderProperties(color = "white",
-                                                                                              style = "solid"), inner.horizontal = ReporteRs::borderProperties(color = "white",
-                                                                                                                                                               style = "solid"), outer.vertical = ReporteRs::borderProperties(color = "white",
-                                                                                                                                                                                                                              style = "solid"), outer.horizontal = ReporteRs::borderProperties(color = "white",
-                                                                                                                                                                                                                                                                                               style = "solid"))
+  df_ft <- ReporteRs::setFlexTableBorders(df_ft,
+                                          inner.vertical = ReporteRs::borderProperties(color = "white", style = "solid"),
+                                          inner.horizontal = ReporteRs::borderProperties(color = "white", style = "solid"),
+                                          outer.vertical = ReporteRs::borderProperties(color = "white", style = "solid"),
+                                          outer.horizontal = ReporteRs::borderProperties(color = "white", style = "solid"))
+
+  # Add the original values to the flextable for reference
+  df_ft$vals <- df
+
 
   return(df_ft)
 }
