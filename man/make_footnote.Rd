@@ -6,7 +6,7 @@
 \usage{
 make_footnote(footnote_text = paste(format(Sys.time(), "\%d \%b \%Y")),
   size = 0.7, color = "grey",
-  mvl_png = "M:/mvl_office/logo/2012/Marketview_Logo_Horizontal.png")
+  mvl_png = "M:/mvl_office/Rebrand/Logo PNGs/Marketview_Logo.png")
 }
 \arguments{
 \item{footnote_text}{The text for the footnote to display}
