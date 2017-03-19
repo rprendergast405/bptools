@@ -4,7 +4,8 @@
 \alias{theme_mcd}
 \title{McDonald's ggplot theme.}
 \usage{
-theme_mcd(base_size = 12, base_family = "")
+theme_mcd(base_size = 11, base_family = "cenb", plain_family = "cen",
+  text_colour = "black")
 }
 \arguments{
 \item{base_size}{The base size for fonts}
