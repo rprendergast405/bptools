@@ -136,6 +136,10 @@ gc()
 spatial_packages <- FALSE
 
 # import packages
+library(RODBC)
+library(tools)
+library(reshape2)
+library(data.table)
 library(magrittr)
 library(tidyverse)      # imports the 'tidyverse' libraries
 library(stringr)
@@ -144,6 +148,7 @@ library(scales)         # axis labelling functions
 library(lubridate)      # time/date functions
 library(xlsx)
 library(marketview)
+library(mvldata)
 if(spatial_packages){
   library(sp)
   library(rgdal)
@@ -161,6 +166,10 @@ tab_dir <- file.path(output_dir, \"tables\")
 
 # Source any function scripts
 source_dir(file.path(base_dir, \"R/functions\"))
+
+
+# Set the plot theme
+theme_set(theme_mvl())
 ")
 
   cat(paste(init_text, collapse = ""), file = file.path(root_dir, "R", paste0("0 ", project_name, " initialise.R")))
@@ -250,7 +259,7 @@ data_import(base_dir)
 # initialise the labelling and set the output subdirectory
 fig_num <- 1
 tab_num <- 1
-
+section_num <- 1
 
 # 2. RESULTS HERE ---------------------------------------------------------
 
@@ -335,6 +344,10 @@ base_dir <- \"", root_dir, "\"
 source(file.path(base_dir, \"R\", \"0 ", project_name, " initialise.R\"))
 library(ReporteRs)
 
+options(\"ReporteRs-default-font\" = \"Helvetica Neue\",
+        \"ReporteRs-fontsize\" = 12,
+        \"ReporteRs-locale.region\" = \"GB\")
+
 # 1. IMPORT DATA ----------------------------------------------------------
 
 
@@ -353,6 +366,14 @@ ppt_report <- ppt_report %>%
   addTitle(\"CLIENT\") %>%
   addSubtitle(\"", project_name, "\") %>%
   addParagraph(paste(\"Prepared for: CONTACT,\", Sys.Date() %>% format(\"%d %B, %Y\")))
+
+
+ppt_report <- ppt_report %>%
+  addSlide(slide.layout = \"Text\") %>%
+  addTitle(\"Key Findings\") %>%
+  addSlide(slide.layout = \"Definitions 1\") %>%
+  addSlide(slide.layout = \"Definitions 2\") %>%
+  addParagraph(\" \")
 
 
 # Add Content -------------------------------------------------------------
