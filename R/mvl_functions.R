@@ -310,3 +310,23 @@ source_dir <- function(path, trace = TRUE, ...) {
     if(trace) cat("\n")
   }
 }
+
+
+
+#' Compound Annual Growth Rate
+#'
+#' @param iv Initial value
+#' @param fv Final value
+#' @param length Length of time between \code{iv} and \code{fv}
+#'
+#' @return cagr The compound annual growth rate from \code{iv} to \code{fv}
+#' @export cagr
+#'
+#' @examples
+#' sales <- data.frame(year_1 = c(10, 5, 1), year_2 = c(15, 4, 5), year_3 = c(20, 8, 2))
+#' cagr(iv = sales$year_1, fv = sales$year_3, length = 2)
+cagr <- function(iv, fv, length){
+  stopifnot(is.numeric(iv) & is.numeric(fv) & is.numeric(length))
+
+  return((fv / iv) ^ (1 / length) - 1)
+}
