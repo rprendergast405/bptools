@@ -18,4 +18,3 @@ Remove whitespace from character vectors
 \examples{
 trim_ws(c("test_name", "text_artifact       "))
 }
-

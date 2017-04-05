@@ -14,4 +14,3 @@ make_cau_df(cau_map, caus)
 \description{
 Given a CAU shapefile and a list of area units, make_cau_df selects the area units and fortifies them into a data.frame for plotting
 }
-

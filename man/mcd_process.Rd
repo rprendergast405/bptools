@@ -17,4 +17,3 @@ A wrapper function to automatically format data taken from mcd_bp_final_data_car
 The attribute IEO_SEGMENT is defined as:
 case when a.bunch_id in (19150, 19151) then b.bunch_name else b.bunch_namex end as ieo_segment
 }
-

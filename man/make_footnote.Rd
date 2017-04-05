@@ -24,4 +24,3 @@ Adds a footnote to the current plot
 Adds a footer to the current plot with a datestamp and the Marketview
 logo.
 }
-

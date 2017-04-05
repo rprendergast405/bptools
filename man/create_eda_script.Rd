@@ -18,4 +18,3 @@ Creates a script within the directory specified.
 Builds the skeleton of an EDA markdown script in the specified root directory.
 Primarily for internal use in create_project().
 }
-

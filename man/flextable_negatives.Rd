@@ -4,7 +4,7 @@
 \alias{flextable_negatives}
 \title{Highlight Negative Cell Values in Red}
 \usage{
-flextable_negatives(ftbl, col_names)
+flextable_negatives(ftbl, col_names = names(ftbl$vals))
 }
 \arguments{
 \item{ftbl}{A FlexTable object to format}
@@ -19,4 +19,3 @@ A function to highlight any negative values in a FlexTable for given column name
 This should work regardless of the formatting - character values such as those returned by \code{marketview::dollar()} or
 \code{marketview::percent()} will be dealt with if I've done this right.
 }
-

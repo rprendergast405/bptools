@@ -22,4 +22,3 @@ Saves the table to file
 \description{
 Saves copies of a data frame to a given directory.
 }
-

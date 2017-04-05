@@ -16,4 +16,3 @@ source_dir(path, trace = TRUE, ...)
 \description{
 Source all scripts in a directory
 }
-

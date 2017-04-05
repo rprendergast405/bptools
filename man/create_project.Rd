@@ -23,4 +23,3 @@ Logical, indicating that the project has been successfully created
 Create some common sub-directories used in an R project, and import
 some scripts containing headers for common analysis tasks.
 }
-

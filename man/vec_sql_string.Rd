@@ -15,4 +15,3 @@ A string containing the values in \code{vec} in SQL-list format
 \description{
 Parse a String Vector for SQL Queries
 }
-

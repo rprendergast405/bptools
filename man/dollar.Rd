@@ -20,4 +20,3 @@ is more appropriate for negative values
 dollar(1000000)
 dollar(c(-2000000, 15000000))
 }
-

@@ -22,4 +22,3 @@ df_ex <- head(cars)
 ft_ex <- flextable_teal(df_ex)
 ft_ex <- flextable_row_highlight(ft_ex, which(df_ex$dist == max(df_ex$dist)))
 }
-

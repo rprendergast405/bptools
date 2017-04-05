@@ -19,4 +19,3 @@ Adds a box to the outline of the plot sets the plot limits
 \description{
 Add a bounding box to a ggplot map and set the limits of the plot to the box.
 }
-

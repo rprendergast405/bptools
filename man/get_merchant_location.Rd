@@ -18,4 +18,3 @@ Given a group ID, \code{get_merchant_location()} returns a data frame containing
 DB <- odbcConnect("MVIEW", uid="user", pwd="password")
 get_merchant_location(DB, group_id = 15435)
 }
-

@@ -30,4 +30,3 @@ should be good enough and you can set it manually if you're concerned.
 DB <- odbcConnect("MVIEW", uid="user", pwd="password")
 bnz_spend_origin(DB, group_id = 15435)
 }
-

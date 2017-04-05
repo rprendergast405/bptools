@@ -20,4 +20,3 @@ is more appropriate for plots of large dollar values
 bdollar(1000000000)
 bdollar(c(2000000000, 15000000000))
 }
-

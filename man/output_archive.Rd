@@ -12,4 +12,3 @@ output_archive(base_dir)
 \description{
 Archive previous results from a project
 }
-

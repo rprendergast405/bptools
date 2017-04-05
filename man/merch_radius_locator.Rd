@@ -24,4 +24,3 @@ A \code{data.frame} of the Fozzie IDs and locations of all merchants within the 
 A function to find all the merchants within a radius (in m) of a given location (in NZTM).
 Optionally include merchants with imputed location from MB centroid.
 }
-

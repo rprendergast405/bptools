@@ -23,4 +23,3 @@ Compound Annual Growth Rate
 sales <- data.frame(year_1 = c(10, 5, 1), year_2 = c(15, 4, 5), year_3 = c(20, 8, 2))
 cagr(iv = sales$year_1, fv = sales$year_3, length = 2)
 }
-

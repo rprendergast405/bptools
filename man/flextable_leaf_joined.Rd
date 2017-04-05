@@ -23,4 +23,3 @@ df_ft A FlexTable of the df with formatting
 \description{
 Format and print a joined FlexTable
 }
-

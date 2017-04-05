@@ -20,4 +20,3 @@ is more appropriate for plots of large dollar values
 kdollar(10000)
 kdollar(c(2000, 1500000))
 }
-

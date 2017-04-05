@@ -19,8 +19,8 @@ colour schemes in line with the Marketview branding guides.
 
 The following palettes are available for use with these scales:
 \describe{
-  \item{Diverging}{LeafPlum}
-  \item{Qualitative}{mvl, mcd}
+  \item{Diverging}{LeafPlum, TealRed, RedStone, SkyStone, PlumStone, LeafStone, RoyalStone}
+  \item{Qualitative}{mvl, mcd, mcd2}
   \item{Sequential}{Leaf, Plum, Teal, Blue, Sky, Citrus, Stone,
      Navy, Orange, Red, Green, Purple}
 }

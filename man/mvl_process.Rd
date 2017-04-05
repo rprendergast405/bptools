@@ -15,4 +15,3 @@ A processed data frame for analysis
 \description{
 A function to format the standard analytics attributes which are stored as numeric variables to save table space
 }
-

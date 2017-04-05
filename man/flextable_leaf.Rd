@@ -19,4 +19,3 @@ A function to create a FlexTable object for use in MS Office type outputs via th
 \examples{
 flextable_leaf(head(cars))
 }
-

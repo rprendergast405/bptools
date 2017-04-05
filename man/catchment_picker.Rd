@@ -16,4 +16,3 @@ catchment_picker(spending, location, map_shapefile = mvldata::nz_cau_13.spdf)
 \description{
 A Shiny function to make picking a catchment for a merchant or retail area easier.
 }
-

@@ -36,4 +36,3 @@ Saves the plot to file
 Saves a ggplot object as a PNG that is suitable for a Marketview
 report/presentation in ppt.
 }
-

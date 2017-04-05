@@ -26,4 +26,3 @@ df_ex <- head(cars)
 ft_ex <- flextable_teal(df_ex)
 ft_ex <- flextable_cell_bold(ft_ex, which(df_ex$speed > 7), "speed", "forestgreen")
 }
-

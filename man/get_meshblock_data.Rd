@@ -18,4 +18,3 @@ A function to import a shapefile of meshblock boundaries for a given census defi
 \examples{
 mb_map.df <- get_meshblock_data(2013)
 }
-

@@ -31,4 +31,3 @@ Saves the plot to file
 A function to save a plot using dimensions and resolution that are
 suitable for a Marketview report.
 }
-

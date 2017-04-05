@@ -2,32 +2,32 @@
 % Please edit documentation in R/colour_palette.R
 \docType{data}
 \name{mvl_colourpal}
-\alias{mvl_blue}
-\alias{mvl_citrus}
 \alias{mvl_colourpal}
-\alias{mvl_fire}
-\alias{mvl_fuchsia}
-\alias{mvl_green}
-\alias{mvl_grey}
-\alias{mvl_half_grey}
-\alias{mvl_half_hay}
-\alias{mvl_half_leaf}
-\alias{mvl_half_purple}
-\alias{mvl_half_teal}
-\alias{mvl_hay}
-\alias{mvl_leaf}
-\alias{mvl_navy}
-\alias{mvl_orange}
+\alias{mvl_blue}
 \alias{mvl_pewter}
-\alias{mvl_plum}
-\alias{mvl_purple}
+\alias{mvl_grey}
 \alias{mvl_red}
-\alias{mvl_royal}
-\alias{mvl_royal2}
-\alias{mvl_sky}
-\alias{mvl_stone}
+\alias{mvl_orange}
+\alias{mvl_green}
 \alias{mvl_teal}
+\alias{mvl_half_teal}
+\alias{mvl_navy}
+\alias{mvl_royal}
+\alias{mvl_purple}
+\alias{mvl_half_purple}
+\alias{mvl_half_grey}
+\alias{mvl_hay}
+\alias{mvl_half_hay}
+\alias{mvl_leaf}
+\alias{mvl_half_leaf}
+\alias{mvl_stone}
+\alias{mvl_citrus}
+\alias{mvl_sky}
+\alias{mvl_plum}
 \alias{mvl_text}
+\alias{mvl_fire}
+\alias{mvl_royal2}
+\alias{mvl_fuchsia}
 \title{Marketview palette.}
 \format{An object of class \code{character} of length 1.}
 \usage{
@@ -85,4 +85,3 @@ mvl_fuchsia
 Colours described by the \href{file:///M:/mvl_office/templates/Logos/MarketView_ColourGuide_v2.pdf}{Marketview colour palette}.
 }
 \keyword{datasets}
-

@@ -14,4 +14,3 @@ make_mb_df(mb_map, mbs)
 \description{
 Given a meshblock shapefile and a list of meshblocks, make_mb_df selects the meshblocks and fortifies them into a data.frame for plotting
 }
-

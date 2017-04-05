@@ -23,4 +23,3 @@ library(ggplot2)
 p <- ggplot(data.frame(x = 1:5, y = 1:5)) + geom_point(aes(x, y))
 p + theme_mcd()
 }
-
