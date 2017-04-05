@@ -65,6 +65,19 @@ mcd_process <- function(dat){
     }
   }
 
+  if("BUNCH_NAMEZ" %in% colnames(dat)){
+    if(is.character(dat[, "BUNCH_NAMEZ"])) {
+      dat[dat[,"BUNCH_NAMEZ"] == "McDonalds NZ", "BUNCH_NAMEZ"] <- "McDonald's"
+      dat[dat[,"BUNCH_NAMEZ"] == "QSR Chicken/ Pizza/ Sandwich", "BUNCH_NAMEZ"] <- "QSR - Chicken/Pizza/Sandwich"
+      dat[dat[,"BUNCH_NAMEZ"] == "QSR Burger", "BUNCH_NAMEZ"] <- "QSR - Burger"
+
+      dat[,"BUNCH_NAMEZ"] <- factor(dat[["BUNCH_NAMEZ"]], levels = c("McDonald's", "QSR - Burger", "QSR - Chicken/Pizza/Sandwich",
+                                                                     "Independent Takeaway", "Coffee Cafes Bakeries", "Restaurants"))
+
+
+    }
+  }
+
   #Format HVC
   if("CUST_TYPE" %in% colnames(dat)){
     if(is.character(dat[, "CUST_TYPE"])) {
