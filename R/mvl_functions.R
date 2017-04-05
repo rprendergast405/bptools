@@ -149,7 +149,21 @@ dollar <- function(x, dp = 0, form = "f", ...){
   paste0(ifelse(x < 0, "-", ""), "$", formatC(abs(x), digits = dp, format = form, big.mark = ",", ...))
 }
 
-
+#' Label in dollars, with '+' for positive growth
+#'
+#' A modification of the \code{\link[scales]{dollar}} function from \code{scales}, which
+#' is more appropriate for negative values
+#' @param x A numeric dollar amount
+#'
+#' @return A character representation of x in dollars
+#'
+#' @examples
+#' dollar(1000000)
+#' dollar(c(-2000000, 15000000))
+#' @export dollar_change
+dollar_change <- function(x, dp = 0, form = "f", ...){
+  paste0(ifelse(x < 0, "-", ""), ifelse(x > 0, "+", ""), "$", formatC(abs(x), digits = dp, format = form, big.mark = ",", ...))
+}
 
 #' Label in millions of dollars
 #'
@@ -222,6 +236,30 @@ kdollar <- function(x, dp = 0, form = "f", ...){
 percent <- function(x, dp = 1, form = "f", ...){
   paste0(formatC(x * 100, digits = dp, format = form, big.mark = ",", ...), "%")
 }
+
+
+#' Convert numeric values to percentages, with '+' indicating positive growth
+#'
+#' A modification of the \code{\link[scales]{percent}} function from \code{scales}, which
+#' gives better control over the decimal places displayed
+#' @param x numeric representation of a percentage
+#' @param dp the number of decimal places to display in the output
+#' @param form Same as the \code{format} parameter in \code{\link{formatC}}
+#' @param ... Additional options for formatC
+#'
+#' @return A character representation of \code{x} as a percentage
+#' @export percent_change
+#'
+#' @examples
+#' percent(0.01)
+#' percent(c(0.001, 0.23423452, 0.2, 1.124, 1213.34))
+#'
+#' Compare to scales implementation:
+#' scales::percent(c(0.001, 0.23423452, 0.2, 1.124, 1213.34))
+percent_change <- function(x, dp = 1, form = "f", ...){
+  paste0(ifelse(x > 0, "+", ""), formatC(x * 100, digits = dp, format = form, big.mark = ",", ...), "%")
+}
+
 
 
 #' Remove whitespace from character vectors
@@ -329,4 +367,15 @@ cagr <- function(iv, fv, length){
   stopifnot(is.numeric(iv) & is.numeric(fv) & is.numeric(length))
 
   return((fv / iv) ^ (1 / length) - 1)
+}
+
+
+spread2 <- function(data, key, value, fill = NA, convert = FALSE, drop = TRUE,
+                    sep = NULL) {
+  data <- dplyr::select_(data, .dots = c(key, value))
+
+  spread_df <- tidyr::spread(data = data, key = key, value = value, fill = fill,
+                             convert = convert, drop = drop, sep = sep)
+
+  return(spread_df)
 }
