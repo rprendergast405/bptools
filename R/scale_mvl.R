@@ -17,8 +17,8 @@
 #' @section Palettes:
 #' The following palettes are available for use with these scales:
 #' \describe{
-#'   \item{Diverging}{LeafPlum}
-#'   \item{Qualitative}{mvl, mcd}
+#'   \item{Diverging}{LeafPlum, TealRed, RedStone, SkyStone, PlumStone, LeafStone, RoyalStone}
+#'   \item{Qualitative}{mvl, mcd, mcd2}
 #'   \item{Sequential}{Leaf, Plum, Teal, Blue, Sky, Citrus, Stone,
 #'      Navy, Orange, Red, Green, Purple}
 #' }
@@ -29,6 +29,13 @@
 #'
 #' @export pal_mvl
 pal_mvl <- function(palette = "Leaf", direction = 1) {
+
+  if(!(palette %in% c("Leaf", "Plum", "Teal", "Blue", "Sky", "Citrus", "Stone",
+                      "Navy", "Orange", "Red", "Green", "Purple",
+                      "LeafPlum", "TealRed", "RedStone", "SkyStone", "PlumStone", "LeafStone", "RoyalStone",
+                      "mcd", "mvl", "mcd2"))) {
+    stop("Palette not available. See ?scale_mvl for a list of palettes that are currently implemented. Email Bert if you have any suggestions.")
+  }
 
   # Single colour palettes ----
   if(palette %in% c("Leaf", "Plum", "Teal", "Blue", "Sky", "Citrus", "Stone",
@@ -61,13 +68,15 @@ pal_mvl <- function(palette = "Leaf", direction = 1) {
   }
 
   # Diverging Scales ----
-  if(palette %in% c("LeafPlum")) {
+  if(palette %in% c("LeafPlum", "TealRed", "RedStone", "SkyStone", "PlumStone", "LeafStone", "RoyalStone")) {
 
     # Match the palette name to the colours ----
     pal_ref <- data.frame(
-      pal_name = c("LeafPlum"),
-      pal_min = c(marketview::mvl_leaf),
-      pal_max = c(marketview::mvl_plum)
+      pal_name = c("LeafPlum", "TealRed", "RedStone", "SkyStone", "PlumStone", "LeafStone", "RoyalStone"),
+      pal_min = c(marketview::mvl_leaf, marketview::mvl_teal, marketview::mvl_red,
+                  marketview::mvl_sky, marketview::mvl_plum, marketview::mvl_leaf, marketview::mvl_royal),
+      pal_max = c(marketview::mvl_plum, marketview::mvl_red, marketview::mvl_stone,
+                  marketview::mvl_stone, marketview::mvl_stone, marketview::mvl_stone, marketview::mvl_stone)
     )
 
     min_col <- pal_ref[pal_ref$pal_name == palette, "pal_min"]
@@ -90,16 +99,19 @@ pal_mvl <- function(palette = "Leaf", direction = 1) {
 
   # Qualitative Scales ----
 
-  if(palette %in% c("mcd", "mvl")) {
+  if(palette %in% c("mcd", "mvl", "mcd2")) {
 
     pal_ref <- dplyr::tibble(
-      pal_name = c("mcd", "mvl"),
+      pal_name = c("mcd", "mvl", "mcd2"),
       vals = list(c(marketview::mvl_red, marketview::mvl_green, marketview::mvl_orange,
                     marketview::mvl_teal, marketview::mvl_navy, marketview::mvl_purple,
                     marketview::mvl_hay),
                   c(marketview::mvl_leaf, marketview::mvl_plum, marketview::mvl_sky,
                     marketview::mvl_citrus, marketview::mvl_fire, marketview::mvl_royal2,
-                    marketview::mvl_stone))
+                    marketview::mvl_stone),
+                  c(marketview::mvl_red, marketview::mvl_orange,
+                    marketview::mvl_teal, marketview::mvl_navy, marketview::mvl_purple,
+                    marketview::mvl_hay))
     )
 
     scale_vals <- as.character(
@@ -139,8 +151,8 @@ pal_mvl <- function(palette = "Leaf", direction = 1) {
 #' @section Palettes:
 #' The following palettes are available for use with these scales:
 #' \describe{
-#'   \item{Diverging}{LeafPlum}
-#'   \item{Qualitative}{mvl, mcd}
+#'   \item{Diverging}{LeafPlum, TealRed, RedStone, SkyStone, PlumStone, LeafStone, RoyalStone}
+#'   \item{Qualitative}{mvl, mcd, mcd2}
 #'   \item{Sequential}{Leaf, Plum, Teal, Blue, Sky, Citrus, Stone,
 #'      Navy, Orange, Red, Green, Purple}
 #' }
