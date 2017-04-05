@@ -281,7 +281,7 @@ flextable_leaf_joined <- function(df, pr, hr,
 #'
 #' @return ftbl The original FlexTable with the formatting applied
 #' @export flextable_negatives
-flextable_negatives <- function(ftbl, col_names) {
+flextable_negatives <- function(ftbl, col_names = names(ftbl$vals)) {
 
   # Get the original data.frame from the flextable object
   df <- as.data.frame(ftbl$vals)
