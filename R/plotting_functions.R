@@ -59,7 +59,7 @@ theme_mvl <- function(base_size = 11, base_family = "hnb", plain_family = "hn", 
                           axis.title.x = ggplot2::element_blank(),
 
                           panel.grid.major.x = ggplot2::element_blank(),
-                          panel.grid.major.y = ggplot2::element_line(colour = mvl_grey, size = 0.2),
+                          panel.grid.major.y = ggplot2::element_line(colour = mvl_half_grey, size = 0.2),
 
                           plot.title = ggplot2::element_text(size = round(base_size * 1.5), hjust = 0),
                           plot.margin = grid::unit(c(0.1, 0.1, 0.1, 0.1), "cm")
