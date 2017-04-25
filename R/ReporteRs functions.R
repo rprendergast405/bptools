@@ -123,7 +123,7 @@ flextable_row_highlight <- function(ft, rows, cols = 1:ft$numcol){
 #' ft_ex <- flextable_teal(df_ex)
 #' ft_ex <- flextable_cell_bold(ft_ex, which(df_ex$speed > 7), "speed", "forestgreen")
 
-flextable_cell_bold <- function(ft, rows, cols, colour = marketview::mvl_text){
+flextable_cell_bold <- function(ft, rows = ft$numrow, cols = 1:ft$numcol, colour = marketview::mvl_text){
   existing_props <- ReporteRs::textProperties(font.size = ft$body.text.props[]$font.size,
                                               font.weight = ft$body.text.props[]$font.weight,
                                               font.style = ft$body.text.props[]$font.style,
