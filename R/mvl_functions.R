@@ -370,12 +370,4 @@ cagr <- function(iv, fv, length){
 }
 
 
-spread2 <- function(data, key, value, fill = NA, convert = FALSE, drop = TRUE,
-                    sep = NULL) {
-  data <- dplyr::select_(data, .dots = c(key, value))
 
-  spread_df <- tidyr::spread(data = data, key = key, value = value, fill = fill,
-                             convert = convert, drop = drop, sep = sep)
-
-  return(spread_df)
-}
