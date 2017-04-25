@@ -56,7 +56,6 @@ theme_mvl <- function(base_size = 11, base_family = "hnb", plain_family = "hn", 
                           legend.position = "top",
                           legend.direction = "horizontal",
 
-                          axis.title.x = ggplot2::element_blank(),
 
                           panel.grid.major.x = ggplot2::element_blank(),
                           panel.grid.major.y = ggplot2::element_line(colour = mvl_half_grey, size = 0.2),
@@ -237,7 +236,7 @@ theme_mcd <- function (base_size = 11, base_family = "cenb", plain_family = "cen
       legend.title = ggplot2::element_blank(),
       legend.position = "top", legend.direction = "horizontal",
       panel.grid.major.x = ggplot2::element_blank(),
-      panel.grid.major.y = ggplot2::element_line(colour = marketview::mvl_grey, size = 0.2),
+      panel.grid.major.y = ggplot2::element_line(colour = marketview::mvl_half_grey, size = 0.2),
       plot.title = ggplot2::element_text(size = round(base_size * 1.5), hjust = 0),
       plot.margin = grid::unit(c(0.1, 0.1, 0.1, 0.1), "cm"),
       plot.background = element_rect(fill = '#f2f2f2', colour = NA),
@@ -374,3 +373,44 @@ zoom_definition <- function(shp_dat, x = 'long', y = 'lat', margin = 0, expand =
 
 }
 
+
+
+#' Define a Zooming for Maps, Based on a Named Area.
+#'
+#' A wrapper function for zoom_definintion() which refers to places from mvldata::osm_places.df to define a bounding box for the map
+#'
+#' @param place_name Name of the City/Town/Suburb/etc to centre the map on
+#' @param margin The margin that should be added to the plot area
+#' @param expand If TRUE, adds a small expansion factor to the limits to ensure that data and axes don't overlap. If FALSE, limits are taken exactly from the data or xlim/ylim.
+#' @param ratio The aspect ratio (x/y) that the resultant plot area should have
+#'
+#' @export zoom_place
+#'
+#' @examples
+#' ggplot()+
+#' geom_polygon(data = nz_tla_13.df,
+#' aes(long, lat, group = group, fill = TLA == 76))+
+#' zoom_place("Auckland")()
+zoom_place <- function(place_name, margin = 20000, expand = FALSE, ratio = 1) {
+
+  if(!(place_name %in% unique(mvldata::osm_places.df$name))){
+    warning("This place doesn't exist in mvldata::osm_places.df. Returning a random location.
+  Check sort(unique(mvldata::osm_places.df$name)) to see the available places.")
+
+    place_name <- sample(unique(mvldata::osm_places.df$name), 1)
+
+    warning(paste("Zoom fn based on", place_name))
+  }
+
+
+  place_df <- mvldata::osm_places.df[mvldata::osm_places.df$name %in% place_name, ]
+
+  zoom_fn <- zoom_definition(
+    shp_dat = place_df,
+    margin = margin,
+    expand = expand,
+    ratio = ratio
+  )
+
+  return(zoom_fn)
+}
