@@ -17,14 +17,23 @@ get_merchant_location <- function(db_con, group_id) {
   if(length(group_id) != 1) stop("you should only provide one group_id")
 
   db_qry <- paste0("
-SELECT        X_COORD, Y_COORD
+SELECT        X_COORD, X_NZTM, Y_COORD, Y_NZTM
 FROM          FOZZIE.GROUPED_RECEIVER gr
 INNER JOIN    FOZZIE.GROUPED_RECEIVER_LOCATION grl ON gr.OID = grl.GROUP_ID
-
+LEFT JOIN     census.mb06_centroids cent on grl.MESHBLOCK = cent.MB06_NUM
 
 WHERE         OID = ", group_id)
 
   dat <- RODBC::sqlQuery(db_con, db_qry, stringsAsFactors = FALSE)
+
+  if(is.na(dat$X_COORD)) {
+    warning(paste0("Exact coordinates not available for merchant ", group_id, "; using imputed location"))
+
+    dat$X_COORD <- dat$X_NZTM
+    dat$Y_COORD <- dat$Y_NZTM
+  }
+
+  dat <- dat[, names(dat) %in% c("X_COORD", "Y_COORD")]
 
   return(dat)
 }
@@ -60,7 +69,7 @@ bnz_spend_origin <- function(db_con, group_id,
 
 
   db_qry <- paste0("
-SELECT      c.CAU,
+SELECT      el.group_id AS merch_id, c.CAU,
 SUM(bnz.TRANSACTION_VALUE) AS SPEND
 
 FROM        BNZTRANS.BNZTRANS bnz
@@ -82,7 +91,7 @@ INNER JOIN  bnztrans.customer c
 WHERE       bnz.SEQMONTH BETWEEN ", seqmonth_start, " AND ", seqmonth_end, "
             AND gr2.oid in (", paste(group_id, collapse = ", "), ")
 
-GROUP BY    c.CAU"
+GROUP BY    el.group_id, c.CAU"
   )
 
   dat <- RODBC::sqlQuery(db_con, db_qry, stringsAsFactors = FALSE)
@@ -145,7 +154,8 @@ make_mb_df <- function(mb_map, mbs){
     rgeos::gSimplify(tol = 25, topologyPreserve = TRUE) %>%
     ggplot2::fortify(region = "id") %>%
     dplyr::left_join(mb_map@data, by = "id") %>%
-    dplyr::select(long, lat, group, MB)
+    dplyr::select(long, lat, group, MB) %>%
+    dplyr::distinct()
 
   return(mb_df)
 }
@@ -168,7 +178,8 @@ make_cau_df <- function(cau_map, caus) {
     ggplot2::fortify(region = "id") %>%
     dplyr::left_join(cau_map@data, by = "id") %>%
     dplyr::select(long, lat, group, CAU, CAU_NAME) %>%
-    dplyr::mutate(CAU = as.integer(CAU))
+    dplyr::mutate(CAU = as.integer(CAU)) %>%
+    dplyr::distinct()
 
   return(cau_df)
 }
@@ -227,7 +238,7 @@ merch_radius_locator <- function(DB, x, y, rad, impute = T){
 
   #If exact do not use imputed location
   if(!impute){
-    merchants <- sqlQuery(DB, paste("select group_id, x_coord as x, y_coord as y
+    merchants <- RODBC::sqlQuery(DB, paste("select group_id, x_coord as x, y_coord as y
                      from fozzie.grouped_receiver_location
                      where round(sqrt(power((X_coord -",
                                     x,
@@ -236,7 +247,7 @@ merch_radius_locator <- function(DB, x, y, rad, impute = T){
                                     "),2))) < ",
                                     rad))
   } else{
-    merchants <- sqlQuery(DB, paste("select a.group_id, coalesce(x_coord, x_nztm) as x, coalesce(y_coord, y_nztm) as y
+    merchants <- RODBC::sqlQuery(DB, paste("select a.group_id, coalesce(x_coord, x_nztm) as x, coalesce(y_coord, y_nztm) as y
                                     from fozzie.grouped_receiver_location a
                                     left join CENSUS.MB06_CENTROIDS b on a.MESHBLOCK = b.MB06_NUM
                                     where round(sqrt(power((coalesce(x_coord, x_nztm) -",
@@ -247,7 +258,90 @@ merch_radius_locator <- function(DB, x, y, rad, impute = T){
                                     rad
     ))
   }
+  merchants <- dplyr::as.tbl(merchants)
 
   return(merchants)
+
+}
+
+#' Find IEO Merchants Within a Given Radius
+#'
+#' A function to find all the IEO merchants within a radius (in m) of a given location (in NZTM).
+#' Optionally include merchants with imputed location from MB centroid.
+#'
+#' @param DB An ODBC connection to bespoke
+#' @param x X coordinate of the centroid
+#' @param y Y coordinate of the centroid
+#' @param rad The radius in which to find merchants
+#' @param impute Should merchants with imputed location be included in the results?
+#'
+#' @return A \code{data.frame} of the Fozzie IDs and locations of all merchants within the given radius
+#' @export ieo_radius_locator
+ieo_radius_locator <- function(DB, x, y, rad, impute = T){
+
+  if(!is.numeric(c(x, y, rad))) stop("Your inputs need to be numeric")
+  if(length(x) != 1 | length(y) != 1) stop("You must only supply a single location")
+  if(length(rad) != 1) stop("You can only search within a single radius")
+
+
+  #If exact do not use imputed location
+  if(!impute){
+    merchants <- RODBC::sqlQuery(DB, paste("select group_id, x_coord as x, y_coord as y
+                                           from fozzie.grouped_receiver_location grl
+                                           inner join mcd_bp_grp_ids ieo ON ieo.merch_id = grl.group_id
+                                           where round(sqrt(power((X_coord -",
+                                           x,
+                                           "),2)+power((Y_COORD - ",
+                                           y,
+                                           "),2))) < ",
+                                           rad))
+  } else{
+    merchants <- RODBC::sqlQuery(DB, paste("select a.group_id, coalesce(x_coord, x_nztm) as x, coalesce(y_coord, y_nztm) as y
+                                           from fozzie.grouped_receiver_location a
+                                           inner join mcd_bp_grp_ids ieo ON ieo.merch_id = a.group_id
+                                           left join CENSUS.MB06_CENTROIDS b on a.MESHBLOCK = b.MB06_NUM
+                                           where round(sqrt(power((coalesce(x_coord, x_nztm) -",
+                                           x,
+                                           "),2)+power((coalesce(y_coord, y_nztm) - ",
+                                           y,
+                                           "),2))) < ",
+                                           rad
+                                           ))
+  }
+  merchants <- dplyr::as.tbl(merchants)
+
+  return(merchants)
+
+}
+
+#' Find Meshblocks Within a Given Radius
+#'
+#' A function to find all the meshblocks within a radius (in m) of a given location (in NZTM).
+#'
+#' @param DB An ODBC connection to bespoke
+#' @param x X coordinate of the centroid
+#' @param y Y coordinate of the centroid
+#' @param rad The radius in which to find meshblocks
+#'
+#' @export mb_radius_locator
+mb_radius_locator <- function(DB, x, y, rad){
+
+  if(!is.numeric(c(x, y, rad))) stop("Your inputs need to be numeric")
+  if(length(x) != 1 | length(y) != 1) stop("You must only supply a single location")
+  if(length(rad) != 1) stop("You can only search within a single radius")
+
+
+  mb_data <- RODBC::sqlQuery(DB, gsub("\n", "", paste0("select distinct mb06, mb06_num
+                                                from CENSUS.MB06_CENTROIDS
+                                                where round(sqrt(power((x_nztm - ",
+                                                x,
+                                                "),2)+power((y_nztm - ",
+                                                y,
+                                                "),2))) <  ",
+                                                rad), fixed = T))
+
+  mb_data <- dplyr::as.tbl(mb_data)
+
+  return(mb_data)
 
 }
