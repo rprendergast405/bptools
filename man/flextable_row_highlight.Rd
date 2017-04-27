@@ -2,9 +2,12 @@
 % Please edit documentation in R/ReporteRs functions.R
 \name{flextable_row_highlight}
 \alias{flextable_row_highlight}
+\alias{ft_row_highlight}
 \title{Highlight given rows of a flextable}
 \usage{
 flextable_row_highlight(ft, rows, cols = 1:ft$numcol)
+
+ft_row_highlight(ft, rows, cols = 1:ft$numcol)
 }
 \arguments{
 \item{ft}{The flextable object to highlight}

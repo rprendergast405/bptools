@@ -2,9 +2,12 @@
 % Please edit documentation in R/ReporteRs functions.R
 \name{flextable_leaf}
 \alias{flextable_leaf}
+\alias{ft_leaf}
 \title{Create a leaf-themed FlexTable}
 \usage{
 flextable_leaf(df, size = 12, padding = size/2)
+
+ft_leaf(df, size = 12, padding = size/2)
 }
 \arguments{
 \item{df}{The data which should populate the flextable}

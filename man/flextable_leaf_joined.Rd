@@ -2,9 +2,12 @@
 % Please edit documentation in R/ReporteRs functions.R
 \name{flextable_leaf_joined}
 \alias{flextable_leaf_joined}
+\alias{ft_leaf_joined}
 \title{Create a FlexTable with Multiple Header Rows}
 \usage{
 flextable_leaf_joined(df, pr, hr, size = 12, padding = size/2)
+
+ft_leaf_joined(df, pr, hr, size = 12, padding = size/2)
 }
 \arguments{
 \item{df}{A \code{data.frame} of values}

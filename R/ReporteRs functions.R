@@ -44,6 +44,11 @@ flextable_teal <- function(df, size = 12, padding = size / 2) {
   return(df_ft)
 }
 
+#' @rdname flextable_teal
+#' @export ft_teal
+ft_teal <- function(df, size = 12, padding = size / 2) {
+  flextable_teal(df, size, padding)
+}
 
 #' Create a dark-themed FlexTable
 #'
@@ -82,6 +87,12 @@ flextable_dark <- function(df, size = 12, padding = size / 2) {
   return(df_ft)
 }
 
+#' @rdname flextable_dark
+#' @export ft_dark
+ft_dark <- function(df, size = 12, padding = size / 2) {
+  flextable_dark(df, size, padding)
+}
+
 
 #' Highlight given rows of a flextable
 #'
@@ -105,6 +116,14 @@ flextable_row_highlight <- function(ft, rows, cols = 1:ft$numcol){
 
   return(ft)
 }
+
+
+#' @rdname flextable_row_highlight
+#' @export ft_row_highlight
+ft_row_highlight <- function(ft, rows, cols = 1:ft$numcol) {
+  flextable_row_highlight(ft, rows, cols)
+}
+
 
 #' Bold cells of a flextable
 #'
@@ -136,6 +155,11 @@ flextable_cell_bold <- function(ft, rows = ft$numrow, cols = 1:ft$numcol, colour
   return(ft)
 }
 
+#' @rdname flextable_cell_bold
+#' @export ft_cell_bold
+ft_cell_bold <- function(ft, rows = ft$numrow, cols = 1:ft$numcol, colour = marketview::mvl_text){
+  flextable_cell_bold(ft, rows, cols, colour)
+}
 
 
 #' Create a black-themed FlexTable
@@ -176,6 +200,12 @@ flextable_black <- function(df, size = 12, padding = size / 2) {
 }
 
 
+#' @rdname flextable_black
+#' @export ft_black
+ft_black <- function(df, size = 12, padding = size / 2) {
+  flextable_black(df, size, padding)
+}
+
 #' Create a leaf-themed FlexTable
 #'
 #' A function to create a FlexTable object for use in MS Office type outputs via the ReporteRs package
@@ -211,6 +241,13 @@ flextable_leaf <- function(df, size = 12, padding = size / 2) {
   df_ft$vals <- df
 
   return(df_ft)
+}
+
+
+#' @rdname flextable_leaf
+#' @export ft_leaf
+ft_leaf <- function(df, size = 12, padding = size / 2) {
+  flextable_leaf(df, size, padding)
 }
 
 
@@ -268,7 +305,13 @@ flextable_leaf_joined <- function(df, pr, hr,
   return(df_ft)
 }
 
-
+#' @rdname flextable_leaf_joined
+#' @export ft_leaf_joined
+ft_leaf_joined <- function(df, pr, hr,
+                           size = 12, padding = size/2) {
+  flextable_leaf_joined(df, pr, hr,
+                        size, padding)
+}
 
 #' Highlight Negative Cell Values in Red
 #'
@@ -302,4 +345,11 @@ flextable_negatives <- function(ftbl, col_names = names(ftbl$vals)) {
     ftbl <- marketview::flextable_cell_bold(ftbl, neg_ind, col_ind, marketview::mvl_red)
   }
   return(ftbl)
+}
+
+
+#' @rdname flextable_negatives
+#' @export ft_negatives
+ft_negatives <- function(ftbl, col_names = names(ftbl$vals)) {
+  flextable_negatives(ftbl, col_names)
 }

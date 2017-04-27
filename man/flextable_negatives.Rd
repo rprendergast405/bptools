@@ -2,9 +2,12 @@
 % Please edit documentation in R/ReporteRs functions.R
 \name{flextable_negatives}
 \alias{flextable_negatives}
+\alias{ft_negatives}
 \title{Highlight Negative Cell Values in Red}
 \usage{
 flextable_negatives(ftbl, col_names = names(ftbl$vals))
+
+ft_negatives(ftbl, col_names = names(ftbl$vals))
 }
 \arguments{
 \item{ftbl}{A FlexTable object to format}

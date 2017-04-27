@@ -2,9 +2,12 @@
 % Please edit documentation in R/ReporteRs functions.R
 \name{flextable_dark}
 \alias{flextable_dark}
+\alias{ft_dark}
 \title{Create a dark-themed FlexTable}
 \usage{
 flextable_dark(df, size = 12, padding = size/2)
+
+ft_dark(df, size = 12, padding = size/2)
 }
 \arguments{
 \item{df}{The data which should populate the flextable}

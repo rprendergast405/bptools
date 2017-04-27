@@ -2,9 +2,13 @@
 % Please edit documentation in R/ReporteRs functions.R
 \name{flextable_cell_bold}
 \alias{flextable_cell_bold}
+\alias{ft_cell_bold}
 \title{Bold cells of a flextable}
 \usage{
 flextable_cell_bold(ft, rows = ft$numrow, cols = 1:ft$numcol,
+  colour = marketview::mvl_text)
+
+ft_cell_bold(ft, rows = ft$numrow, cols = 1:ft$numcol,
   colour = marketview::mvl_text)
 }
 \arguments{
