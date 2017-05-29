@@ -61,7 +61,9 @@ theme_mvl <- function(base_size = 11, base_family = "hnb", plain_family = "hn", 
                           panel.grid.major.y = ggplot2::element_line(colour = mvl_half_grey, size = 0.2),
 
                           plot.title = ggplot2::element_text(size = round(base_size * 1.5), hjust = 0),
-                          plot.margin = grid::unit(c(0.1, 0.1, 0.1, 0.1), "cm")
+                          plot.margin = grid::unit(c(0.1, 0.1, 0.1, 0.1), "cm"),
+
+                          plot.caption = ggplot2::element_text(size = round(base_size * 0.9), family = plain_family, hjust = 1)
                         )
   )
 }
@@ -355,6 +357,13 @@ make_footnote <- function(footnote_text = paste(format(Sys.time(), "%d %b %Y")),
 #' akl_zoom()
 zoom_definition <- function(shp_dat, x = 'long', y = 'lat', margin = 0, expand = FALSE, ratio = 1){
 
+  if(sum(is.na(shp_dat[[x]])) + sum(is.na(shp_dat[[y]])) > 0){
+    warning("The data provided has NA coordinates. Check that your geographical standards are consistent")
+    na_ind <- is.na(shp_dat[[x]]) | is.na(shp_dat[[y]])
+
+    shp_dat <- shp_dat[!na_ind, ]
+  }
+
   #Calculate the longest dimension, x or y
   wl <- max(c(max(shp_dat[[x]]) - min(shp_dat[[x]]), max(shp_dat[[y]]) - min(shp_dat[[y]])))/2 + margin
 
@@ -363,13 +372,13 @@ zoom_definition <- function(shp_dat, x = 'long', y = 'lat', margin = 0, expand =
   min_coords <- c(mean(c(max(shp_dat[[x]]), min(shp_dat[[x]]))), mean(c(max(shp_dat[[y]]), min(shp_dat[[y]])))) - c(ratio * wl, wl)
 
   #Function to apply the zoom
-  zoom_fn <- function(){
+  #zoom_fn <- function(){
     ggplot2::coord_fixed(xlim = c(min_coords[1], max_coords[1]),
                          ylim = c(min_coords[2], max_coords[2]),
                          expand = expand)
-  }
+  #}
 
-  return(zoom_fn)
+  #return(zoom_fn)
 
 }
 
@@ -414,3 +423,89 @@ zoom_place <- function(place_name, margin = 20000, expand = FALSE, ratio = 1) {
 
   return(zoom_fn)
 }
+
+
+#' Add a Polygon Basemap
+#'
+#' Used to quickly add a basemap of NZ geographical areas to plots
+#'
+#' @param data Usually will be mvldata::nz_tla_06.df, nz_tla_13.df, or nz_regions.df; but can be any data.frame of polygons with [long, lat, group] attributes
+#' @param fill colour to fill the polygons
+#' @param colour colour of the polygon borders
+#' @param size width of the border line
+#'
+#' @export add_basemap
+add_basemap <- function(data = mvldata::nz_tla_06.df, fill = mvl_half_grey, colour = mvl_grey, size = 0.2) {
+  ggplot2::geom_polygon(data = data, ggplot2::aes(x = long, y = lat, group = group),
+                        fill = fill, colour = colour, size = size, inherit.aes = FALSE)
+}
+
+#' Add Water Polygons to a Map
+#'
+#' Used to quickly add water polygons to plots
+#'
+#' @param rivers Should river polygons be added to the plot?
+#' @param inland Should inland water polygons be added to the plot?
+#' @param extra Should additional lakes/rivers not covered by inland and rivers be added?
+#' @param fill colour to fill the polygons
+#' @param colour colour of the polygon borders
+#' @param size width of the border line
+#' @param hole_fill what colour should holes be filled with?
+#'
+#' @export add_water
+add_water <- function(rivers = TRUE, inland = TRUE, extra = TRUE,
+                      fill = mvl_half_teal, colour = mvl_teal, size = 0.2,
+                      hole_fill = mvl_half_grey) {
+
+  if(!any(rivers, inland, extra)) {
+    stop("You need to add at least one layer to the plot")
+  }
+
+  dat <- data.frame()
+
+  if(rivers) {
+    dat <- dplyr::bind_rows(dat, mvldata::rivers.df)
+  }
+
+  if(inland) {
+    max_id <- max(as.numeric(dat$id)) + 1
+
+    if(is.infinite(max_id)) max_id <- 1
+
+    water_dat <- mvldata::inland_water.df
+
+    # spoof some polygon ids to make sure we have distinct groups
+    water_dat$id <- as.numeric(water_dat$id) + max_id
+    water_dat$piece <- as.numeric(water_dat$piece)
+    water_dat$group <- paste(water_dat$id, water_dat$piece, sep = ".")
+
+    # make sure the dfs will bind
+    dat$group <- as.character(dat$group)
+    dat$piece <- as.numeric(dat$piece)
+    dat$id <- as.numeric(dat$id)
+    dat <- dplyr::bind_rows(dat, water_dat)
+  }
+
+  if(extra) {
+    max_id <- max(as.numeric(dat$id)) + 1
+
+    if(is.infinite(max_id)) max_id <- 1
+
+    water_dat <- mvldata::extra_waters
+
+    # spoof some polygon ids to make sure we have distinct groups
+    water_dat$id <- as.numeric(water_dat$id) + max_id
+    water_dat$piece <- as.numeric(water_dat$piece)
+    water_dat$group <- paste(water_dat$id, water_dat$piece, sep = ".")
+
+    dat <- dplyr::bind_rows(dat, water_dat)
+  }
+
+
+  list(ggplot2::geom_polygon(data = dat, ggplot2::aes(x = long, y = lat, group = group),
+                             fill = fill, colour = colour, size = size, inherit.aes = FALSE),
+       ggplot2::geom_polygon(data = dplyr::filter(dat, hole), ggplot2:: aes(long, lat, group = group),
+                             fill = hole_fill, colour = colour)
+  )
+}
+
