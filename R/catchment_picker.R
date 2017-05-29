@@ -7,7 +7,7 @@
 #' @param map_shapefile A shapefile from which to draw the map (default is 2013 CAU)
 #'
 #' @export catchment_picker
-catchment_picker <- function(spending, location, map_shapefile = mvldata::nz_cau_13.spdf){
+catchment_picker <- function(spending = NULL, location = NULL, map_shapefile = mvldata::nz_cau_13.spdf){
   require(shiny)
   require(dplyr)
   require(leaflet)
@@ -18,7 +18,7 @@ catchment_picker <- function(spending, location, map_shapefile = mvldata::nz_cau
     # App ui - pretty basic
     ui = fluidPage(
       column(8, leafletOutput("map", width = 1000, height = 1000)),
-      column(4, downloadLink('downloadData', 'Download'),
+      column(4, downloadButton('downloadData', 'Download'),
              selectInput(inputId = "catchment_name", label = "Catchment Name",
                          choices = c("Primary", "Secondary", "Tertiary"),
                          selected = "Primary"),
@@ -34,12 +34,15 @@ catchment_picker <- function(spending, location, map_shapefile = mvldata::nz_cau
         nz_map <-leaflet(spend_map.spdf) %>%
           addPolygons(fillOpacity = 0.5,
                       stroke = TRUE,
-                      weight = 2,
+                      weight = 1,
                       fillColor = ~pal(SPEND),
                       layerId = ~CAU) %>%
-          addTiles() %>%
-          addMarkers(data = store_location.spdf)
+          addTiles()
 
+        if(!is.null(location)) {
+          nz_map <- nz_map %>%
+            addMarkers(data = store_location.spdf)
+        }
         nz_map
       })
 
@@ -62,7 +65,7 @@ catchment_picker <- function(spending, location, map_shapefile = mvldata::nz_cau
               mutate(prop = SPEND / sum(SPEND, na.rm = TRUE)) %>%
               filter(CAU %in% data$primary_catchment) %>%
               group_by(CAU = "TOTAL", CAU_NAME = "TOTAL") %>%
-              summarise_each(funs(sum_na), SPEND, prop)
+              summarise_at(vars(SPEND, prop), sum_na)
           ) %>%
           mutate(SPEND = dollar(SPEND),
                  prop = percent(prop),
@@ -80,7 +83,7 @@ catchment_picker <- function(spending, location, map_shapefile = mvldata::nz_cau
               mutate(prop = SPEND / sum(SPEND, na.rm = TRUE)) %>%
               filter(CAU %in% data$secondary_catchment) %>%
               group_by(CAU = "TOTAL", CAU_NAME = "TOTAL") %>%
-              summarise_each(funs(sum_na), SPEND, prop)
+              summarise_at(vars(SPEND, prop), sum_na)
           ) %>%
           mutate(SPEND = dollar(SPEND),
                  prop = percent(prop),
@@ -98,7 +101,7 @@ catchment_picker <- function(spending, location, map_shapefile = mvldata::nz_cau
               mutate(prop = SPEND / sum(SPEND, na.rm = TRUE)) %>%
               filter(CAU %in% data$tertiary_catchment) %>%
               group_by(CAU = "TOTAL", CAU_NAME = "TOTAL") %>%
-              summarise_each(funs(sum_na), SPEND, prop)
+              summarise_at(vars(SPEND, prop), sum_na)
           ) %>%
           mutate(SPEND = dollar(SPEND),
                  prop = percent(prop),
@@ -183,26 +186,26 @@ catchment_picker <- function(spending, location, map_shapefile = mvldata::nz_cau
                         fillColor = ~pal(spend_map.spdf$SPEND)[spend_map.spdf$CAU %in% data$unselected],
                         fillOpacity = 0.5,
                         stroke = TRUE,
-                        weight = 2,
+                        weight = 1,
                         layerId = ~CAU) %>%
             addPolygons(data = map_primary(),
                         fillColor = ~pal2(spend_map.spdf$SPEND)[spend_map.spdf$CAU %in% data$primary_catchment],
                         fillOpacity = 0.8,
-                        weight = 2,
+                        weight = 1,
                         color = "red",
                         group = "catchment1",
                         layerId = ~CAU) %>%
             addPolygons(data = map_secondary(),
                         fillColor = ~pal3(spend_map.spdf$SPEND)[spend_map.spdf$CAU %in% data$secondary_catchment],
                         fillOpacity = 0.8,
-                        weight = 2,
+                        weight = 1,
                         color = "green",
                         group = "catchment2",
                         layerId = ~CAU) %>%
             addPolygons(data = map_tertiary(),
                         fillColor = ~pal4(spend_map.spdf$SPEND)[spend_map.spdf$CAU %in% data$tertiary_catchment],
                         fillOpacity = 0.8,
-                        weight = 2,
+                        weight = 1,
                         color = "gold",
                         group = "catchment3",
                         layerId = ~CAU)
@@ -241,8 +244,10 @@ catchment_picker <- function(spending, location, map_shapefile = mvldata::nz_cau
     # Initialise the map at the start ------
     onStart = function() {
       cat("Initialising\n")
-      store_location.spdf <<- SpatialPoints(coords = location, proj4string = CRS("+proj=tmerc +lat_0=0 +lon_0=173 +k=0.9996 +x_0=1600000 +y_0=10000000 +ellps=GRS80 +units=m +no_defs")) %>%
-        spTransform(CRS("+proj=longlat +datum=WGS84"))
+      if(!is.null(location)) {
+        store_location.spdf <<- SpatialPoints(coords = location, proj4string = CRS("+proj=tmerc +lat_0=0 +lon_0=173 +k=0.9996 +x_0=1600000 +y_0=10000000 +ellps=GRS80 +units=m +no_defs")) %>%
+          spTransform(CRS("+proj=longlat +datum=WGS84"))
+      }
 
       cat("Processing Map")
       # add the spending data to the map
@@ -254,35 +259,41 @@ catchment_picker <- function(spending, location, map_shapefile = mvldata::nz_cau
       cat("...\n")
       spend_map.spdf <<- spend_map.spdf %>%
         gSimplify(tol = 50, topologyPreserve = TRUE) %>%
-        SpatialPolygonsDataFrame(spend_map.spdf@data) %>%
+        SpatialPolygonsDataFrame(data.frame(spend_map.spdf@data, row.names = row.names(.))) %>%
         spTransform(CRS("+proj=longlat +datum=WGS84"))
 
-      spend_map.spdf$CAU <- as.character(spend_map.spdf$CAU)
-      spending$CAU <- as.character(spending$CAU)
+      if(is.null(spending)) {
+        cat("No spending data provided; showing TLA ID\n")
+        spend_map.spdf$CAU <<- as.character(spend_map.spdf$CAU)
+        spend_map.spdf@data$SPEND <<- spend_map.spdf@data$TLA
+      } else {
+        spend_map.spdf$CAU <- as.character(spend_map.spdf$CAU)
+        spending$CAU <- as.character(spending$CAU)
 
-      cat("Adding Spend Data\n")
-      spend_map.spdf@data <<-spend_map.spdf@data %>%
-        left_join(spending)
+        cat("Adding Spend Data\n")
+        spend_map.spdf@data <<-spend_map.spdf@data %>%
+          left_join(spending)
+        }
 
       cat("Finishing Up")
       pal <<- colorNumeric(
         palette = "Blues",
-        domain = spend_map.spdf$SPEND
+        domain = spend_map.spdf$SPEND[spend_map.spdf$SPEND != 999]
       )
 
       pal2 <<- colorNumeric(
         palette = "Reds",
-        domain = spend_map.spdf$SPEND
+        domain = spend_map.spdf$SPEND[spend_map.spdf$SPEND != 999]
       )
 
       pal3 <<- colorNumeric(
         palette = "Greens",
-        domain = spend_map.spdf$SPEND
+        domain = spend_map.spdf$SPEND[spend_map.spdf$SPEND != 999]
       )
 
       pal4 <<- colorNumeric(
         palette = "YlOrBr",
-        domain = spend_map.spdf$SPEND
+        domain = spend_map.spdf$SPEND[spend_map.spdf$SPEND != 999]
       )
 
       sum_na <<- function(x) sum(x, na.rm = TRUE)
