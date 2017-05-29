@@ -4,7 +4,7 @@
 \alias{output_archive}
 \title{Archive previous results from a project}
 \usage{
-output_archive(base_dir)
+output_archive(base_dir = getwd())
 }
 \arguments{
 \item{base_dir}{The base directory of the project}

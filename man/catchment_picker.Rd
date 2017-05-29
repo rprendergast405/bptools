@@ -4,7 +4,8 @@
 \alias{catchment_picker}
 \title{Catchment selection tool.}
 \usage{
-catchment_picker(spending, location, map_shapefile = mvldata::nz_cau_13.spdf)
+catchment_picker(spending = NULL, location = NULL,
+  map_shapefile = mvldata::nz_cau_13.spdf)
 }
 \arguments{
 \item{spending}{A data.frame of the spend origin with the attributes CAU and SPEND}

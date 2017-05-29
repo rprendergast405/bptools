@@ -1,3 +1,36 @@
+# marketview 0.5.2
+
+## Small Changes
+- Slight update to diverging colour palettes in pal_mvl()
+- catchment_picker() can now run without spending or location
+- Done away with the base_dir argument in scripts made by create_project()
+- Made the plot.caption in theme_mvl() a bit smaller and standard font weight
+- create_project() sets default ggplot colour scales using pal_mvl()
+- create_project() no longer uses the base_dir argument in script templates
+- zoom_definition() no longer needs to be added as a function to a ggplot object ie p = p + zoom_definition(shp_dat)() is now p = p + zoom_definition(shp_dat)
+
+# marketview 0.5.1
+
+## What's New
+- zoom_place() for map boundaries based on place names
+- percent_change() and dollar_change() for representing growth figures
+- added ieo_radius_locator(): an IEO-specific version of merch_radius_locator()
+- added mb_radius_locator(): finds all meshblocks within radius of a point (based on meshblock centroid)
+- Added ft_() aliases for flextable_() functions
+
+## Small Changes
+- get_merchant_location() uses the imputed location if exact coordinates are not available (with a warning)
+- slight changes on merch_radius_locator()
+- major gridlines in theme_mvl() are lighter
+- default for flextable_negatives() is all columns
+- added capability in mcd_process() to treat bunch_namez
+- more colour palettes in scale_mvl()
+- Default for flextable_cell_bold() is to highlight the final row
+
+## Bug Fixes
+- fixed a bug in make_mb_df() & make_cau_df() where duplicate polygons could be introduced
+
+
 # marketview 0.5
 
 ## What's New

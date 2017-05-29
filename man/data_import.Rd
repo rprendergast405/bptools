@@ -4,8 +4,8 @@
 \alias{data_import}
 \title{Import the processed data for a project}
 \usage{
-data_import(base_dir, data_name = paste(gsub(".*/(?!$)|/$", "", base_dir, perl
-  = TRUE), "data.RData"))
+data_import(base_dir = getwd(), data_name = paste(gsub(".*/(?!$)|/$", "",
+  base_dir, perl = TRUE), "data.RData"))
 }
 \arguments{
 \item{base_dir}{The base directory of the project}
