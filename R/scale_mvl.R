@@ -18,7 +18,7 @@
 #' The following palettes are available for use with these scales:
 #' \describe{
 #'   \item{Diverging}{LeafPlum, TealRed, RedStone, SkyStone, PlumStone, LeafStone, RoyalStone}
-#'   \item{Qualitative}{mvl, mcd, mcd2}
+#'   \item{Qualitative}{mvl, mvl_classic, mcd, mcd2}
 #'   \item{Sequential}{Leaf, Plum, Teal, Blue, Sky, Citrus, Stone,
 #'      Navy, Orange, Red, Green, Purple}
 #' }
@@ -33,7 +33,7 @@ pal_mvl <- function(palette = "Leaf", direction = 1) {
   if(!(palette %in% c("Leaf", "Plum", "Teal", "Blue", "Sky", "Citrus", "Stone",
                       "Navy", "Orange", "Red", "Green", "Purple",
                       "LeafPlum", "TealRed", "RedStone", "SkyStone", "PlumStone", "LeafStone", "RoyalStone",
-                      "mcd", "mvl", "mcd2"))) {
+                      "mcd", "mvl", "mcd2", "mvl_classic"))) {
     stop("Palette not available. See ?scale_mvl for a list of palettes that are currently implemented. Email Bert if you have any suggestions.")
   }
 
@@ -62,7 +62,7 @@ pal_mvl <- function(palette = "Leaf", direction = 1) {
         dir_vec <- n:1
       } else stop("direction should be -1 or 1")
 
-      colorRampPalette(c(top_col, "white"))(n + 2)[dir_vec]
+      colorRampPalette(c(top_col, "white"))(n + 1)[dir_vec]
     }
 
   }
@@ -85,13 +85,22 @@ pal_mvl <- function(palette = "Leaf", direction = 1) {
     # construct the palette function ----
     pal_out <- function(n, dirn = direction){
 
+      n_new <- 2 * floor(n / 2) + 1
+
       if(dirn == 1) {
-        dir_vec <- 1:n
+        dir_vec <- 1:n_new
       } else if(dirn == -1) {
-        dir_vec <- n:1
+        dir_vec <- n_new:1
       } else stop("direction should be -1 or 1")
 
-      grDevices::colorRampPalette(c(min_col, "#f7f7f7", max_col))(n)[dir_vec]
+
+      if(n %% 2 == 0) {
+        # take the central value out if getting an even number of colours ----
+        dir_vec <- dir_vec[-ceiling(length(dir_vec) / 2)]
+      }
+
+
+      grDevices::colorRampPalette(c(min_col, "#f7f7f7", max_col))(n_new)[dir_vec]
     }
 
   }
@@ -99,10 +108,10 @@ pal_mvl <- function(palette = "Leaf", direction = 1) {
 
   # Qualitative Scales ----
 
-  if(palette %in% c("mcd", "mvl", "mcd2")) {
+  if(palette %in% c("mcd", "mvl", "mcd2", "mvl_classic")) {
 
     pal_ref <- dplyr::tibble(
-      pal_name = c("mcd", "mvl", "mcd2"),
+      pal_name = c("mcd", "mvl", "mcd2", "mvl_classic"),
       vals = list(c(marketview::mvl_red, marketview::mvl_green, marketview::mvl_orange,
                     marketview::mvl_teal, marketview::mvl_navy, marketview::mvl_purple,
                     marketview::mvl_hay),
@@ -111,7 +120,10 @@ pal_mvl <- function(palette = "Leaf", direction = 1) {
                     marketview::mvl_stone),
                   c(marketview::mvl_red, marketview::mvl_orange,
                     marketview::mvl_teal, marketview::mvl_navy, marketview::mvl_purple,
-                    marketview::mvl_hay))
+                    marketview::mvl_hay),
+                  c(marketview::mvl_teal, marketview::mvl_navy,
+                    marketview::mvl_royal, marketview::mvl_purple, marketview::mvl_half_purple,
+                    marketview::mvl_half_grey))
     )
 
     scale_vals <- as.character(
