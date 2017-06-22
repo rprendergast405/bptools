@@ -357,25 +357,38 @@ make_footnote <- function(footnote_text = paste(format(Sys.time(), "%d %b %Y")),
 #' akl_zoom()
 zoom_definition <- function(shp_dat, x = 'long', y = 'lat', margin = 0, expand = FALSE, ratio = 1){
 
-  if(sum(is.na(shp_dat[[x]])) + sum(is.na(shp_dat[[y]])) > 0){
+  if (sum(is.na(shp_dat[[x]])) + sum(is.na(shp_dat[[y]])) > 0) {
     warning("The data provided has NA coordinates. Check that your geographical standards are consistent")
     na_ind <- is.na(shp_dat[[x]]) | is.na(shp_dat[[y]])
 
     shp_dat <- shp_dat[!na_ind, ]
   }
 
+  # caluculate the centre point of the shapefile
+  centre_point <- c(mean(c(max(shp_dat[[x]]), min(shp_dat[[x]]))), mean(c(max(shp_dat[[y]]), min(shp_dat[[y]]))))
+
   #Calculate the longest dimension, x or y
-  wl <- max(c(max(shp_dat[[x]]) - min(shp_dat[[x]]), max(shp_dat[[y]]) - min(shp_dat[[y]])))/2 + margin
+  x_length <- max(shp_dat[[x]]) - min(shp_dat[[x]])
+  y_length <- max(shp_dat[[y]]) - min(shp_dat[[y]])
+
+  # find the length to add to the centre point
+  search_space <- seq(min(ratio * x_length, y_length), max(ratio * x_length, y_length), length.out = 10000)
+
+  x_dim <- min(search_space[search_space >= x_length & search_space / ratio >= y_length]) / 2
+  y_dim <- x_dim / ratio
+
+
+
 
   #Calculate the box coordinates
-  max_coords <- c(mean(c(max(shp_dat[[x]]), min(shp_dat[[x]]))), mean(c(max(shp_dat[[y]]), min(shp_dat[[y]])))) + c(ratio * wl, wl)
-  min_coords <- c(mean(c(max(shp_dat[[x]]), min(shp_dat[[x]]))), mean(c(max(shp_dat[[y]]), min(shp_dat[[y]])))) - c(ratio * wl, wl)
+  max_coords <- centre_point + c(x_dim, y_dim)
+  min_coords <- centre_point - c(x_dim, y_dim)
 
   #Function to apply the zoom
   #zoom_fn <- function(){
-    ggplot2::coord_fixed(xlim = c(min_coords[1], max_coords[1]),
-                         ylim = c(min_coords[2], max_coords[2]),
-                         expand = expand)
+  ggplot2::coord_fixed(xlim = c(min_coords[1], max_coords[1]),
+                       ylim = c(min_coords[2], max_coords[2]),
+                       expand = expand)
   #}
 
   #return(zoom_fn)
@@ -402,7 +415,7 @@ zoom_definition <- function(shp_dat, x = 'long', y = 'lat', margin = 0, expand =
 #' zoom_place("Auckland")()
 zoom_place <- function(place_name, margin = 20000, expand = FALSE, ratio = 1) {
 
-  if(!(place_name %in% unique(mvldata::osm_places.df$name))){
+  if (!(place_name %in% unique(mvldata::osm_places.df$name))) {
     warning("This place doesn't exist in mvldata::osm_places.df. Returning a random location.
   Check sort(unique(mvldata::osm_places.df$name)) to see the available places.")
 
@@ -435,9 +448,22 @@ zoom_place <- function(place_name, margin = 20000, expand = FALSE, ratio = 1) {
 #' @param size width of the border line
 #'
 #' @export add_basemap
-add_basemap <- function(data = mvldata::nz_tla_06.df, fill = mvl_half_grey, colour = mvl_grey, size = 0.2) {
-  ggplot2::geom_polygon(data = data, ggplot2::aes(x = long, y = lat, group = group),
-                        fill = fill, colour = colour, size = size, inherit.aes = FALSE)
+add_basemap <- function(data = mvldata::nz_tla_06.df, fill = mvl_half_grey, colour = mvl_grey, size = 0.2, hole_fill = "white") {
+
+  if ("hole" %in% names(data)) {
+    obj <- list(ggplot2::geom_polygon(data = data, ggplot2::aes(x = long, y = lat, group = group),
+                                      fill = fill, colour = colour, size = size, inherit.aes = FALSE),
+                ggplot2::geom_polygon(data = dplyr::filter(data, hole), ggplot2::aes(long, lat, group = group),
+                                      fill = hole_fill, colour = colour, size = size, inherit.aes = FALSE)
+    )
+  } else {
+
+    obj <- ggplot2::geom_polygon(data = data, ggplot2::aes(x = long, y = lat, group = group),
+                                 fill = fill, colour = colour, size = size, inherit.aes = FALSE)
+
+  }
+
+  return(obj)
 }
 
 #' Add Water Polygons to a Map
