@@ -159,17 +159,22 @@ if(spatial_packages){
 rm(spatial_packages)
 
 # set directories
-data_dir <- file.path(base_dir, \"data\")
-output_dir <- file.path(base_dir, \"output\")
+output_dir <- file.path(\"output\")
 fig_dir <- file.path(output_dir, \"figures\")
 tab_dir <- file.path(output_dir, \"tables\")
 
 # Source any function scripts
-source_dir(file.path(base_dir, \"R/functions\"))
+source_dir(file.path(\"R/functions\"))
 
 
 # Set the plot theme
 theme_set(theme_mvl())
+
+# set colour palettes
+scale_colour_discrete <- scale_colour_mvl
+scale_colour_continuous <- scale_colour_mvlc
+scale_fill_discrete <- scale_fill_mvl
+scale_fill_continuous <- scale_fill_mvlc
 ")
 
   cat(paste(init_text, collapse = ""), file = file.path(root_dir, "R", paste0("0 ", project_name, " initialise.R")))
@@ -200,11 +205,10 @@ create_processing_script <- function(project_name, root_dir) {
 #   - Created
 # -------------------------------------------------------------------------
 
-base_dir <- \"", root_dir, "\"
 
 # 0. INITIALISE -----------------------------------------------------------
 
-source(file.path(base_dir, \"R\", \"0 ", project_name, " initialise.R\"))
+source(file.path(\"R\", \"0 ", project_name, " initialise.R\"))
 
 # 1. IMPORT DATA ----------------------------------------------------------
 
@@ -213,7 +217,7 @@ source(file.path(base_dir, \"R\", \"0 ", project_name, " initialise.R\"))
 
 
 save(list = ls(all.names = TRUE)[!grepl(\"dir\", ls(all.names = TRUE))],
-     file = file.path(data_dir, \"processed\", \"", project_name, " data.RData\"))
+     file = file.path(\"data\", \"processed\", \"", project_name, " data.RData\"))
 ")
 
   cat(paste(procces_text, collapse = ""), file = file.path(root_dir, "R", paste0("1 ", project_name, " processing.R")))
@@ -245,15 +249,13 @@ create_results_script <- function(project_name, root_dir) {
 #   - Created
 # -------------------------------------------------------------------------
 
-base_dir <- \"", root_dir, "\"
-
 # 0. INITIALISE -----------------------------------------------------------
 
-source(file.path(base_dir, \"R\", \"0 ", project_name, " initialise.R\"))
+source(file.path(\"R\", \"0 ", project_name, " initialise.R\"))
 
 # 1. IMPORT DATA ----------------------------------------------------------
 
-data_import(base_dir)
+data_import()
 
 
 # initialise the labelling and set the output subdirectory
@@ -292,12 +294,14 @@ echo=FALSE, warning=FALSE, message=FALSE)
 ```
 
 ```{r init, results = \"hide\"}
-base_dir <- \"", root_dir, "\"
 
 # 0. INITIALISE -----------------------------------------------------------
 
+base_dir <- \"", root_dir, "\"
+
 source(file.path(base_dir, \"R\", \"0 ", project_name, " initialise.R\"))
 library(knitr)
+
 # 1. IMPORT DATA ----------------------------------------------------------
 
 
@@ -337,11 +341,10 @@ create_report_script <- function(project_name, root_dir) {
 # Last edited ", format(Sys.Date(), "%d %m %Y"), " by create_project()
 #   - Created
 # -------------------------------------------------------------------------
-base_dir <- \"", root_dir, "\"
 
 # 0. INITIALISE -----------------------------------------------------------
 
-source(file.path(base_dir, \"R\", \"0 ", project_name, " initialise.R\"))
+source(file.path(\"R\", \"0 ", project_name, " initialise.R\"))
 library(ReporteRs)
 
 options(\"ReporteRs-default-font\" = \"Helvetica Neue\",
@@ -351,7 +354,7 @@ options(\"ReporteRs-default-font\" = \"Helvetica Neue\",
 # 1. IMPORT DATA ----------------------------------------------------------
 
 
-data_import(base_dir)
+data_import()
 
 
 # 2. COMPILE THE REPORT ---------------------------------------------------------
@@ -381,7 +384,7 @@ ppt_report <- ppt_report %>%
 
 # Save the finished report ------------------------------------------------
 
-writeDoc(ppt_report, file = file.path(base_dir, \"Report/", project_name, ".pptx\"))
+writeDoc(ppt_report, file = file.path(\"Report/", project_name, ".pptx\"))
 ")
 
   cat(paste(report_text, collapse = ""), file = file.path(root_dir, "R", paste0("3 ", project_name, " report.R")))
@@ -416,36 +419,35 @@ create_run_script <- function(project_name, root_dir) {
 #   - Created
 # -------------------------------------------------------------------------
 
-base_dir <- \"", root_dir, "\"
 
 # 0. INITIALISE -----------------------------------------------------------
 
-source(file.path(base_dir, \"R\", \"0 ", project_name, " initialise.R\"))
+source(file.path(\"R\", \"0 ", project_name, " initialise.R\"))
 
 # 1. IMPORT DATA ----------------------------------------------------------
 
 # Update the processed data if necessary ----
 
-data_refresh <- file.info(file.path(base_dir, \"R\", \"1 ", project_name, " processing.R\"))$mtime > file.info(file.path(data_dir, \"processed\", \"", project_name, " data.RData\"))$mtime
+data_refresh <- file.info(file.path(\"R\", \"1 ", project_name, " processing.R\"))$mtime > file.info(file.path(\"data\", \"processed\", \"", project_name, " data.RData\"))$mtime
 if(is.na(data_refresh)) data_refresh <- TRUE
 
 if(data_refresh) {
-  source(file.path(base_dir, \"R\", \"1 ", project_name, " processing.R\"))
-} else data_import(base_dir)
+  source(file.path(\"R\", \"1 ", project_name, " processing.R\"))
+} else data_import()
 
 # 2. PRODUCE THE RESULTS --------------------------------------------------
 
 # Archive the old results ----
-output_archive(base_dir)
+output_archive()
 
 # Re-run the results script ----
-source(file.path(base_dir, \"R\", \"2 ", project_name, " results.R\"))
+source(file.path(\"R\", \"2 ", project_name, " results.R\"))
 
 
 # 3. COMPILE THE REPORT ---------------------------------------------------
 
 # Re-run the results script ----
-source(file.path(base_dir, \"R\", \"3 ", project_name, " report.R\"))
+source(file.path(\"R\", \"3 ", project_name, " report.R\"))
 ")
 
   cat(paste(run_text, collapse = ""), file = file.path(root_dir, "R", paste0(project_name, " RUN SCRIPT.R")))
