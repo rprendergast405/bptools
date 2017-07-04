@@ -55,6 +55,7 @@ theme_mvl <- function(base_size = 11, base_family = "hnb", plain_family = "hn", 
                           legend.title = ggplot2::element_blank(),
                           legend.position = "top",
                           legend.direction = "horizontal",
+                          legend.box = "vertical",
 
 
                           panel.grid.major.x = ggplot2::element_blank(),
@@ -167,6 +168,7 @@ theme_map <- function(base_size = 11, base_family = "hnb", plain_family = "hn", 
       legend.position = c(1, 1),
       legend.direction = "vertical",
       legend.justification = c(1, 1),
+      legend.box = "vertical",
 
       strip.text = ggplot2::element_blank(),
       panel.background = ggplot2::element_rect(fill = 'lightblue'),
@@ -372,9 +374,9 @@ zoom_definition <- function(shp_dat, x = 'long', y = 'lat', margin = 0, expand =
   y_length <- max(shp_dat[[y]]) - min(shp_dat[[y]])
 
   # find the length to add to the centre point
-  search_space <- seq(min(ratio * x_length, y_length), max(ratio * x_length, y_length), length.out = 10000)
+  search_space <- seq(min(x_length, x_length * ratio, y_length, y_length * ratio), max(x_length, x_length * ratio, y_length, y_length * ratio), length.out = 10000)
 
-  x_dim <- min(search_space[search_space >= x_length & search_space / ratio >= y_length]) / 2
+  x_dim <- (min(search_space[search_space * ratio >= x_length & search_space >= y_length]) + margin) * ratio / 2
   y_dim <- x_dim / ratio
 
 
