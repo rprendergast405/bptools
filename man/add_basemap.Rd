@@ -5,7 +5,7 @@
 \title{Add a Polygon Basemap}
 \usage{
 add_basemap(data = mvldata::nz_tla_06.df, fill = mvl_half_grey,
-  colour = mvl_grey, size = 0.2)
+  colour = mvl_grey, size = 0.2, hole_fill = "white")
 }
 \arguments{
 \item{data}{Usually will be mvldata::nz_tla_06.df, nz_tla_13.df, or nz_regions.df; but can be any data.frame of polygons with [long, lat, group] attributes}
