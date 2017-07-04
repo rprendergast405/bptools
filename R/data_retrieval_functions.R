@@ -74,27 +74,23 @@ SUM(bnz.TRANSACTION_VALUE) AS SPEND
 
 FROM        BNZTRANS.BNZTRANS bnz
 
-LEFT JOIN   fozzie.grouped_elements gr
-            ON bnz.RECEIVER_ID = gr.ELEMENT_ID
-
-LEFT JOIN   fozzie.grouped_elements el
+INNER JOIN  fozzie.grouped_elements el
             ON bnz.receiver_id = el.element_id
             AND bnz.receiver_type = el.element_type
-
-LEFT JOIN   fozzie.grouped_receiver gr2
-            ON el.group_id = gr2.oid
 
 INNER JOIN  bnztrans.customer c
             ON bnz.customer_id = c.customer_id
 
 
 WHERE       bnz.SEQMONTH BETWEEN ", seqmonth_start, " AND ", seqmonth_end, "
-            AND gr2.oid in (", paste(group_id, collapse = ", "), ")
+            AND el.group_id in (", paste(group_id, collapse = ", "), ")
 
 GROUP BY    el.group_id, c.CAU"
   )
 
   dat <- RODBC::sqlQuery(db_con, db_qry, stringsAsFactors = FALSE)
+
+  dat <- dplyr::as.tbl(dat)
 
   return(dat)
 }
