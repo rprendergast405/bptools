@@ -282,7 +282,7 @@ trim_ws <- function (x){
 #'
 #' @export output_archive
 
-output_archive <- function(base_dir) {
+output_archive <- function(base_dir = getwd()) {
   # The directory containing the outputs
   output_dir <- file.path(base_dir, "output")
 
@@ -310,7 +310,10 @@ output_archive <- function(base_dir) {
 #'
 #' @return imports the processed data into the global environment
 #' @export data_import
-data_import <- function(base_dir, data_name = paste(gsub(".*/(?!$)|/$", "", base_dir, perl = TRUE), "data.RData")) {
+data_import <- function(base_dir = getwd(), data_name = paste(gsub(".*/(?!$)|/$", "", base_dir, perl = TRUE), "data.RData")) {
+
+  # Construct the data directory
+  data_dir <- file.path(base_dir, "data")
 
   # When was the processing script last updated?
   processing_time <- file.info(file.path(base_dir, "R", paste("1", gsub(".*/(?!$)|/$", "", base_dir, perl = TRUE), "processing.R")))$mtime
