@@ -34,10 +34,10 @@ save_plot <- function(p,
                       res = 360,
                       mvl_footer = FALSE,
                       ...) {
-  if(shape == "square"){
+  if (shape == "square") {
     height = 700*4
     width = 850*4
-  } else if(shape == "wide"){
+  } else if (shape == "wide") {
     height = (11.07*35/0.77)*4
     width = (23.92*35/0.77)*4
   }
@@ -47,7 +47,7 @@ save_plot <- function(p,
       width = width,
       res = res)
 
-  if(mvl_footer){
+  if (mvl_footer) {
     print(p +
             theme(plot.margin = unit(c(.1, .1, .5, .1), units = 'in')))
     make_footnote()
@@ -93,7 +93,7 @@ ppt_png <- function(p,
       type = 'cairo',
       family = fam)
 
-  if(mvl_foot){
+  if (mvl_foot) {
     print(p +
             theme(plot.margin = unit(c(.1, .1, .5, .1), units = 'in')))
     make_footnote(footnote_text = mvl_foot_text, color = mvl_foot_colour, size = mvl_foot_size)
@@ -126,10 +126,10 @@ save_table <- function(x,
 
     write_csv(x, path = file.path(write_dir, paste0(tab_num, "_", name, ".csv")))
 
-  if(xlsx){
+  if (xlsx) {
     write.xlsx(x, file = file.path(write_dir, xls_name), sheetName = name, append = tab_num > 1)
 
-    if(tab_num == 1) warning("An existing .xlsx may have been overwritten.")
+    if (tab_num == 1) warning("An existing .xlsx may have been overwritten.")
   }
 }
 
@@ -271,7 +271,7 @@ percent_change <- function(x, dp = 1, form = "f", ...){
 #'
 #' @examples
 #' trim_ws(c("test_name", "text_artifact       "))
-trim_ws <- function (x){
+trim_ws <- function(x){
   gsub("^\\s+|\\s+$", "", x)
 }
 
@@ -287,9 +287,7 @@ output_archive <- function(base_dir = getwd()) {
   output_dir <- file.path(base_dir, "output")
 
   # Archive previous versions of the outputs
-  archive_time <- Sys.time() %>%
-    gsub(x = ., pattern = " ", repl = "_") %>%
-    gsub(x = ., pattern = "[^0-9a-z_]", repl = "")
+  archive_time <-  gsub(x = gsub(x = Sys.time(), pattern = " ", replacement = "_"), pattern = "[^0-9a-z_]", replacement = "")
 
   # create an archive for old files
   dir.create(path = file.path(base_dir, "archive", archive_time), recursive = TRUE)
@@ -329,7 +327,7 @@ data_import <- function(base_dir = getwd(), data_name = paste(gsub(".*/(?!$)|/$"
 
   warning(paste("Data last updated", data_time))
 
-  if (processing_time > data_time){
+  if (processing_time > data_time) {
     warning("Your processing script has been updated more recently than your data.")
   }
 
@@ -346,9 +344,9 @@ data_import <- function(base_dir = getwd(), data_name = paste(gsub(".*/(?!$)|/$"
 #' @export source_dir
 source_dir <- function(path, trace = TRUE, ...) {
   for (nm in list.files(path, pattern = "\\.[RrSsQq]$")) {
-    if(trace) cat(nm,":")
+    if (trace) cat(nm,":")
     source(file.path(path, nm), ...)
-    if(trace) cat("\n")
+    if (trace) cat("\n")
   }
 }
 
@@ -373,4 +371,15 @@ cagr <- function(iv, fv, length){
 }
 
 
+#' Parse SEQMONTH attributes as dates
+#'
+#' @param x A vector of SEQMONTH
+#'
+#' @export parse_seqmonth
+parse_seqmonth <- function(x){
+  if (unique(nchar(x)) != 6) {
+    stop("You should only provide SEQMONTH attributes")
+  }
 
+  x_date <- as.Date(paste0(x, "01"), format = "%Y%m%d")
+}
