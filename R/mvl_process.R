@@ -8,6 +8,17 @@
 #' @export mvl_process
 mvl_process <- function(dat){
 
+  # Coerce to data.frame
+  dat <- as.data.frame(dat)
+
+  # SEQMONTH if it exists
+  if ("SEQMONTH" %in% colnames(dat)) {
+    if (is.integer(dat[, "SEQMONTH"])) {
+      dat[,"m_date"] <- parse_seqmonth(dat[,"SEQMONTH"])
+    }
+  }
+
+
   # Time of day ----
   if("TOD" %in% colnames(dat)) {
 
@@ -22,7 +33,7 @@ mvl_process <- function(dat){
     }
   }
 
-  # Day of Week ---
+  # Day of Week ----
   if("DOW" %in% colnames(dat)) {
     if(is.numeric(dat[, "DOW"])) {
       dat <- dplyr::left_join(dat, data.frame(DOW = 1:7,
@@ -69,5 +80,9 @@ mvl_process <- function(dat){
       dat <- dat[, -which(names(dat) == "SPEND_BKT2")]
     }
   }
+
+  # coerce to tbl
+  dat <- dplyr::as.tbl(dat)
+
   return(dat)
 }
