@@ -57,6 +57,7 @@ theme_mvl <- function(base_size = 11, base_family = "hnb", plain_family = "hn", 
                           legend.direction = "horizontal",
                           legend.box = "vertical",
 
+                          axis.text.x = element_text(vjust = .5),
 
                           panel.grid.major.x = ggplot2::element_blank(),
                           panel.grid.major.y = ggplot2::element_line(colour = mvl_half_grey, size = 0.2),
