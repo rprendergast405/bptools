@@ -133,18 +133,18 @@ pal_mvl <- function(palette = "Leaf", direction = 1) {
     )
 
     pal_out <- function(n, dirn = direction) {
-      if(dirn == 1) {
+      if (dirn == 1) {
         dir_vec <- 1:n
-      } else if(dirn == -1) {
+      } else if (dirn == -1) {
         dir_vec <- n:1
       } else stop("direction should be -1 or 1")
 
-      if(n > length(scale_vals)) {
+      if (n > length(scale_vals)) {
         warning(paste("n too large, allowed maximum for palette", palette, "is", length(scale_vals),
                 "\nReturning the palette you asked for with that many colors\n"))
        }
       scale_vals <- scale_vals[dir_vec]
-      scale_vals[is.na(scale_vals)] <- marketview::mvl_grey
+      scale_vals[is.na(scale_vals)] <- scales::grey_pal()(length(scale_vals[is.na(scale_vals)]))
       return(scale_vals)
     }
   }
