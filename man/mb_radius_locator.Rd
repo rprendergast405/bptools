@@ -4,7 +4,7 @@
 \alias{mb_radius_locator}
 \title{Find Meshblocks Within a Given Radius}
 \usage{
-mb_radius_locator(DB, x, y, rad)
+mb_radius_locator(DB, x, y, rad, census = 2006)
 }
 \arguments{
 \item{DB}{An ODBC connection to bespoke}

@@ -61,15 +61,15 @@ bnz_spend_origin <- function(db_con, group_id,
                              seqmonth_end = as.numeric(format(seq.Date(from = Sys.Date(), by = "-1 months", length.out = 13)[2], "%Y%m"))) {
 
   # I suppose I'd better try and prevent sql injections
-  if(!is.numeric(group_id)) stop("group_id must be numeric")
-  if(!is.numeric(seqmonth_start)) stop("seqmonth_start must be numeric")
-  if(length(seqmonth_start) != 1) stop("you should only provide one seqmonth_start")
-  if(!is.numeric(seqmonth_end)) stop("seqmonth_end must be numeric")
-  if(length(seqmonth_end) != 1) stop("you should only provide one seqmonth_end")
+  if (!is.numeric(group_id)) stop("group_id must be numeric")
+  if (!is.numeric(seqmonth_start)) stop("seqmonth_start must be numeric")
+  if (length(seqmonth_start) != 1) stop("you should only provide one seqmonth_start")
+  if (!is.numeric(seqmonth_end)) stop("seqmonth_end must be numeric")
+  if (length(seqmonth_end) != 1) stop("you should only provide one seqmonth_end")
 
 
   db_qry <- paste0("
-SELECT      el.group_id AS merch_id, c.CAU,
+SELECT      el.group_id AS merch_id, mb06.cau_id AS cau06, mb13.cau_id AS cau13,
 SUM(bnz.TRANSACTION_VALUE) AS SPEND
 
 FROM        BNZTRANS.BNZTRANS bnz
@@ -78,14 +78,17 @@ INNER JOIN  fozzie.grouped_elements el
             ON bnz.receiver_id = el.element_id
             AND bnz.receiver_type = el.element_type
 
-INNER JOIN  bnztrans.customer c
+INNER JOIN  bnztrans.customer_ext_meshblocks c
             ON bnz.customer_id = c.customer_id
-
+LEFT JOIN   census.meshblock_2006 mb06
+            ON mb06.id = c.meshblock_06
+LEFT JOIN   census.meshblock_2013 mb13
+            ON mb13.id = c.meshblock_13
 
 WHERE       bnz.SEQMONTH BETWEEN ", seqmonth_start, " AND ", seqmonth_end, "
             AND el.group_id in (", paste(group_id, collapse = ", "), ")
 
-GROUP BY    el.group_id, c.CAU"
+GROUP BY    el.group_id, mb06.cau_id, mb13.cau_id"
   )
 
   dat <- RODBC::sqlQuery(db_con, db_qry, stringsAsFactors = FALSE)
@@ -109,8 +112,15 @@ GROUP BY    el.group_id, c.CAU"
 #' @examples mb_map.df <- get_meshblock_data(2013)
 get_meshblock_data <- function(census = 2013) {
   if (census == 2013) {
-    dat <- rgdal::readOGR(dsn = "M:/gisdata/2013 Boundaries/ESRI shapefile Output/2013 Digital Boundaries Generlised Clipped",
-                           layer = "MB2013_GV_Clipped", stringsAsFactors = FALSE)
+    dat <- sf::st_read(dsn = "M:/gisdata/2013 Boundaries/ESRI shapefile Output/2013 Digital Boundaries Generlised Clipped",
+                       layer = "MB2013_GV_Clipped", stringsAsFactors = FALSE)
+
+    # Remove z attributes
+    dat <- sf::st_zm(dat)
+
+    # Convert to spatial
+    dat <- as(dat, "Spatial")
+
     # Add a MB column describing the meshblock
     dat$MB <- as.integer(dat$MB2013)
 
@@ -118,8 +128,14 @@ get_meshblock_data <- function(census = 2013) {
     dat$id <- rownames(dat@data)
 
   } else if (census == 2006) {
-    dat <- rgdal::readOGR(dsn = "M:/gisdata/census2006",
-                            layer = "mb", stringsAsFactors = FALSE)
+    dat <- sf::st_read(dsn = "M:/gisdata/census2006",
+                       layer = "mb", stringsAsFactors = FALSE)
+
+    # Remove z attributes
+    dat <- sf::st_zm(dat)
+
+    # Convert to spatial
+    dat <- as(dat, "Spatial")
 
     # Add a MB column describing the meshblock
     dat$MB <- as.integer(dat$MB06)
@@ -192,7 +208,7 @@ make_cau_df <- function(cau_map, caus) {
 vec_sql_string <- function(vec){
 
   #Only accept classes which can be interpretted as strings
-  stopifnot(is.numeric(vec) | is.character(vec) | is.factor(vec))
+  stopifnot(is.numeric(vec) | is.character(vec) | is.factor(vec) | is.integer(vec))
 
   if(any(grepl(";|'(!?=')", vec, perl = TRUE))) stop("You need to sanitise your input vector - semicolons and unescaped quotations are not allowed")
 
@@ -320,21 +336,34 @@ ieo_radius_locator <- function(DB, x, y, rad, impute = T){
 #' @param rad The radius in which to find meshblocks
 #'
 #' @export mb_radius_locator
-mb_radius_locator <- function(DB, x, y, rad){
+mb_radius_locator <- function(DB, x, y, rad, census = 2006){
 
-  if(!is.numeric(c(x, y, rad))) stop("Your inputs need to be numeric")
-  if(length(x) != 1 | length(y) != 1) stop("You must only supply a single location")
-  if(length(rad) != 1) stop("You can only search within a single radius")
+  if (!is.numeric(c(x, y, rad))) stop("Your inputs need to be numeric")
+  if (length(x) != 1 | length(y) != 1) stop("You must only supply a single location")
+  if (length(rad) != 1) stop("You can only search within a single radius")
 
+  census <- match.arg(as.character(census), c("2006", "2013"))
 
-  mb_data <- RODBC::sqlQuery(DB, gsub("\n", "", paste0("select distinct mb06, mb06_num
+  if (census == "2006") {
+    mb_data <- RODBC::sqlQuery(DB, gsub("\n", "", paste0("select distinct mb06, mb06_num
                                                 from CENSUS.MB06_CENTROIDS
                                                 where round(sqrt(power((x_nztm - ",
-                                                x,
-                                                "),2)+power((y_nztm - ",
-                                                y,
-                                                "),2))) <  ",
-                                                rad), fixed = T))
+                                                         x,
+                                                         "),2)+power((y_nztm - ",
+                                                         y,
+                                                         "),2))) <  ",
+                                                         rad), fixed = T))
+  } else if (census == "2013") {
+    mb_data <- RODBC::sqlQuery(DB, gsub("\n", "", paste0("select distinct meshblock AS mb13
+                                                from CENSUS.MB_CENTROIDS_2013
+                                                         where round(sqrt(power((x_nztm - ",
+                                                         x,
+                                                         "),2)+power((y_nztm - ",
+                                                         y,
+                                                         "),2))) <  ",
+                                                         rad), fixed = T))
+  }
+
 
   mb_data <- dplyr::as.tbl(mb_data)
 
