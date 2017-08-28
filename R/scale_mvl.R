@@ -20,7 +20,7 @@
 #'   \item{Diverging}{LeafPlum, TealRed, RedStone, SkyStone, PlumStone, LeafStone, RoyalStone}
 #'   \item{Qualitative}{mvl, mvl_classic, mcd, mcd2}
 #'   \item{Sequential}{Leaf, Plum, Teal, Blue, Sky, Citrus, Stone,
-#'      Navy, Orange, Red, Green, Purple}
+#'      Navy, Orange, Red, Green, Purple, Highlight}
 #' }
 #' If there are others that you want to be implemented, let me (Bert) know
 #'
@@ -28,18 +28,18 @@
 #' @param direction Set the order of the colours in the scale
 #'
 #' @export pal_mvl
-pal_mvl <- function(palette = "Leaf", direction = 1) {
+pal_mvl <- function(palette = "Leaf", direction = 1, highlight = mvl_leaf) {
 
-  if(!(palette %in% c("Leaf", "Plum", "Teal", "Blue", "Sky", "Citrus", "Stone",
-                      "Navy", "Orange", "Red", "Green", "Purple",
-                      "LeafPlum", "TealRed", "RedStone", "SkyStone", "PlumStone", "LeafStone", "RoyalStone",
-                      "mcd", "mvl", "mcd2", "mvl_classic"))) {
+  if (!(palette %in% c("Leaf", "Plum", "Teal", "Blue", "Sky", "Citrus", "Stone",
+                       "Navy", "Orange", "Red", "Green", "Purple", "Highlight",
+                       "LeafPlum", "TealRed", "RedStone", "SkyStone", "PlumStone", "LeafStone", "RoyalStone",
+                       "mcd", "mvl", "mcd2", "mvl_classic"))) {
     stop("Palette not available. See ?scale_mvl for a list of palettes that are currently implemented. Email Bert if you have any suggestions.")
   }
 
   # Single colour palettes ----
-  if(palette %in% c("Leaf", "Plum", "Teal", "Blue", "Sky", "Citrus", "Stone",
-                    "Navy", "Orange", "Red", "Green", "Purple")) {
+  if (palette %in% c("Leaf", "Plum", "Teal", "Blue", "Sky", "Citrus", "Stone",
+                     "Navy", "Orange", "Red", "Green", "Purple", "Highlight")) {
 
     # Match the name to the base colour ----
     pal_ref <- data.frame(
@@ -56,19 +56,21 @@ pal_mvl <- function(palette = "Leaf", direction = 1) {
     # Construct the palette function ----
     pal_out <- function(n, dirn = direction){
 
-      if(dirn == 1) {
+      if (dirn == 1) {
         dir_vec <- 1:n
-      } else if(dirn == -1) {
+      } else if (dirn == -1) {
         dir_vec <- n:1
       } else stop("direction should be -1 or 1")
 
-      colorRampPalette(c(top_col, "white"))(n + 1)[dir_vec]
+      if (palette == "Highlight") {
+        c(highlight, colorRampPalette(c(mvl_stone, "grey75"))(n))[dir_vec]
+      } else colorRampPalette(c(top_col, "white"))(n + 1)[dir_vec]
     }
 
   }
 
   # Diverging Scales ----
-  if(palette %in% c("LeafPlum", "TealRed", "RedStone", "SkyStone", "PlumStone", "LeafStone", "RoyalStone")) {
+  if (palette %in% c("LeafPlum", "TealRed", "RedStone", "SkyStone", "PlumStone", "LeafStone", "RoyalStone")) {
 
     # Match the palette name to the colours ----
     pal_ref <- data.frame(
@@ -87,14 +89,14 @@ pal_mvl <- function(palette = "Leaf", direction = 1) {
 
       n_new <- 2 * floor(n / 2) + 1
 
-      if(dirn == 1) {
+      if (dirn == 1) {
         dir_vec <- 1:n_new
-      } else if(dirn == -1) {
+      } else if (dirn == -1) {
         dir_vec <- n_new:1
       } else stop("direction should be -1 or 1")
 
 
-      if(n %% 2 == 0) {
+      if (n %% 2 == 0) {
         # take the central value out if getting an even number of colours ----
         dir_vec <- dir_vec[-ceiling(length(dir_vec) / 2)]
       }
@@ -108,7 +110,7 @@ pal_mvl <- function(palette = "Leaf", direction = 1) {
 
   # Qualitative Scales ----
 
-  if(palette %in% c("mcd", "mvl", "mcd2", "mvl_classic")) {
+  if (palette %in% c("mcd", "mvl", "mcd2", "mvl_classic")) {
 
     pal_ref <- dplyr::tibble(
       pal_name = c("mcd", "mvl", "mcd2", "mvl_classic"),
@@ -164,9 +166,9 @@ pal_mvl <- function(palette = "Leaf", direction = 1) {
 #' The following palettes are available for use with these scales:
 #' \describe{
 #'   \item{Diverging}{LeafPlum, TealRed, RedStone, SkyStone, PlumStone, LeafStone, RoyalStone}
-#'   \item{Qualitative}{mvl, mcd, mcd2}
+#'   \item{Qualitative}{mvl, mcd, mcd2, mvl_classic}
 #'   \item{Sequential}{Leaf, Plum, Teal, Blue, Sky, Citrus, Stone,
-#'      Navy, Orange, Red, Green, Purple}
+#'      Navy, Orange, Red, Green, Purple, Highlight}
 #' }
 #' If there are others that you want to be implemented, let me (Bert) know
 #'
@@ -179,15 +181,15 @@ NULL
 
 #' @rdname scale_mvl
 #' @export scale_colour_mvl
-scale_colour_mvl <- function(..., palette = "Leaf", direction = 1) {
-  ggplot2::discrete_scale("colour", "brewer", pal_mvl(palette, direction), ...)
+scale_colour_mvl <- function(..., palette = "mvl", direction = 1, highlight = mvl_leaf) {
+  ggplot2::discrete_scale("colour", "brewer", pal_mvl(palette, direction, highlight), ...)
 }
 
 
 #' @rdname scale_mvl
 #' @export scale_fill_mvl
-scale_fill_mvl <- function(..., palette = "Leaf", direction = 1) {
-  ggplot2::discrete_scale("fill", "brewer", pal_mvl(palette, direction), ...)
+scale_fill_mvl <- function(..., palette = "mvl", direction = 1, highlight = mvl_leaf) {
+  ggplot2::discrete_scale("fill", "brewer", pal_mvl(palette, direction, highlight), ...)
 }
 
 
@@ -195,7 +197,7 @@ scale_fill_mvl <- function(..., palette = "Leaf", direction = 1) {
 #' @export scale_colour_mvlc
 scale_colour_mvlc <- function(..., palette = "Leaf", direction = -1, values = NULL, na.value = "grey50", guide = "colourbar") {
   # warn about using a qualitative palette to generate the gradient
-  if(palette %in% c("mcd", "mvl")) {
+  if (palette %in% c("mcd", "mvl")) {
     warning("Using a discrete colour palette in a continuous scale.\n  Consider using type = \"seq\" or type = \"div\" instead", call. = FALSE)
   }
   ggplot2::continuous_scale("colour", "distiller",
@@ -207,7 +209,7 @@ scale_colour_mvlc <- function(..., palette = "Leaf", direction = -1, values = NU
 #' @export scale_fill_mvlc
 scale_fill_mvlc <- function(..., palette = "Leaf", direction = -1, values = NULL, na.value = "grey50", guide = "colourbar") {
   # warn about using a qualitative palette to generate the gradient
-  if(palette %in% c("mcd", "mvl")) {
+  if (palette %in% c("mcd", "mvl")) {
     warning("Using a discrete colour palette in a continuous scale.\n  Consider using type = \"seq\" or type = \"div\" instead", call. = FALSE)
   }
   ggplot2::continuous_scale("fill", "distiller",

@@ -4,7 +4,7 @@
 \alias{pal_mvl}
 \title{Marketview Palette}
 \usage{
-pal_mvl(palette = "Leaf", direction = 1)
+pal_mvl(palette = "Leaf", direction = 1, highlight = mvl_leaf)
 }
 \arguments{
 \item{palette}{Name of the palette to use}

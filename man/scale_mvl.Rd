@@ -8,9 +8,10 @@
 \alias{scale_fill_mvlc}
 \title{Marketview Colour Scales}
 \usage{
-scale_colour_mvl(..., palette = "Leaf", direction = 1)
+scale_colour_mvl(..., palette = "mvl", direction = 1,
+  highlight = mvl_leaf)
 
-scale_fill_mvl(..., palette = "Leaf", direction = 1)
+scale_fill_mvl(..., palette = "mvl", direction = 1, highlight = mvl_leaf)
 
 scale_colour_mvlc(..., palette = "Leaf", direction = -1, values = NULL,
   na.value = "grey50", guide = "colourbar")
