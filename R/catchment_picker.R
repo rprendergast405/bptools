@@ -175,6 +175,7 @@ catchment_picker <- function(spending = NULL, location = NULL, map_shapefile = m
         # Draw the primary catchment
         #if (any(!c(is.null(map_primary()), is.null(map_secondary()), is.null(map_tertiary())))) {
 
+        suppressWarnings(
           proxy %>%
             removeShape('catchment1') %>%
             clearGroup('catchment1') %>%
@@ -209,6 +210,7 @@ catchment_picker <- function(spending = NULL, location = NULL, map_shapefile = m
                         color = "gold",
                         group = "catchment3",
                         layerId = ~CAU)
+        )
         #}
 
 
