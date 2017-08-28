@@ -329,20 +329,23 @@ flextable_negatives <- function(ftbl, col_names = names(ftbl$vals)) {
   # Get the original data.frame from the flextable object
   df <- as.data.frame(ftbl$vals)
 
-  for(column in col_names) {
+  for (column in col_names) {
     # Get the specified columns
     col_ind <- which(ftbl$col_id == column)
-    col_vals <- df[, col_ind]
+    # in case there are multiple columns with the same name
+    for (ind in col_ind) {
+      col_vals <- df[, ind]
 
-    # Get the values as numerics
-    col_vals <-  gsub("[^-\\.0-9]", "", col_vals)
-    col_vals <- as.numeric(col_vals)
+      # Get the values as numerics
+      col_vals <-  gsub("[^-\\.0-9]", "", col_vals)
+      col_vals <- as.numeric(col_vals)
 
-    # Find any values that are less than zero
-    neg_ind <- which(col_vals < 0)
+      # Find any values that are less than zero
+      neg_ind <- which(col_vals < 0)
 
-    # Highlight the negative values in the flextable
-    ftbl <- marketview::flextable_cell_bold(ftbl, neg_ind, col_ind, marketview::mvl_red)
+      # Highlight the negative values in the flextable
+      ftbl <- marketview::flextable_cell_bold(ftbl, neg_ind, ind, marketview::mvl_red)
+    }
   }
   return(ftbl)
 }
