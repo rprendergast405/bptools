@@ -113,7 +113,7 @@ mcd_process <- function(dat){
   # Deprivation
   if ("DEPRIVATION_NO" %in% colnames(dat)) {
     if (is.integer(dat[, "DEPRIVATION_NO"])) {
-      dat[,"AGE"] <- factor(dat[["DEPRIVATION_NO"]],
+      dat[,"DEPRIVATION_NO"] <- factor(dat[["DEPRIVATION_NO"]],
                             levels = 1:4,
                             labels = c("Low Deprivation",
                                        "Moderate Deprivation",
@@ -219,7 +219,10 @@ mcd_process <- function(dat){
 
   #Format NZDep scale
   if ("DEPRIVATION" %in% colnames(dat)) {
-    dat[,"DEPRIVATION"] <- factor(dat[["DEPRIVATION"]])
+    dat[,"DEPRIVATION"] <- factor(dat[["DEPRIVATION"]], labels = c("Low Deprivation",
+                                                                   "Moderate Deprivation",
+                                                                   "High Deprivation",
+                                                                   "Unknown"))
   }
 
   #Create Date class attribute
