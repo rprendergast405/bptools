@@ -1,3 +1,13 @@
+# marketview 0.5.4
+
+# What's New
+- file_spellchecker() will check a script to see if character elements contain spelling errors
+- mcd_post_campaign() similar to create_project: makes a new McDonald's post-campaign project with standard scripts for the report
+- create_script() function to make a new script with headers and data_import() etc.
+
+# Changes
+- theme_map_minimal() is now called theme_map(), and theme_map() becomes theme_map_old(). I never used theme_map, so it is annoying to have to type _minimal() every time. Sorry for any broken code
+
 # marketview 0.5.3
 
 # What's New

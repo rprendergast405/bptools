@@ -1,7 +1,7 @@
 Package: marketview
 Type: Package
 Title: Functions and Objects for Analysis & Reporting at Marketview
-Version: 0.5.3
+Version: 0.5.4
 Authors@R: c(person("Bert", "Prendergast", email = "robertp@marketview.co.nz",
                     role = c("aut", "cre")),
              person("Sam", "Harvey", email = "samh@marketview.co.nz",
@@ -18,12 +18,11 @@ Imports:
     scales,
     RODBC,
     ggplot2,
-    grDevices,
-    grid,
-    png,
-    readr,
-    xlsx,
-    ReporteRs
+    ReporteRs,
+    qdap,
+    stringr,
+    sp,
+    sf
 Suggests:
     leaflet,
     shiny,
