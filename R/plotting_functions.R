@@ -57,10 +57,8 @@ theme_mvl <- function(base_size = 11, base_family = "hnb", plain_family = "hn", 
                           legend.direction = "horizontal",
                           legend.box = "vertical",
 
-                          axis.text.x = element_text(vjust = .5),
-
                           panel.grid.major.x = ggplot2::element_blank(),
-                          panel.grid.major.y = ggplot2::element_line(colour = mvl_half_grey, size = 0.2),
+                          panel.grid.major.y = ggplot2::element_blank(),
 
                           plot.title = ggplot2::element_text(size = round(base_size * 1.5), hjust = 0),
                           plot.margin = grid::unit(c(0.1, 0.1, 0.1, 0.1), "cm"),
@@ -122,7 +120,7 @@ theme_mvl_old <- function(base_size = 12, base_family = "calb", plain_family = "
   )
 }
 
-#' Marketview ggplot map theme.
+#' Marketview ggplot map theme (old version).
 #'
 #'A theme for maps that looks okay in a Marketview ppt report.
 #'Similar to \code{\link{theme_mvl}} but it has a blue background, no axis labels,
@@ -133,13 +131,13 @@ theme_mvl_old <- function(base_size = 12, base_family = "calb", plain_family = "
 #' @param plain_family The plain family for fonts (used in legend text)
 #'
 #' @return A theme object to be added to ggplot objects
-#' @export theme_map
+#' @export theme_map_old
 #'
 #' @examples
 #' library(ggplot2)
 #' p <- ggplot(data.frame(x = 1:5, y = 1:5)) + geom_point(aes(x, y))
 #' p + theme_map()
-theme_map <- function(base_size = 11, base_family = "hnb", plain_family = "hn", text_colour = marketview::mvl_text) {
+theme_map_old <- function(base_size = 11, base_family = "hnb", plain_family = "hn", text_colour = marketview::mvl_text) {
   if(!all(c("hn", "hnb") %in% names(grDevices::windowsFonts()))) {
     grDevices::windowsFonts(hn = "Helvetica Neue",
                             hnb = "Helvetica Neue Bold")
@@ -160,7 +158,8 @@ theme_map <- function(base_size = 11, base_family = "hnb", plain_family = "hn", 
                           margin = grid::unit(rep(0.1, 4), "cm"),
                           debug = FALSE),
 
-      axis.text = ggplot2::element_blank(),
+      axis.text.x = ggplot2::element_blank(),
+      axis.text.y = ggplot2::element_blank(),
       axis.title = ggplot2::element_blank(),
 
       legend.background = ggplot2::element_rect(fill = grDevices::rgb(1, 1, 1, 0.65), colour = "white"),
@@ -190,16 +189,17 @@ theme_map <- function(base_size = 11, base_family = "hnb", plain_family = "hn", 
 #' @param plain_family The plain family for fonts (used in legend text)
 #'
 #' @return A theme object to be added to ggplot objects
-#' @export theme_map_minimal
+#' @export theme_map
 #'
 #' @examples
 #' library(ggplot2)
 #' p <- ggplot(data.frame(x = 1:5, y = 1:5)) + geom_point(aes(x, y))
 #' p + theme_map_minimal()
-theme_map_minimal <- function(base_size = 11, base_family = "hnb", plain_family = "hn", text_colour = marketview::mvl_text) {
+theme_map <- function(base_size = 11, base_family = "hnb", plain_family = "hn", text_colour = marketview::mvl_text) {
   ggplot2::`%+replace%`(theme_mvl(base_size = base_size, base_family = base_family, text_colour = text_colour),
     ggplot2::theme(
-      axis.text = ggplot2::element_blank(),
+      axis.text.x = ggplot2::element_blank(),
+      axis.text.y = ggplot2::element_blank(),
       axis.title = ggplot2::element_blank(),
       line = ggplot2::element_blank(),
       plot.title = ggplot2::element_text(size = ggplot2::rel(2), hjust = 0),
@@ -210,6 +210,24 @@ theme_map_minimal <- function(base_size = 11, base_family = "hnb", plain_family 
     )
   )
 }
+
+
+#' Marketview ggplot map theme (minimal).
+#'
+#'A minimal theme for maps that is more suitable for faceted plots.
+#'
+#' @param base_size The base size for fonts
+#' @param base_family The base family for fonts
+#' @param plain_family The plain family for fonts (used in legend text)
+#'
+#' @return A theme object to be added to ggplot objects
+#' @export theme_map_minimal
+#'
+#' @examples
+#' library(ggplot2)
+#' p <- ggplot(data.frame(x = 1:5, y = 1:5)) + geom_point(aes(x, y))
+#' p + theme_map_minimal()
+theme_map_minimal <- theme_map
 
 #' McDonald's ggplot theme.
 #'
