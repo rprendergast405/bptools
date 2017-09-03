@@ -6,14 +6,14 @@
 Creates a new R script with the headers and workflow mapped out in the same
 manner as a standard results scrpt from create_project()}
 \usage{
-create_script(name, project_name = getwd(), location = "R")
+create_script(name, project_dir = getwd(), location = "R")
 }
 \arguments{
 \item{name}{The name for the new R script}
 
-\item{project_name}{Name of the project (should always be the current working directory)}
-
 \item{location}{Directory where the script should be created - default is the /R directory}
+
+\item{project_name}{Name of the project (should always be the current working directory)}
 }
 \description{
 Create a new R script
