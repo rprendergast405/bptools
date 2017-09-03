@@ -44,7 +44,7 @@ create_project <- function(project_name,
   cat("Creating directories\n")
 
   dir_create <- function(x) {
-    if (!(tolower(x) %in% tolower(dir(root_dir)))) {
+    if (!(tolower(x) %in% tolower(list.dirs(root_dir, full.names = FALSE)))) {
       dir.create(file.path(root_dir, x), recursive = TRUE)
     }
   }
@@ -102,14 +102,17 @@ LaTeX: pdfLaTeX
   # cat(" Done\n")
 
   cat(paste0("Copying mvl_template.pptx to ", root_dir, " ..."))
-  file.copy(from = file.path("M:/R/mvl_template.pptx"),
+  file.copy(from = system.file("extdata", "mvl_template.pptx", package = "marketview"),  #file.path("M:/R/mvl_template.pptx"),
             to = root_dir)
 
-  file.copy(from = file.path("M:/R/mvl_template_old.pptx"),
+  file.copy(from = system.file("extdata", "mvl_template_old.pptx", package = "marketview"), #file.path("M:/R/mvl_template_old.pptx"),
+            to = root_dir)
+
+  file.copy(from = system.file("extdata", "mcd_template.pptx", package = "marketview"), #file.path("M:/R/mvl_template_old.pptx"),
             to = root_dir)
   cat(" Done\n")
 
-  cat("Project created successfully")
+  cat("Project created successfully\n")
 }
 
 
@@ -143,16 +146,13 @@ create_init_script <- function(project_name, root_dir) {
 
 # 0. INITIALISE -----------------------------------------------------------
 
-# clear the workspace
+# clear the workspace ----
 rm(list = setdiff(ls(), c(\"base_dir\", \"archive\")))
 gc()
-spatial_packages <- FALSE
 
-# import packages
+# import packages -----
 library(RODBC)
 library(tools)
-library(reshape2)
-library(data.table)
 library(magrittr)
 library(tidyverse)      # imports the 'tidyverse' libraries
 library(stringr)
@@ -162,36 +162,28 @@ library(lubridate)      # time/date functions
 library(readxl)
 library(marketview)
 library(mvldata)
-if(spatial_packages){
-  library(sp)
-  library(rgdal)
-  library(rgeos)
-  library(maptools)
-  library(spatstat)
-}
-rm(spatial_packages)
 
-# set directories
+# set directories -----
 output_dir <- file.path(\"output\")
 fig_dir <- file.path(output_dir, \"figures\")
 tab_dir <- file.path(output_dir, \"tables\")
 
-# Source any function scripts
+# Source any function scripts -----
 source_dir(file.path(\"R/functions\"))
 
-# Database connections
+# Database connections -----
 DB <- odbcConnect(dsn = \"MVIEW\", uid = \"bespoke\", pwd = \"bespoke\")
 
-# Set the plot theme
+# Set the plot theme -----
 theme_set(theme_mvl())
 
-# set colour palettes
+# set colour palettes -----
 scale_colour_discrete <- partial(scale_colour_mvl, palette = \"mcd\")
 scale_colour_continuous <- scale_colour_mvlc
 scale_fill_discrete <- partial(scale_fill_mvl, palette = \"mcd\")
 scale_fill_continuous <- scale_fill_mvlc
 
-# Prevent print.data.frame from destroying your session
+# Prevent print.data.frame from destroying your session ----
 print.data.frame <- function(x, ..., n = NULL, width = NULL) {
 x <- dplyr::as.tbl(x)
 print(x, ..., n = NULL, width = NULL)
@@ -200,7 +192,6 @@ print(x, ..., n = NULL, width = NULL)
 
   cat(paste(init_text, collapse = ""), file = file.path(root_dir, "R", paste0("0 ", project_name, " initialise.R")))
 }
-
 
 #' Create a processing script.
 #'

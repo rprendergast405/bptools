@@ -57,8 +57,8 @@ theme_mvl <- function(base_size = 11, base_family = "hnb", plain_family = "hn", 
                           legend.direction = "horizontal",
                           legend.box = "vertical",
 
-                          panel.grid.major.x = ggplot2::element_blank(),
-                          panel.grid.major.y = ggplot2::element_blank(),
+                          panel.grid.minor.x = ggplot2::element_blank(),
+                          panel.grid.minor.y = ggplot2::element_blank(),
 
                           plot.title = ggplot2::element_text(size = round(base_size * 1.5), hjust = 0),
                           plot.margin = grid::unit(c(0.1, 0.1, 0.1, 0.1), "cm"),

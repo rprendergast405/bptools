@@ -57,7 +57,8 @@ NumSpacesForTab: 2
 Encoding: UTF-8
 
 RnwWeave: Sweave
-LaTeX: pdfLaTeX"
+LaTeX: pdfLaTeX
+"
 
   cat("Creating .RProj file\n")
   cat(paste(rproject_specs), file = file.path(root_dir, paste(campaign_name, "Rproj", sep = ".")))
@@ -93,10 +94,13 @@ LaTeX: pdfLaTeX"
   cat(" Done\n")
 
   cat(paste0("Copying mvl_template.pptx to ", root_dir, " ..."))
-  file.copy(from = file.path("M:/R/mvl_template.pptx"),
+  file.copy(from = system.file("extdata", "mvl_template.pptx", package = "marketview"),  #file.path("M:/R/mvl_template.pptx"),
             to = root_dir)
 
-  file.copy(from = file.path("M:/R/mvl_template_old.pptx"),
+  file.copy(from = system.file("extdata", "mvl_template_old.pptx", package = "marketview"), #file.path("M:/R/mvl_template_old.pptx"),
+            to = root_dir)
+
+  file.copy(from = system.file("extdata", "mcd_template.pptx", package = "marketview"),
             to = root_dir)
   cat(" Done\n")
 
@@ -131,6 +135,15 @@ create_mcd_processing <- function(campaign_name, root_dir) {
 
 
 # 0. INITIALISE -----------------------------------------------------------
+
+# Get the time periods from the promo window definition
+tpoi_spw_start <- min(c(cpoi_df$spw_start, cpoi_df$spw_end))
+tpoi_spw_end <- max(c(cpoi_df$spw_start, cpoi_df$spw_end))
+
+# Define total period of interest
+tpoi_start <- seqpromo.df %>% filter(seqpromo_week == tpoi_spw_start) %>% pull(week_start) %>% format(\"%Y%m%d\") %>% as.numeric
+tpoi_end <- seqpromo.df %>% filter(seqpromo_week == tpoi_spw_end) %>% pull(week_start) %>% subtract(days(1)) %>% format(\"%Y%m%d\") %>% as.numeric
+
 
 #Define the period for the forecast for comparison to expected performance
 #defaults to 4 weeks prior to and 4 weeks after promo
@@ -1226,19 +1239,14 @@ create_mcd_run <- function(campaign_name, root_dir) {
 source(file.path(\"R\", \"0 ", campaign_name, " initialise.R\"))
 library(ReporteRs)
 
+# Should the data be refreshed? (generally TRUE)
+data_refresh <- TRUE
+
 ## Define period of interest attributes ----
-
-# Define total period of interest
-tpoi_start <- YYYYMMDD
-tpoi_end <- YYYYMMDD
-
-# or define via seqpromo_week
-tpoi_spw_start <- YYYYWW
-tpoi_spw_end <- YYYYWW
 
 # Create a data frame to define comparison periods of interest within the total period of interest
 # ** Only contiguous periods are supported **
-# Note that promo period of interest must be set as first entry (to become first level of factor)
+# Note that promo period of interest should be set as first entry (to become first level of factor)
 cpoi_df = data.frame(cpoi_name = c(\"Promo\", \"Rest of Year\", \"Same Promo Last Year\"),
                      spw_start = c(YYYYWW, YYYYWW, YYYYWW),
                      spw_end = c(YYYYWW, YYYYWW, YYYYWW))
@@ -1254,9 +1262,6 @@ DB <- odbcConnect(\"MVIEW\", uid = \"bespoke\", pwd = \"bespoke\")
 # 1. IMPORT DATA ----------------------------------------------------------
 
 # Update the processed data if necessary ----
-
-data_refresh <- file.info(file.path(\"R\", \"1 ", campaign_name, " processing.R\"))$mtime > file.info(file.path(\"data\", \"processed\", \"", campaign_name, " data.RData\"))$mtime
-if (is.na(data_refresh)) data_refresh <- TRUE
 
 if (data_refresh) {
   source(file.path(\"R\", \"1 ", campaign_name, " processing.R\"))

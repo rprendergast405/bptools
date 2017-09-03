@@ -22,7 +22,7 @@ The following palettes are available for use with these scales:
   \item{Diverging}{LeafPlum, TealRed, RedStone, SkyStone, PlumStone, LeafStone, RoyalStone}
   \item{Qualitative}{mvl, mvl_classic, mcd, mcd2}
   \item{Sequential}{Leaf, Plum, Teal, Blue, Sky, Citrus, Stone,
-     Navy, Orange, Red, Green, Purple}
+     Navy, Orange, Red, Green, Purple, Highlight}
 }
 If there are others that you want to be implemented, let me (Bert) know
 }
