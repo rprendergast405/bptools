@@ -299,7 +299,8 @@ create_eda_script <- function(project_name, root_dir) {
 title: \"", project_name, " EDA\"
 output: html_document
 editor_options:
-  chunk_output_type: console---
+  chunk_output_type: console
+---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(fig.width = 12, fig.height = 8, fig.path = 'Figs/',
