@@ -1,3 +1,15 @@
+#' Most Common Item Associations
+#'
+#' What are the best friends of a MCD tld item? Gets the number of items, total spending,
+#' and total transactions for all items that have been bought in the same transaction
+#' as the given items.
+#'
+#' @param con ODBC connection to bespoke database
+#' @param codes The menu_item_no codes of the items to consider
+#' @param start_week The first promo week of the time period to consider
+#' @param end_week The last promo week of the time period to consider
+#'
+#' @export tld_item_friends
 tld_item_friends <- function(con, codes, start_week, end_week) {
   # find the start and end days of the period
   date_qry <- glue::glue("SELECT MIN(seqday) AS period_start, MAX(seqday) AS period_end
