@@ -356,3 +356,31 @@ flextable_negatives <- function(ftbl, col_names = names(ftbl$vals)) {
 ft_negatives <- function(ftbl, col_names = names(ftbl$vals)) {
   flextable_negatives(ftbl, col_names)
 }
+
+
+#' Set the Column Widths of a FlexTable Object
+#'
+#' @param ft a Flextable created by FlexTable() or marketview::flextable() functions
+#' @param col_widths A vector of the relative widths that you would like the columns to take
+#' @param table_length The total width of the FLextable in centimeters
+#'
+#' @export flextable_widths
+flextable_widths <- function(ft, col_widths, table_length = 21.42) {
+
+  if (length(col_widths != ft$numcols)) stop("col_widths should be the same length as ft$numcol")
+
+  rescale_widths <- col_widths / sum(col_widths)
+
+  final_widths <- table_length * 0.3937 * rescale_widths
+
+  ft <- ReporteRs::setFlexTableWidths(ft, final_widths)
+
+  return(ft)
+}
+
+
+#' @rdname flextable_widths
+#' @export ft_widths
+ft_widths <- function(ft, col_widths, table_length = 21.42) {
+  flextable_widths(ft, col_widths, table_length)
+}
