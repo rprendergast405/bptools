@@ -142,7 +142,7 @@ tpoi_spw_end <- max(c(cpoi_df$spw_start, cpoi_df$spw_end))
 
 # Define total period of interest
 tpoi_start <- seqpromo.df %>% filter(seqpromo_week == tpoi_spw_start) %>% pull(week_start) %>% format(\"%Y%m%d\") %>% as.numeric
-tpoi_end <- seqpromo.df %>% filter(seqpromo_week == tpoi_spw_end) %>% pull(week_start) %>% subtract(days(1)) %>% format(\"%Y%m%d\") %>% as.numeric
+tpoi_end <- seqpromo.df %>% filter(seqpromo_week == tpoi_spw_end) %>% pull(week_start) %>% add(days(6)) %>% format(\"%Y%m%d\") %>% as.numeric
 
 
 #Define the period for the forecast for comparison to expected performance
