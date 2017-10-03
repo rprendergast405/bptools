@@ -12,14 +12,24 @@
 #' @examples
 tld_sales_summary <- function(con, codes, start_week, end_week, group_name = NULL) {
 
+  # Create a table of the codes
+  codes_tbl <- data.frame(MENU_ITEM_NO = codes)
+
+  datetime <- format(Sys.time(), "%Y%m%d%H%M")
+  tmp_tblname <- paste0("MCD_SALES", datetime)
+  RODBC::sqlSave(channel = con, dat = codes_tbl, tablename = tmp_tblname, rownames = FALSE)
+
   # Build the query statement to get sales for all products during the time period
-  qry <- glue::glue("SELECT * FROM mcd.mcd_tld_item_summ_promo
-                     WHERE menu_item_no IN {vec_sql_string(codes)}
+  qry <- glue::glue("SELECT * FROM mcd.mcd_tld_item_summ_promo sum
+                     INNER JOIN {tmp_tblname} codes ON sum.menu_item_no = codes.menu_item_no
                      AND seqpromo_week BETWEEN {start_week} AND {end_week}")
 
   # Fetch the data
   summ_df <- RODBC::sqlQuery(con, qry)
   summ_df <- dplyr::as.tbl(summ_df)
+
+  # Drop the codes table
+  RODBC::sqlDrop(con, tmp_tblname)
 
   # Add date-class for promo weeks
   summ_df <- dplyr::left_join(summ_df, sqlQuery(con, "SELECT seqpromo_week, MIN(seqday) AS w_date FROM mcd.mcd_promo_week_dates GROUP BY seqpromo_week"),
