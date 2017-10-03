@@ -104,7 +104,12 @@ LaTeX: pdfLaTeX
             to = root_dir)
   cat(" Done\n")
 
-  cat("Project created successfully")
+  cat(paste0("Copying example_items.csv to ", root_dir, "/data ..."))
+  file.copy(from = system.file("extdata", "example_items.csv", package = "marketview"),
+            to = file.path(root_dir, "data"))
+  cat(" Done\n")
+
+  cat("Project created successfully\n")
 }
 
 
@@ -145,15 +150,6 @@ tpoi_start <- seqpromo.df %>% filter(seqpromo_week == tpoi_spw_start) %>% pull(w
 tpoi_end <- seqpromo.df %>% filter(seqpromo_week == tpoi_spw_end) %>% pull(week_start) %>% add(days(6)) %>% format(\"%Y%m%d\") %>% as.numeric
 
 
-#Define the period for the forecast for comparison to expected performance
-#defaults to 4 weeks prior to and 4 weeks after promo
-poi_spw_start <- cpoi_df[1,2]
-poi_spw_end <- cpoi_df[1,3]
-
-fc_start_week = poi_spw_start - pre_forecast
-fc_end_week = poi_spw_end + post_forecast
-
-
 # 1. IMPORT DATA ----------------------------------------------------------
 
 #Import overall sales breakdown for generic sections
@@ -192,19 +188,29 @@ for (i in 1:dim(cpoi_df)[1]) {
 
 generic_df$poi <- factor(generic_df$poi, levels = cpoi_df[,1])
 
-# Load IEO data for forecast
-ieo_data <- sqlQuery(DB, paste(\"select sum(a.spend) as spend, a.seqweek,
-case when b.bunch_id in (19150, 19151) then b.bunch_name else b.bunch_namex end as ieo_segment
-from mcd_bp_final_card_dataset2 a
-inner join mcd_bp_grp_ids b on a.merch_id = b.merch_id
-where a.seqweek <=\", fc_end_week,
-\"group by a.seqweek, case when b.bunch_id in (19150, 19151) then b.bunch_name else b.bunch_namex end\"))
+
+# Get the TLD Specific data using the tld_customer_data function ----
+promo_item_data <- tld_customer_data(
+  con = DB,
+  codes = unique(promo_items$codes),
+  start_week = min(promo_items$start_week),
+  end_week = max(promo_items$end_week)
+) %>%
+  left_join(promo_items, by = c(\"MENU_ITEM_NO\" = \"codes\")) %>%
+  inner_join(sqlQuery(DB, \"SELECT id AS store_id, merch_name, merch_tla FROM mcd_bp_grp_ids grp INNER JOIN mcd.mcd_store sto ON sto.fozzie_group_id = grp.merch_id\")) %>%
+  mcd_process() %>%
+  left_join(sqlQuery(DB, \"SELECT id AS pos_type, description AS pos_name FROM mcd.dim_pos_type\")) %>%
+  mutate(cust_group = case_when(CUST_TYPE == \"HVC\" ~ as.character(AGEX),
+         TRUE ~ \"non-HVC\"),
+         POS_NAME = reorder(POS_NAME, POS_TYPE))
+
 
 
 # 2. SAVE THE PROCESSED DATA ----------------------------------------------
 
 
-save(generic_df, ieo_data, poi_spw_start, poi_spw_end, fc_start_week, fc_end_week,
+save(generic_df,
+     promo_item_data,
      file = file.path(\"data\", \"processed\", \"", campaign_name, " data.RData\"))
 ")
 
@@ -241,6 +247,8 @@ create_mcd_results <- function(campaign_name, root_dir) {
 # -------------------------------------------------------------------------
 
 # 0. INITIALISE -----------------------------------------------------------
+
+library(data.table)
 
 # initialise the labelling and set the output subdirectory
 fig_num <- 1
@@ -1022,7 +1030,7 @@ tab_num <- tab_num + 1
 #'
 #' @return Creates a script within the directory specified.
 create_mcd_report <- function(campaign_name, root_dir) {
-  report_text <- c("# 4 ", campaign_name, " report.R
+  report_text <- c("# 3 ", campaign_name, " report.R
 # Created by ", Sys.info()["user"], ", on ", format(Sys.Date(), "%d %m %Y"), "
 # -------------------------------------------------------------------------
 # A script designed to compile a powerpoint report containing the
@@ -1049,6 +1057,18 @@ options(\"ReporteRs-default-font\" = \"Helvetica Neue\",
 
 data_import()
 
+item_breakdown <- function(df, var) {
+  quo_var <- enquo(var)
+
+  df %>%
+    filter(!is.na(item),
+    !is.na(!!quo_var)) %>%
+    group_by(group, !!quo_var) %>%
+    summarise(trans = n_distinct(TRANS_ID)) %>%
+    mutate(trans = trans / sum(trans),
+    trans = percent(trans)) %>%
+    spread(!!quo_var, trans, fill = percent(0))
+}
 
 # 2. COMPILE THE REPORT ---------------------------------------------------------
 
@@ -1079,6 +1099,11 @@ ppt_report %<>%
   addSlide(\"Subtitle\") %>%
   addTitle(\"Section 1\") %>%
   addParagraph(\"High Level Overview of McDonald's Performance\")
+
+ppt_report %<>%
+  addSlide(\"Text\") %>%
+  addTitle(\"Summary\") %>%
+  addParagraph(c(\"\"))
 
 ppt_report %<>%
   addSlide(\"Table\") %>%
@@ -1120,10 +1145,6 @@ ppt_report %<>%
   addFlexTable(section_1_ft_5) %>%
   addParagraph(\"\")
 
-ppt_report %<>%
-  addSlide(\"Text\") %>%
-  addTitle(\"Summary\") %>%
-  addParagraph(c(\"\"))
 
 # Section 2 ----------------------------------------------------------------
 
@@ -1131,6 +1152,11 @@ ppt_report %<>%
   addSlide(\"Subtitle\") %>%
   addTitle(\"Section 2\") %>%
   addParagraph(\"McDonald's HVC Performance Review\")
+
+ppt_report %<>%
+  addSlide(\"Text\") %>%
+  addTitle(\"Summary\") %>%
+  addParagraph(\"\")
 
 ppt_report %<>%
   addSlide(\"Table\") %>%
@@ -1147,48 +1173,19 @@ ppt_report %<>%
   addTitle(toTitleCase(\"\")) %>%
   addFlexTable(section_2_ft_3)
 
-ppt_report %<>%
-  addSlide(\"Text\") %>%
-  addTitle(\"Summary\") %>%
-  addParagraph(\"\")
 
 # Section 3 ----------------------------------------------------------------
-
-ppt_report %<>%
-  addSlide(\"Subtitle\") %>%
-  addTitle(\"Section 3\") %>%
-  addParagraph(\"IEO Performance vs. Expected Sales\")
-
-ppt_report %<>%
-  addSlide(\"Text\") %>%
-  addTitle(\"Comparing Expected Performance of the Market via Regression Model\") %>%
-  addParagraph(c(\"In the course of other work for McDonald's Marketview has developed a regression model for forecasting sales in the IEO market. The model uses the previous sales and behavior of the market going back to 2012 to forecast sales for each IEO category.\",
-\"By restricting the data used in the model to three weeks before the start of the Monopoly period we can forecast expected sales performance for each IEO category over this period. By comparing actual performance to expected we get a view of how each IEO category performed relative to expectation.\",
-\"Within QSR we can consider this as providing a comparison between this promotion and the average promotion run at the same period in the previous years in the training data.\"))
-
-ppt_report %<>%
-  addSlide(\"Image\") %>%
-  addTitle(toTitleCase(\"\")) %>%
-  addPlot(function() print(section_3_gr_1), vector.graphic = FALSE)
-
-ppt_report %<>%
-  addSlide(\"Image\") %>%
-  addTitle(toTitleCase(\"\")) %>%
-  addPlot(function() print(section_3_gr_2), vector.graphic = FALSE)
-
-ppt_report %<>%
-  addSlide(\"Text\") %>%
-  addTitle(paste(\"How Did Competitor Promotions Impact on the ", campaign_name, " Window?\")) %>%
-  addParagraph(c(\"\"))
 
 #--------------------------------------------------------------------------
 # TLD promo specific sections
 #--------------------------------------------------------------------------
 
+
 ppt_report %<>%
   addSlide(\"Subtitle\") %>%
-  addTitle(\"Section 4\") %>%
-  addParagraph(\"\")
+  addTitle(\"Section 3\") %>%
+  addParagraph(\"Product-Level Deep Dive\")
+
 
 ppt_report %<>%
   addSlide(\"Text\") %>%
@@ -1196,12 +1193,78 @@ ppt_report %<>%
   addParagraph(c(\"\"))
 
 
+# Do the item level findings ----
+for (item_group in unique(promo_items$item)) {
+
+  # AWU plot ----
+  p <- tld_comparison_plot(promo_items, group_name = item_group, con = DB) +
+    scale_colour_mvl(palette = \"mcd\")
+
+  ppt_report %<>%
+    addSlide(\"Wide Picture Brief\") %>%
+    addTitle(paste(item_group, \"AWU Sales\")) %>%
+    addPlot(function() print(p), vector.graphic = FALSE)
+
+  # Age & Gender ----
+  cust_ftbl <- promo_item_data %>%
+    item_breakdown(cust_group) %>%
+    left_join(
+      promo_item_data %>%
+       item_breakdown(GENDER)
+    ) %>%
+    ft_leaf() %>%
+    ft_widths(c(3, rep(1, .$numcol - 1)))
+
+  ppt_report %<>%
+    addSlide(\"Table\") %>%
+    addTitle(paste(item_group, \"Customers Age & Gender\")) %>%
+    addParagraph(paste(item_group, \"Customers Age & Gender\")) %>%
+    addFlexTable(cust_ftbl)
+
+  # Daypart ----
+  daypart_ftbl <- promo_item_data %>%
+    item_breakdown(DAYPART) %>%
+    ft_leaf() %>%
+    ft_widths(c(2, rep(1, .$numcol - 1)))
+
+  ppt_report %<>%
+    addSlide(\"Table\") %>%
+    addTitle(paste(item_group, \"Customers by Daypart\")) %>%
+    addParagraph(paste(item_group, \"Customers by Daypart\")) %>%
+    addFlexTable(daypart_ftbl)
+
+# Region ----
+  region_ftbl <- promo_item_data %>%
+    item_breakdown(MCD_REGION) %>%
+    ft_leaf()
+
+  ppt_report %<>%
+    addSlide(\"Table\") %>%
+    addTitle(paste(item_group, \"Customers by Region\")) %>%
+    addParagraph(paste(item_group, \"Customers by Region\")) %>%
+    addFlexTable(region_ftbl)
+
+  # POS ----
+  pos_ftbl <- promo_item_data %>%
+    item_breakdown(POS_NAME) %>%
+    ft_leaf()
+
+  ppt_report %<>%
+    addSlide(\"Table\") %>%
+    addTitle(paste(item_group, \"POS Types\")) %>%
+    addParagraph(paste(item_group, \"POS Types\")) %>%
+    addFlexTable(pos_ftbl)
+
+}
+
+
+
 # Save the finished report ------------------------------------------------
 
 writeDoc(ppt_report, file = file.path(\"Report/", campaign_name, " Campaign Analysis.pptx\"))
 ")
 
-  cat(paste(report_text, collapse = ""), file = file.path(root_dir, "R", paste0("4 ", campaign_name, " report.R")))
+  cat(paste(report_text, collapse = ""), file = file.path(root_dir, "R", paste0("3 ", campaign_name, " report.R")))
 
 }
 
@@ -1251,9 +1314,9 @@ cpoi_df = data.frame(cpoi_name = c(\"Promo\", \"Rest of Year\", \"Same Promo Las
                      spw_start = c(YYYYWW, YYYYWW, YYYYWW),
                      spw_end = c(YYYYWW, YYYYWW, YYYYWW))
 
-# Forecast period - how many weeks before/after the promo should be included?
-pre_forecast <- 4
-post_forecast <- 4
+
+## promo item performance -----
+promo_items <- read_csv(\"data/example_items.csv\")
 
 # Database connection
 DB <- odbcConnect(\"MVIEW\", uid = \"bespoke\", pwd = \"bespoke\")
@@ -1272,16 +1335,14 @@ if (data_refresh) {
 # Re-run the results script ----
 source(file.path(\"R\", \"2 ", campaign_name, " results.R\"))
 
-# Re-run the forecast script ----
-source(file.path(\"R\", \"3 ", campaign_name, " forecast.R\"))
 
 # 3. COMPILE THE REPORT ---------------------------------------------------
 
 # Check the spelling ----
-file_spellchecker(file.path(\"R\", \"4 ", campaign_name, " report.R\"))
+file_spellchecker(file.path(\"R\", \"3 ", campaign_name, " report.R\"))
 
 # Re-run the results script ----
-source(file.path(\"R\", \"4 ", campaign_name, " report.R\"))
+source(file.path(\"R\", \"3 ", campaign_name, " report.R\"))
 ")
 
   cat(paste(run_text, collapse = ""), file = file.path(root_dir, "R", paste0(campaign_name, " RUN SCRIPT.R")))
