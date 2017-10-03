@@ -1,7 +1,11 @@
 # marketviw 0.5.5
 
+# What's New
+- Several new tld_() functions. There could still be some bugs in these so let me know if anything goes awry
+
 # Changes
-- made some slight environment updates to catchment_picker()
+- catchment_picker() has had a facelift! And should also run a bit quicker and have a cleaner environment
+- Updated TLD section in mcd_post_campaign()
 
 # marketview 0.5.4
 
