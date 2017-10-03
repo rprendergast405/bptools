@@ -1,9 +1,10 @@
 #' Comparison Plot of TLD Item Performance
 #'
-#' @param con
-#' @param product_tbl
-#' @param group_name
-#' @param index
+#' @param con ODBC connection to bespoke
+#' @param product_tbl Table of products to consider
+#' @param group_name Name for the plot title
+#' @param index Should AWUs be indexed to the first week?
+#' @param align_weeks Should the weeks be standardised to 'Week 1', 'Week 2', etc? Otherwise uses seqpromo_week
 #'
 #' @return
 #' @export tld_comparison_plot

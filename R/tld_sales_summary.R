@@ -6,10 +6,7 @@
 #' @param end_week The last promo week of the time period
 #' @param group_name Optional name attribute to add to the output data
 #'
-#' @return
 #' @export tld_sales_summary
-#'
-#' @examples
 tld_sales_summary <- function(con, codes, start_week, end_week, group_name = NULL) {
 
   # Create a table of the codes

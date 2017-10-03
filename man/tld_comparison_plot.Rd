@@ -8,7 +8,15 @@ tld_comparison_plot(con, product_tbl, group_name, align_weeks = FALSE,
   index = FALSE)
 }
 \arguments{
-\item{index}{}
+\item{con}{ODBC connection to bespoke}
+
+\item{product_tbl}{Table of products to consider}
+
+\item{group_name}{Name for the plot title}
+
+\item{align_weeks}{Should the weeks be standardised to 'Week 1', 'Week 2', etc? Otherwise uses seqpromo_week}
+
+\item{index}{Should AWUs be indexed to the first week?}
 }
 \description{
 Comparison Plot of TLD Item Performance
