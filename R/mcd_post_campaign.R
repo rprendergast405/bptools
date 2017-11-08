@@ -190,19 +190,24 @@ generic_df$poi <- factor(generic_df$poi, levels = cpoi_df[,1])
 
 
 # Get the TLD Specific data using the tld_customer_data function ----
+promo_item_dates <- promo_items %>%
+  mutate(WEEK_SPAN = map2(start_week, end_week, function(x, y) return(x:y))) %>%
+  unnest() %>%
+  left_join(sqlQuery(DB, \"SELECT seqpromo_week AS week_span, seqday FROM mcd.mcd_promo_week_dates\")) %>%
+  select(codes, Item, group, SEQDAY)
+
 promo_item_data <- tld_customer_data(
   con = DB,
   codes = unique(promo_items$codes),
   start_week = min(promo_items$start_week),
   end_week = max(promo_items$end_week)
 ) %>%
-  left_join(promo_items, by = c(\"MENU_ITEM_NO\" = \"codes\")) %>%
+  left_join(promo_item_dates, by = c(\"MENU_ITEM_NO\" = \"codes\", \"SEQDAY\")) %>%
   inner_join(sqlQuery(DB, \"SELECT id AS store_id, merch_name, merch_tla FROM mcd_bp_grp_ids grp INNER JOIN mcd.mcd_store sto ON sto.fozzie_group_id = grp.merch_id\")) %>%
   mcd_process() %>%
   left_join(sqlQuery(DB, \"SELECT id AS pos_type, description AS pos_name FROM mcd.dim_pos_type\")) %>%
-  mutate(cust_group = case_when(CUST_TYPE == \"HVC\" ~ as.character(AGEX),
-         TRUE ~ \"non-HVC\"),
-         POS_NAME = reorder(POS_NAME, POS_TYPE))
+  mutate(cust_group = as.character(AGEX),POS_NAME = reorder(POS_NAME, POS_TYPE))
+
 
 
 
@@ -281,8 +286,8 @@ temp2 <- temp %>%
   select(no_diff) %>%
   as.tbl %>%
   setNames(gsub(\" \", \"_\", names(.))) %>%
-  mutate_at(vars(contains(\"change\")), funs(percent_change(., dp = 2))) %>%
-  mutate_if(is.numeric, funs(percent(., dp = 2))) %>%
+  mutate_at(vars(contains(\"change\")), funs(percent_change(., dp = 1))) %>%
+  mutate_if(is.numeric, funs(percent(., dp = 1))) %>%
   setNames(gsub(\"_\", \" \", names(.))) %>%
   mutate_all(as.character)
 
@@ -325,8 +330,8 @@ temp2 <- temp %>%
   select(no_diff) %>%
   as.tbl %>%
   setNames(gsub(\" \", \"_\", names(.))) %>%
-  mutate_at(vars(contains(\"change\")), funs(percent_change(., dp = 2))) %>%
-  mutate_if(is.numeric, funs(percent(., dp = 2))) %>%
+  mutate_at(vars(contains(\"change\")), funs(percent_change(., dp = 1))) %>%
+  mutate_if(is.numeric, funs(percent(., dp = 1))) %>%
   setNames(gsub(\"_\", \" \", names(.))) %>%
   mutate_all(as.character)
 
@@ -394,8 +399,8 @@ temp2 <- temp %>%
   select(no_diff) %>%
   as.tbl %>%
   setNames(gsub(\" \", \"_\", names(.))) %>%
-  mutate_at(vars(contains(\"change\")), funs(percent_change(., dp = 2))) %>%
-  mutate_if(is.numeric, funs(percent(., dp = 2))) %>%
+  mutate_at(vars(contains(\"change\")), funs(percent_change(., dp = 1))) %>%
+  mutate_if(is.numeric, funs(percent(., dp = 1))) %>%
   setNames(gsub(\"_\", \" \", names(.))) %>%
   mutate_all(as.character)
 
@@ -426,8 +431,8 @@ temp2b <- tempb %>%
   select(no_diff) %>%
   as.tbl %>%
   setNames(gsub(\" \", \"_\", names(.))) %>%
-  mutate_at(vars(contains(\"change\")), funs(percent_change(., dp = 2))) %>%
-  mutate_if(is.numeric, funs(percent(., dp = 2))) %>%
+  mutate_at(vars(contains(\"change\")), funs(percent_change(., dp = 1))) %>%
+  mutate_if(is.numeric, funs(percent(., dp = 1))) %>%
   setNames(gsub(\"_\", \" \", names(.))) %>%
   mutate_all(as.character) %>%
   mutate(cust_type = 'Total')
@@ -586,7 +591,7 @@ tempb %<>%
 
 temp2 <- temp %>%
   setNames(gsub(\" \", \"_\", names(.))) %>%
-  mutate_at(vars(contains(\"change\")), funs(percent_change(., dp = 2))) %>%
+  mutate_at(vars(contains(\"change\")), funs(percent_change(., dp = 1))) %>%
   mutate_if(is.numeric, percent) %>%
   setNames(gsub(\"_\", \" \", names(.))) %>%
   setNames(gsub(\"age\", \"Age\", names(.))) %>%
@@ -596,7 +601,7 @@ temp2 <- temp %>%
 
 temp2b <- tempb %>%
   setNames(gsub(\" \", \"_\", names(.))) %>%
-  mutate_at(vars(contains(\"change\")), funs(percent_change(., dp = 2))) %>%
+  mutate_at(vars(contains(\"change\")), funs(percent_change(., dp = 1))) %>%
   mutate_if(is.numeric, percent) %>%
   setNames(gsub(\"_\", \" \", names(.))) %>%
   setNames(gsub(\"age\", \"Age\", names(.))) %>%
@@ -658,7 +663,7 @@ tempb %<>%
 
 temp2 <- temp %>%
   setNames(gsub(\" \", \"_\", names(.))) %>%
-  mutate_at(vars(contains(\"change\")), funs(percent_change(., dp = 2))) %>%
+  mutate_at(vars(contains(\"change\")), funs(percent_change(., dp = 1))) %>%
   mutate_if(is.numeric, percent) %>%
   setNames(gsub(\"_\", \" \", names(.))) %>%
   setNames(gsub(\"mcd region\", \"Region\", names(.))) %>%
@@ -668,7 +673,7 @@ temp2 <- temp %>%
 
 temp2b <- tempb %>%
   setNames(gsub(\" \", \"_\", names(.))) %>%
-  mutate_at(vars(contains(\"change\")), funs(percent_change(., dp = 2))) %>%
+  mutate_at(vars(contains(\"change\")), funs(percent_change(., dp = 1))) %>%
   mutate_if(is.numeric, percent) %>%
   setNames(gsub(\"_\", \" \", names(.))) %>%
   setNames(gsub(\"mcd region\", \"Region\", names(.))) %>%
@@ -729,7 +734,7 @@ tempb %<>%
 
 temp2 <- temp %>%
   setNames(gsub(\" \", \"_\", names(.))) %>%
-  mutate_at(vars(contains(\"change\")), funs(percent_change(., dp = 2))) %>%
+  mutate_at(vars(contains(\"change\")), funs(percent_change(., dp = 1))) %>%
   mutate_if(is.numeric, percent) %>%
   setNames(gsub(\"_\", \" \", names(.))) %>%
   setNames(gsub(\"daypart\", \"Daypart\", names(.))) %>%
@@ -739,7 +744,7 @@ temp2 <- temp %>%
 
 temp2b <- tempb %>%
   setNames(gsub(\" \", \"_\", names(.))) %>%
-  mutate_at(vars(contains(\"change\")), funs(percent_change(., dp = 2))) %>%
+  mutate_at(vars(contains(\"change\")), funs(percent_change(., dp = 1))) %>%
   mutate_if(is.numeric, percent) %>%
   setNames(gsub(\"_\", \" \", names(.))) %>%
   setNames(gsub(\"daypart\", \"Daypart\", names(.))) %>%
@@ -1061,9 +1066,9 @@ item_breakdown <- function(df, var) {
   quo_var <- enquo(var)
 
   df %>%
-    filter(!is.na(item),
+    filter(!is.na(Item),
     !is.na(!!quo_var)) %>%
-    group_by(group, !!quo_var) %>%
+    group_by(Item, !!quo_var) %>%
     summarise(trans = n_distinct(TRANS_ID)) %>%
     mutate(trans = trans / sum(trans),
     trans = percent(trans)) %>%
@@ -1194,10 +1199,17 @@ ppt_report %<>%
 
 
 # Do the item level findings ----
-for (item_group in unique(promo_items$item)) {
+for (item_group in unique(promo_items$group)) {
+
+  items <- promo_items %>%
+    filter(group == item_group)
+
+  item_data <- promo_item_data %>%
+    filter(group == item_group)
 
   # AWU plot ----
-  p <- tld_comparison_plot(promo_items, group_name = item_group, con = DB) +
+  p <- tld_comparison_plot(items %>% rename(item = group, group = Item),
+                           group_name = item_group, con = DB) +
     scale_colour_mvl(palette = \"mcd\")
 
   ppt_report %<>%
@@ -1206,10 +1218,10 @@ for (item_group in unique(promo_items$item)) {
     addPlot(function() print(p), vector.graphic = FALSE)
 
   # Age & Gender ----
-  cust_ftbl <- promo_item_data %>%
+  cust_ftbl <- item_data %>%
     item_breakdown(cust_group) %>%
     left_join(
-      promo_item_data %>%
+      item_data %>%
        item_breakdown(GENDER)
     ) %>%
     ft_leaf() %>%
@@ -1222,7 +1234,7 @@ for (item_group in unique(promo_items$item)) {
     addFlexTable(cust_ftbl)
 
   # Daypart ----
-  daypart_ftbl <- promo_item_data %>%
+  daypart_ftbl <- item_data %>%
     item_breakdown(DAYPART) %>%
     ft_leaf() %>%
     ft_widths(c(2, rep(1, .$numcol - 1)))
@@ -1234,7 +1246,7 @@ for (item_group in unique(promo_items$item)) {
     addFlexTable(daypart_ftbl)
 
 # Region ----
-  region_ftbl <- promo_item_data %>%
+  region_ftbl <- item_data %>%
     item_breakdown(MCD_REGION) %>%
     ft_leaf()
 
@@ -1245,7 +1257,7 @@ for (item_group in unique(promo_items$item)) {
     addFlexTable(region_ftbl)
 
   # POS ----
-  pos_ftbl <- promo_item_data %>%
+  pos_ftbl <- item_data %>%
     item_breakdown(POS_NAME) %>%
     ft_leaf()
 
