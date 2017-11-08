@@ -271,13 +271,13 @@ h3 {
               removeShape('catchment1') %>%
               clearGroup('catchment1') %>%
               addPolygons(data = map_other(),
-                          fillColor = ~pal(spend_map.spdf$TLA)[spend_map.spdf$CAU %in% data$unselected],
+                          fillColor = ~pal(spend_map.spdf$SPEND)[spend_map.spdf$CAU %in% data$unselected],
                           fillOpacity = 0.5,
                           stroke = TRUE,
                           weight = 1,
                           layerId = ~CAU) %>%
               addPolygons(data = map_primary(),
-                          fillColor = ~pal2(spend_map.spdf$TLA)[spend_map.spdf$CAU %in% data$primary_catchment],
+                          fillColor = ~pal2(spend_map.spdf$SPEND)[spend_map.spdf$CAU %in% data$primary_catchment],
                           fillOpacity = 0.8,
                           weight = 1,
                           color = "red",
@@ -292,13 +292,13 @@ h3 {
               removeShape('catchment2') %>%
               clearGroup('catchment2') %>%
               addPolygons(data = map_other(),
-                          fillColor = ~pal(spend_map.spdf$TLA)[spend_map.spdf$CAU %in% data$unselected],
+                          fillColor = ~pal(spend_map.spdf$SPEND)[spend_map.spdf$CAU %in% data$unselected],
                           fillOpacity = 0.5,
                           stroke = TRUE,
                           weight = 1,
                           layerId = ~CAU) %>%
               addPolygons(data = map_secondary(),
-                          fillColor = ~pal3(spend_map.spdf$TLA)[spend_map.spdf$CAU %in% data$secondary_catchment],
+                          fillColor = ~pal3(spend_map.spdf$SPEND)[spend_map.spdf$CAU %in% data$secondary_catchment],
                           fillOpacity = 0.8,
                           weight = 1,
                           color = "green",
@@ -313,13 +313,13 @@ h3 {
               removeShape('catchment3') %>%
               clearGroup('catchment3') %>%
               addPolygons(data = map_other(),
-                          fillColor = ~pal(spend_map.spdf$TLA)[spend_map.spdf$CAU %in% data$unselected],
+                          fillColor = ~pal(spend_map.spdf$SPEND)[spend_map.spdf$CAU %in% data$unselected],
                           fillOpacity = 0.5,
                           stroke = TRUE,
                           weight = 1,
                           layerId = ~CAU) %>%
               addPolygons(data = map_tertiary(),
-                          fillColor = ~pal4(spend_map.spdf$TLA)[spend_map.spdf$CAU %in% data$tertiary_catchment],
+                          fillColor = ~pal4(spend_map.spdf$SPEND)[spend_map.spdf$CAU %in% data$tertiary_catchment],
                           fillOpacity = 0.8,
                           weight = 1,
                           color = "gold",
