@@ -9,9 +9,10 @@
 \title{Marketview Colour Scales}
 \usage{
 scale_colour_mvl(..., palette = "mvl", direction = 1,
-  highlight = mvl_leaf)
+  highlight = mvl_leaf, guide = ggplot2::guide_legend(byrow = TRUE))
 
-scale_fill_mvl(..., palette = "mvl", direction = 1, highlight = mvl_leaf)
+scale_fill_mvl(..., palette = "mvl", direction = 1, highlight = mvl_leaf,
+  guide = ggplot2::guide_legend(byrow = TRUE))
 
 scale_colour_mvlc(..., palette = "Leaf", direction = -1, values = NULL,
   na.value = "grey50", guide = "colourbar")
@@ -35,7 +36,7 @@ colour schemes in line with the Marketview branding guides.
 The following palettes are available for use with these scales:
 \describe{
   \item{Diverging}{LeafPlum, TealRed, RedStone, SkyStone, PlumStone, LeafStone, RoyalStone}
-  \item{Qualitative}{mvl, mcd, mcd2, mvl_classic}
+  \item{Qualitative}{mvl, mcd, mcd2, mvl_classic, fssi}
   \item{Sequential}{Leaf, Plum, Teal, Blue, Sky, Citrus, Stone,
      Navy, Orange, Red, Green, Purple, Highlight}
 }

@@ -4,7 +4,8 @@
 \alias{tld_sales_summary}
 \title{Get the Weekly Sales for a TLD Item}
 \usage{
-tld_sales_summary(con, codes, start_week, end_week, group_name = NULL)
+tld_sales_summary(con, codes, start_week, end_week, promo_week = TRUE,
+  group_name = NULL)
 }
 \arguments{
 \item{con}{ODBC connection to bespoke}
