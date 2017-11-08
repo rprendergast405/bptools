@@ -1,4 +1,4 @@
-codes,group,start_week,end_week,item
+codes,Item,start_week,end_week,group
 6640,Serious Angus,201724,201734,Gourmet Creations
 6641,Serious Angus,201724,201734,Gourmet Creations
 6642,Serious Angus,201724,201734,Gourmet Creations
@@ -43,3 +43,5 @@ codes,group,start_week,end_week,item
 6808,"Chicken, Brie, & Relish",201724,201734,Gourmet Creations
 6809,Loaded Lettuce,201724,201734,Gourmet Creations
 6810,Loaded Lettuce,201724,201734,Gourmet Creations
+5596,Banana McFlurry,201724,201730,Banana McFlurry
+1802,2 for $7 McFlurry,201724,201730,Banana McFlurry
