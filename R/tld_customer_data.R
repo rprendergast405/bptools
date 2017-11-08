@@ -22,7 +22,7 @@ tld_customer_data <- function(con, codes, start_week, end_week, keep_table = FAL
   }
 
   # Initialise dates
-  datetime <- format(Sys.time(), "%Y%m%d%H%M")
+  datetime <- paste0(substr(toupper(Sys.info()["user"]), 1, 3), format(Sys.time(), "%m%d%H%M"))
 
   date_qry <- glue::glue("SELECT MIN(seqday) AS period_start, MAX(seqday) AS period_end
                          FROM mcd.mcd_promo_week_dates WHERE seqpromo_week IN ({start_week}, {end_week})")
@@ -83,16 +83,15 @@ WHERE seqday BETWEEN {start_day} AND {end_day}")
 
   tld_final_qry <- glue::glue("create table mcd_cust{datetime}_5 compress nologging as
 select a.trans_id, a.seqday, a.store_id, a.menu_item_no, a.register_no,
-a.pos_type, mvcore.mcd_aggtime2(a.start_time) AS daypart_report_no, a.total_amount, c.source_id, c.agex, c.gender, c.meshblock, c.cust_type
+a.pos_type, mvcore.mcd_aggtime2(a.end_time) AS daypart_report_no, a.end_time,
+a.total_amount, a.quantity, a.item_price, a.item_type,
+c.source_id, c.agex, c.gender, c.meshblock, c.cust_type
 from mcd.mcd_tld_data a
 inner join MCD.TRANS_CUSTOMER d on a.trans_id = d.trans_id
 inner join mcd_cust{datetime}_3 c on d.customer_id = c.customer_id and SUBSTR(a.seqday, 1, 6) = c.max_month
 inner join mcd_cust{datetime}_4 c2 on c.source_id = c2.source_id
 
-WHERE seqday BETWEEN {start_day} AND {end_day}
-
-group by a.trans_id, a.seqday, a.store_id, a.menu_item_no, a.register_no,
-a.pos_type, mvcore.mcd_aggtime2(a.start_time), a.total_amount, c.source_id, c.agex, c.gender, c.meshblock, c.cust_type")
+WHERE seqday BETWEEN {start_day} AND {end_day}")
 
 
   # Execute the queries ----
@@ -110,16 +109,6 @@ a.pos_type, mvcore.mcd_aggtime2(a.start_time), a.total_amount, c.source_id, c.ag
   cat("Getting Final Data (6 of 6)\n")
   RODBC::sqlQuery(con, tld_final_qry)
 
-  if (keep_table) {
-    cat("Saving Final Data Table\n")
-    keep_qry <- glue::glue("CREATE TABLE {toupper(tmp_tblname)} COMPRESS NOLOGGING AS
-SELECT * FROM mcd_cust{datetime}_5")
-
-    RODBC::sqlQuery(DB, keep_qry)
-  }
-
-
-
   # Drop the tables and return the data
   cat("Dropping Tables\n")
 
@@ -128,8 +117,15 @@ SELECT * FROM mcd_cust{datetime}_5")
   RODBC::sqlDrop(con, toupper(glue::glue("mcd_cust{datetime}_3")))
   RODBC::sqlDrop(con, toupper(glue::glue("mcd_cust{datetime}_4")))
   tld_cust_data <- dplyr::as.tbl(sqlQuery(con, glue::glue("SELECT * FROM mcd_cust{datetime}_5")))
+  if (keep_table) {
+    cat("Saving Final Data Table\n")
+    keep_qry <- glue::glue("CREATE TABLE {toupper(tablename)} COMPRESS NOLOGGING AS
+                            SELECT * FROM mcd_cust{datetime}_5")
+    RODBC::sqlQuery(DB, keep_qry)
+  }
   RODBC::sqlDrop(con, toupper(glue::glue("mcd_cust{datetime}_5")))
   RODBC::sqlDrop(con, toupper(glue::glue("{tmp_tblname}")))
+
 
 
   return(tld_cust_data)
