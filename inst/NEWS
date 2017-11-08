@@ -1,4 +1,21 @@
-# marketviw 0.5.5
+# marketview 0.5.6
+
+# What's New
+- added "fssi" colour palette to scale_mvl()
+
+# Changes
+- New default packages in create_project()
+- cleaned up the default directories in create_project()
+- updated mcd_post_campaign() with Jeremy's feedback
+- improved labels for tld_comparison_plot()
+- safer tablenames in tld_customer_data()
+- added an option for tld_sales_summary() to get promo_week sales or Monday-Sunday sales
+
+# Bug Fixes
+- catchment_picker() was not correctly filling polygons - fixed
+- fixed a bug with comparing the same item in multiple time periods in mcd_post_campaign()
+
+# marketview 0.5.5
 
 # What's New
 - Several new tld_() functions. There could still be some bugs in these so let me know if anything goes awry
