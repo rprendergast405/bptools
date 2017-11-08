@@ -48,7 +48,14 @@ tld_comparison_plot <- function(con, product_tbl, group_name, align_weeks = FALS
 
   # Make a df for labeling the lines
   label_df <- dplyr::group_by(sales_df, group)
-  label_df <- dplyr::slice(sales_df, ifelse(index, n(), 1))
+  label_df <- dplyr::slice(label_df, ifelse(index, n(), 1))
+
+  value_labels <- dplyr::group_by(sales_df, group)
+  value_labels <- dplyr::slice(value_labels, c(1, n()))
+  value_labels <- dplyr::mutate(value_labels, text =  ifelse(row_number() == 1,
+                                                             paste(scales::comma(round(awu)), "            "),
+                                                             paste("            ", scales::comma(round(awu)))))
+
 
   # Construct the plot
   p <- ggplot2::ggplot(data = sales_df,
@@ -57,8 +64,13 @@ tld_comparison_plot <- function(con, product_tbl, group_name, align_weeks = FALS
                        size = 1, show.legend = FALSE) +
     scale_colour_mvl(palette = "Highlight", highlight = mvl_plum) +
     theme_mvl() +
-    ggrepel::geom_text_repel(data = label_df,
+    ggrepel::geom_label_repel(data = label_df,
                              mapping = ggplot2::aes(label = group),
+                             family = "hnb", size = 3, alpha = 0.75,
+                             direction = "y", label.size = NA,
+                             show.legend = FALSE) +
+    ggplot2::geom_text(data = value_labels,
+                             mapping = ggplot2::aes(label = text),
                              family = "hnb", size = 3,
                              show.legend = FALSE) +
     ggplot2::labs(title = paste(group_name, "AWUs", ifelse(index, "(Indexed)", "")),
