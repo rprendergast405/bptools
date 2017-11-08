@@ -18,7 +18,7 @@
 #' The following palettes are available for use with these scales:
 #' \describe{
 #'   \item{Diverging}{LeafPlum, TealRed, RedStone, SkyStone, PlumStone, LeafStone, RoyalStone}
-#'   \item{Qualitative}{mvl, mvl_classic, mcd, mcd2}
+#'   \item{Qualitative}{mvl, mvl_classic, mcd, mcd2, fssi}
 #'   \item{Sequential}{Leaf, Plum, Teal, Blue, Sky, Citrus, Stone,
 #'      Navy, Orange, Red, Green, Purple, Highlight}
 #' }
@@ -33,7 +33,7 @@ pal_mvl <- function(palette = "Leaf", direction = 1, highlight = mvl_leaf) {
   if (!(palette %in% c("Leaf", "Plum", "Teal", "Blue", "Sky", "Citrus", "Stone",
                        "Navy", "Orange", "Red", "Green", "Purple", "Highlight",
                        "LeafPlum", "TealRed", "RedStone", "SkyStone", "PlumStone", "LeafStone", "RoyalStone",
-                       "mcd", "mvl", "mcd2", "mvl_classic"))) {
+                       "mcd", "mvl", "mcd2", "mvl_classic", "fssi"))) {
     stop("Palette not available. See ?scale_mvl for a list of palettes that are currently implemented. Email Bert if you have any suggestions.")
   }
 
@@ -110,10 +110,10 @@ pal_mvl <- function(palette = "Leaf", direction = 1, highlight = mvl_leaf) {
 
   # Qualitative Scales ----
 
-  if (palette %in% c("mcd", "mvl", "mcd2", "mvl_classic")) {
+  if (palette %in% c("mcd", "mvl", "mcd2", "mvl_classic", "fssi")) {
 
     pal_ref <- dplyr::tibble(
-      pal_name = c("mcd", "mvl", "mcd2", "mvl_classic"),
+      pal_name = c("mcd", "mvl", "mcd2", "mvl_classic", "fssi"),
       vals = list(c(marketview::mvl_red, marketview::mvl_green, marketview::mvl_orange,
                     marketview::mvl_teal, marketview::mvl_navy, marketview::mvl_purple,
                     marketview::mvl_hay),
@@ -125,7 +125,10 @@ pal_mvl <- function(palette = "Leaf", direction = 1, highlight = mvl_leaf) {
                     marketview::mvl_hay),
                   c(marketview::mvl_teal, marketview::mvl_navy,
                     marketview::mvl_royal, marketview::mvl_purple, marketview::mvl_half_purple,
-                    marketview::mvl_half_grey))
+                    marketview::mvl_half_grey),
+                  c(marketview::mvl_red, marketview::mvl_orange, marketview::mvl_teal,
+                    marketview::mvl_green, marketview::mvl_navy, marketview::mvl_purple,
+                    marketview::mvl_hay))
     )
 
     scale_vals <- as.character(
@@ -166,7 +169,7 @@ pal_mvl <- function(palette = "Leaf", direction = 1, highlight = mvl_leaf) {
 #' The following palettes are available for use with these scales:
 #' \describe{
 #'   \item{Diverging}{LeafPlum, TealRed, RedStone, SkyStone, PlumStone, LeafStone, RoyalStone}
-#'   \item{Qualitative}{mvl, mcd, mcd2, mvl_classic}
+#'   \item{Qualitative}{mvl, mcd, mcd2, mvl_classic, fssi}
 #'   \item{Sequential}{Leaf, Plum, Teal, Blue, Sky, Citrus, Stone,
 #'      Navy, Orange, Red, Green, Purple, Highlight}
 #' }
@@ -181,15 +184,15 @@ NULL
 
 #' @rdname scale_mvl
 #' @export scale_colour_mvl
-scale_colour_mvl <- function(..., palette = "mvl", direction = 1, highlight = mvl_leaf) {
-  ggplot2::discrete_scale("colour", "brewer", pal_mvl(palette, direction, highlight), ...)
+scale_colour_mvl <- function(..., palette = "mvl", direction = 1, highlight = mvl_leaf, guide = ggplot2::guide_legend(byrow = TRUE)) {
+  ggplot2::discrete_scale("colour", "brewer", pal_mvl(palette, direction, highlight), guide = guide, ...)
 }
 
 
 #' @rdname scale_mvl
 #' @export scale_fill_mvl
-scale_fill_mvl <- function(..., palette = "mvl", direction = 1, highlight = mvl_leaf) {
-  ggplot2::discrete_scale("fill", "brewer", pal_mvl(palette, direction, highlight), ...)
+scale_fill_mvl <- function(..., palette = "mvl", direction = 1, highlight = mvl_leaf, guide = ggplot2::guide_legend(byrow = TRUE)) {
+  ggplot2::discrete_scale("fill", "brewer", pal_mvl(palette, direction, highlight), guide = guide, ...)
 }
 
 
