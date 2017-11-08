@@ -28,7 +28,7 @@ create_project <- function(project_name,
                            sub_dirs = NULL) {
 
   # The default sub-directories that should be created by the function
-  base_sub_dirs <- c("data", "data/processed", "R", "R/rmd", "R/functions", "R/shiny", "output", "output/tables", "output/figures", "Report")
+  base_sub_dirs <- c("data", "data/processed", "R", "R/functions", "output", "output/tables", "output/figures", "Report")
 
   # The root directory for the project takes the project name
   if (!is.null(within)) {
@@ -162,6 +162,9 @@ library(lubridate)      # time/date functions
 library(readxl)
 library(marketview)
 library(mvldata)
+library(glue)
+library(ReporteRs)
+library(RcppRoll)
 
 # set directories -----
 output_dir <- file.path(\"output\")
@@ -182,6 +185,11 @@ scale_colour_discrete <- partial(scale_colour_mvl, palette = \"mcd\")
 scale_colour_continuous <- scale_colour_mvlc
 scale_fill_discrete <- partial(scale_fill_mvl, palette = \"mcd\")
 scale_fill_continuous <- scale_fill_mvlc
+
+# Set ReporteRs defaults
+options(\"ReporteRs-default-font\" = \"Helvetica Neue\",
+        \"ReporteRs-fontsize\" = 12,
+        \"ReporteRs-locale.region\" = \"GB\")
 
 # Prevent print.data.frame from destroying your session ----
 print.data.frame <- function(x, ..., n = NULL, width = NULL) {
@@ -225,8 +233,8 @@ source(file.path(\"R\", \"0 ", project_name, " initialise.R\"))
 # 1. IMPORT DATA ----------------------------------------------------------
 
 
-# 2. SAVE THE PROCESSED DATA ----------------------------------------------
 
+# 2. SAVE THE PROCESSED DATA ----------------------------------------------
 
 save(list = ls()[sapply(sapply(ls(), function(x){class(get(x))}), function(x){\"data.frame\" %in% x})],
      file = file.path(\"data\", \"processed\", \"", project_name, " data.RData\"))
@@ -311,22 +319,19 @@ knitr::opts_chunk$set(fig.width = 12, fig.height = 8, fig.path = 'Figs/',
 
 # 0. INITIALISE -----------------------------------------------------------
 
-base_dir <- \"", root_dir, "\"
-
-source(file.path(base_dir, \"R\", \"0 ", project_name, " initialise.R\"))
+source(\"R/0 ", project_name, " initialise.R\")
 library(knitr)
 
 # 1. IMPORT DATA ----------------------------------------------------------
 
 
-data_import(base_dir)
-
+data_import()
 
 ```
 
 ")
 
-  cat(paste(eda_text, collapse = ""), file = file.path(root_dir, "R", "rmd", paste0(project_name, " EDA.Rmd")))
+  cat(paste(eda_text, collapse = ""), file = file.path(root_dir, paste0(project_name, " EDA.Rmd")))
 
 }
 
