@@ -2,6 +2,7 @@
 
 # What's New
 - added "fssi" colour palette to scale_mvl()
+- new add_placenames() function for adding city/town/suburb names to a map
 
 # Changes
 - New default packages in create_project()
