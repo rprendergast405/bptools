@@ -433,7 +433,7 @@ zoom_definition <- function(shp_dat, x = 'long', y = 'lat', margin = 0, expand =
 #' ggplot()+
 #' geom_polygon(data = nz_tla_13.df,
 #' aes(long, lat, group = group, fill = TLA == 76))+
-#' zoom_place("Auckland")()
+#' zoom_place("Auckland")
 zoom_place <- function(place_name, margin = 20000, expand = FALSE, ratio = 1) {
 
   if (!(place_name %in% unique(mvldata::osm_places.df$name))) {
@@ -551,8 +551,36 @@ add_water <- function(rivers = TRUE, inland = TRUE, extra = TRUE,
 
   list(ggplot2::geom_polygon(data = dat, ggplot2::aes(x = long, y = lat, group = group),
                              fill = fill, colour = colour, size = size, inherit.aes = FALSE),
-       ggplot2::geom_polygon(data = dplyr::filter(dat, hole), ggplot2:: aes(long, lat, group = group),
+       ggplot2::geom_polygon(data = dplyr::filter(dat, hole), ggplot2::aes(long, lat, group = group),
                              fill = hole_fill, colour = colour)
   )
 }
 
+
+
+#' Add Some Placenames to a Map
+#'
+#' Use to quickly add a layer of towns/cities and some selected suburbs to a map for reference
+#'
+#' @param data A data.frame of the names to add to the plot, and their locations in NZTM coordinates
+#' @param colour The text colour for the place names
+#' @param size The text size for the place names
+#' @param tla Optional argument to only show the suburbs of a given set of TLA ids (2006 TLA definition)
+#'
+#' @export add_placenames
+add_placenames <- function(data = mvldata::sparse_places.df, colour = mvl_text, size = 3, tla = NULL) {
+
+  stopifnot(is.integer(tla))
+
+  if (!is.null(tla)) data <- data[data[["TLA"]] %in% tla, ]
+
+  dat <- data[data[["osm_id"]] %in% mvldata::major_places.df[["osm_id"]] == FALSE, ]
+
+  obj <- list(ggplot2::geom_text(data = dat, ggplot2::aes(x = long, y = lat, label = name),
+                          colour = colour, size = size, inherit.aes = FALSE, family = "hn"),
+       ggplot2::geom_text(data = mvldata::major_places.df, ggplot2::aes(x = long, y = lat, label = name),
+                          colour = colour, size = size, inherit.aes = FALSE, family = "hnb")
+  )
+
+  return(obj)
+}
