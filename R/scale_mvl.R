@@ -114,8 +114,8 @@ pal_mvl <- function(palette = "Leaf", direction = 1, highlight = mvl_leaf) {
 
     pal_ref <- dplyr::tibble(
       pal_name = c("mcd", "mvl", "mcd2", "mvl_classic", "fssi"),
-      vals = list(c(marketview::mvl_red, marketview::mvl_green, marketview::mvl_orange,
-                    marketview::mvl_teal, marketview::mvl_navy, marketview::mvl_purple,
+      vals = list(c(marketview::mvl_orange, marketview::mvl_navy, marketview::mvl_red,
+                    marketview::mvl_green, marketview::mvl_teal, marketview::mvl_purple,
                     marketview::mvl_hay),
                   c(marketview::mvl_leaf, marketview::mvl_plum, marketview::mvl_sky,
                     marketview::mvl_citrus, marketview::mvl_fire, marketview::mvl_royal2,
