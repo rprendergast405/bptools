@@ -74,7 +74,7 @@ on a.source_id = b.source_id and a.age = b.agex")
   # Customer profile of those who buy the codes
   tld_cust_qry <- glue::glue("create table mcd_cust{datetime}_4 compress nologging as
 SELECT DISTINCT source_id
-FROM mcd.mcd_tld_data a
+FROM mcd.mcd_sales_items a
 INNER JOIN mcd.trans_customer d on a.trans_id = d.trans_id
 INNER JOIN mcd_cust{datetime}_3 c on d.customer_id = c.customer_id and SUBSTR(a.seqday, 1, 6) = c.max_month
 INNER JOIN {tmp_tblname} codes ON a.menu_item_no = codes.menu_item_no
