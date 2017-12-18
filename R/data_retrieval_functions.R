@@ -159,11 +159,11 @@ return(dat)
 #' @export make_mb_df
 #'
 #' @import sp
-make_mb_df <- function(mb_map, mbs){
+make_mb_df <- function(mb_map, mbs, tol = 25){
   # simplify and fortify the data
   mb_df <- mb_map %>%
     subset(MB %in% mbs) %>%
-    rgeos::gSimplify(tol = 25, topologyPreserve = TRUE) %>%
+    rgeos::gSimplify(tol = tol, topologyPreserve = TRUE) %>%
     ggplot2::fortify(region = "id") %>%
     dplyr::left_join(mb_map@data, by = "id") %>%
     dplyr::select(long, lat, group, MB) %>%
