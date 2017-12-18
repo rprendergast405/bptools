@@ -8,8 +8,9 @@
 #' @param location Directory where the script should be created - default is the /R directory
 #'
 #' @export create_script
-create_script <- function(name, project_dir = getwd(), location = "R") {
+create_script <- function(name, location = "R") {
 
+  project_dir <- getwd()
   project_name <- gsub("^.*/", "", project_dir)
 
 script_text <- c("# ", name, ".R
@@ -28,12 +29,12 @@ script_text <- c("# ", name, ".R
 
 # 0. INITIALISE -----------------------------------------------------------
 
-source(file.path(\"", project_dir, "\", \"R\", \"0 ", project_name, " initialise.R\"))
+source(file.path(\"R\", \"0 ", project_name, " initialise.R\"))
 
 # 1. IMPORT DATA ----------------------------------------------------------
 
 data_import()
 ")
 
-  cat(paste(script_text, collapse = ""), file = file.path(project_dir, location, paste0(name, ".R")))
+  cat(paste(script_text, collapse = ""), file = file.path(location, paste0(name, ".R")))
 }
