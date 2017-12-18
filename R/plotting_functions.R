@@ -564,23 +564,38 @@ add_water <- function(rivers = TRUE, inland = TRUE, extra = TRUE,
 #'
 #' @param data A data.frame of the names to add to the plot, and their locations in NZTM coordinates
 #' @param colour The text colour for the place names
+#' @param fillcolour Fill colour for the text. Only used if shadowtext package is installed.
 #' @param size The text size for the place names
 #' @param tla Optional argument to only show the suburbs of a given set of TLA ids (2006 TLA definition)
 #'
 #' @export add_placenames
-add_placenames <- function(data = mvldata::sparse_places.df, colour = mvl_text, size = 3, tla = NULL) {
+add_placenames <- function(data = mvldata::sparse_places.df, colour = mvl_text, fillcolour = "white", size = 3, tla = NULL) {
 
-  stopifnot(is.integer(tla))
 
-  if (!is.null(tla)) data <- data[data[["TLA"]] %in% tla, ]
+  if (!is.null(tla)) {
+
+    stopifnot(is.integer(tla))
+
+    data <- data[data[["TLA"]] %in% tla, ]
+  }
 
   dat <- data[data[["osm_id"]] %in% mvldata::major_places.df[["osm_id"]] == FALSE, ]
 
-  obj <- list(ggplot2::geom_text(data = dat, ggplot2::aes(x = long, y = lat, label = name),
-                          colour = colour, size = size, inherit.aes = FALSE, family = "hn"),
-       ggplot2::geom_text(data = mvldata::major_places.df, ggplot2::aes(x = long, y = lat, label = name),
-                          colour = colour, size = size, inherit.aes = FALSE, family = "hnb")
-  )
+  if ("shadowtext" %in% installed.packages()[, "Package"]) {
+    obj <- list(shadowtext::geom_shadowtext(data = dat, ggplot2::aes(x = long, y = lat, label = name),
+                                            color = fillcolour, bgcolor = colour, size = size, inherit.aes = FALSE, family = "hn"),
+                shadowtext::geom_shadowtext(data = mvldata::major_places.df, ggplot2::aes(x = long, y = lat, label = name),
+                                            color = fillcolour, bgcolor = colour, size = size, inherit.aes = FALSE, family = "hnb")
+    )
+  } else {
+    obj <- list(ggplot2::geom_text(data = dat, ggplot2::aes(x = long, y = lat, label = name),
+                                   colour = colour, size = size, inherit.aes = FALSE, family = "hn"),
+                ggplot2::geom_text(data = mvldata::major_places.df, ggplot2::aes(x = long, y = lat, label = name),
+                                   colour = colour, size = size, inherit.aes = FALSE, family = "hnb")
+    )
+
+  }
+
 
   return(obj)
 }
