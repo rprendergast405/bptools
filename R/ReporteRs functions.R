@@ -350,6 +350,48 @@ flextable_negatives <- function(ftbl, col_names = names(ftbl$vals)) {
   return(ftbl)
 }
 
+#' Highlight Increased Cell Values in Green
+#'
+#' A function to highlight any positive values in a FlexTable for given column names.
+#' This requires values to be formatted using \code{marketview::dollar_change()} or
+#' \code{marketview::percent_change()} (or similar).
+#'
+#' @param ftbl A FlexTable object to format
+#' @param col_names The names of the columns in which to highlight the positives
+#'
+#' @return ftbl The original FlexTable with the formatting applied
+#' @export flextable_positives
+flextable_positives <- function(ftbl, col_names = names(ftbl$vals)) {
+
+  # Get the original data.frame from the flextable object
+  df <- as.data.frame(ftbl$vals)
+
+  for (column in col_names) {
+    # Get the specified columns
+    col_ind <- which(ftbl$col_id == column)
+    # in case there are multiple columns with the same name
+    for (ind in col_ind) {
+      col_vals <- df[, ind]
+
+      # Get the values as numerics
+      #col_vals <-  gsub("[^-\\.0-9]", "", col_vals)
+      #col_vals <- as.numeric(col_vals)
+
+      # Find any values that are less than zero
+      neg_ind <- which(grepl("\\+", col_vals))
+
+      # Highlight the negative values in the flextable
+      ftbl <- marketview::flextable_cell_bold(ftbl, neg_ind, ind, marketview::mvl_green)
+    }
+  }
+  return(ftbl)
+}
+
+#' @rdname flextable_positives
+#' @export ft_positives
+ft_positives <- function(ftbl, col_names = names(ftbl$vals)) {
+  flextable_positives(ftbl, col_names)
+}
 
 #' @rdname flextable_negatives
 #' @export ft_negatives
@@ -365,7 +407,7 @@ ft_negatives <- function(ftbl, col_names = names(ftbl$vals)) {
 #' @param table_length The total width of the FLextable in centimeters
 #'
 #' @export flextable_widths
-flextable_widths <- function(ft, col_widths, table_length = 21.42) {
+flextable_widths <- function(ft, col_widths = rep(1, ft$numcol), table_length = 21.42) {
 
   if (length(col_widths != ft$numcols)) stop("col_widths should be the same length as ft$numcol")
 
@@ -381,6 +423,6 @@ flextable_widths <- function(ft, col_widths, table_length = 21.42) {
 
 #' @rdname flextable_widths
 #' @export ft_widths
-ft_widths <- function(ft, col_widths, table_length = 21.42) {
+ft_widths <- function(ft, col_widths = rep(1, ft$numcol), table_length = 21.42) {
   flextable_widths(ft, col_widths, table_length)
 }
