@@ -244,30 +244,52 @@ output_archive <- function(base_dir = getwd()) {
 
 #' Import the processed data for a project
 #'
-#' @param base_dir The base directory of the project
-#' @param data_name The name that the data object has. Defaults to "project name data.RData"
+#' @param data_dir The directory where the processed data lives
+#' @param r_dir The directory where the processing scripts live
 #'
 #' @return imports the processed data into the global environment
 #' @export data_import
-data_import <- function(base_dir = getwd(), data_name = paste(gsub(".*/(?!$)|/$", "", base_dir, perl = TRUE), "data.RData")) {
-
-  # Construct the data directory
-  data_dir <- file.path(base_dir, "data")
+data_import <- function(data_dir = file.path("data", "processed"), r_dir = file.path("R")) {
 
   # When was the processing script last updated?
-  processing_time <- file.info(file.path(base_dir, "R", paste("1", gsub(".*/(?!$)|/$", "", base_dir, perl = TRUE), "processing.R")))$mtime
+  proc_script <- file.path("R", grep("*.processing\\.R$", dir(r_dir), value = TRUE))
+
+  if (length(proc_script) > 0) processing_time <- file.info(proc_script)$mtime
 
   # When was the data last updated?
-  data_time <- file.info(file.path(data_dir, "processed", paste(gsub(".*/(?!$)|/$", "", base_dir, perl = TRUE), "data.RData")))$mtime
+  data_file <- file.path(data_dir, grep("*.\\.RData$", dir(data_dir), value = TRUE, ignore.case = TRUE))
+  if (length(data_file) == 0) return("No data found. Check that your processed data has the .RData file type.")
+  if (length(proc_script) > 0) data_time <- file.info(data_file)$mtime
+
+  # Warn if there are multiple files in the directory
+  if (length(data_file) > 1) {
+    cat(paste0(length(data_file), " .RData files found in ", crayon::green(data_dir), ". Use load() if you only need to import particular files.\n"))
+  }
 
 
   # Import the data
-  load(file.path(data_dir, "processed", data_name), envir = .GlobalEnv)
+  load_verbose <- function(path) {
+    # Last updated?
+    data_time <- file.info(path)$mtime
 
-  warning(paste("Data processing script last updated", processing_time))
+    short_path <- gsub(paste0(data_dir, "/"), "", path)
 
-  warning(paste("Data last updated", data_time))
+    # tell the user what's happening
+    cat(paste0("Importing ", crayon::green(short_path), " (last updated ", crayon::red(format(data_time, "%H:%M:%S, %a %b %d")), ")\n"))
 
+    # Import the data to the global env
+    load(path, envir = .GlobalEnv)
+  }
+
+  # When was the script updated?
+  cat(paste("Data processing script last updated", crayon::red(format(processing_time, "%H:%M:%S, %a %b %d")), "\n"))
+
+  # Load the processed files
+  data_files <- split(data_file, 1:length(data_file))
+  lapply(data_files, load_verbose)
+
+  # Warn if the script has been updated, but the data hasn't
+  data_time <- min(file.info(data_file)$mtime)
   if (processing_time > data_time) {
     warning("Your processing script has been updated more recently than your data.")
   }
@@ -317,10 +339,19 @@ cagr <- function(iv, fv, length){
 #' @param x A vector of SEQMONTH
 #'
 #' @export parse_seqmonth
-parse_seqmonth <- function(x){
+parse_seqmonth <- function(x) {
   if (unique(nchar(x)) != 6) {
     stop("You should only provide SEQMONTH attributes")
   }
 
   x_date <- as.Date(paste0(x, "01"), format = "%Y%m%d")
+}
+
+#' Parse Date attributes to SEQDAY format
+#'
+#' @param x A vector of dates
+#'
+#' @export to_seqday
+to_seqday <- function(x) {
+  return(as.integer(format(x, "%Y%m%d")))
 }
