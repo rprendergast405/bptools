@@ -1,3 +1,19 @@
+# marketview 0.5.7
+
+# What's New
+- flextable_positives()
+- added more labelling functions such as mdollar_change etc.
+
+# Changes
+- "mcd" colour palette has been updated as per Nik's feeback
+- add_placenames() uses the shadowtext package if it's available. Would recommend installing it
+- data_import() has had an overhaul, it's not more verbose and should be more flexible
+- added an option to set the tolerance in make_mb_df()
+- added more default options to the initialise script from create_project(), which should help with consistency
+
+# Bug Fixes
+- updated tld_customer_data() to avoid the strange Oracle bug
+
 # marketview 0.5.6
 
 # What's New
