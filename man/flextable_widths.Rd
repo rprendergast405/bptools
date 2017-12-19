@@ -5,9 +5,9 @@
 \alias{ft_widths}
 \title{Set the Column Widths of a FlexTable Object}
 \usage{
-flextable_widths(ft, col_widths, table_length = 21.42)
+flextable_widths(ft, col_widths = rep(1, ft$numcol), table_length = 21.42)
 
-ft_widths(ft, col_widths, table_length = 21.42)
+ft_widths(ft, col_widths = rep(1, ft$numcol), table_length = 21.42)
 }
 \arguments{
 \item{ft}{a Flextable created by FlexTable() or marketview::flextable() functions}

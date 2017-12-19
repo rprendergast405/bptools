@@ -22,5 +22,5 @@ A wrapper function for zoom_definintion() which refers to places from mvldata::o
 ggplot()+
 geom_polygon(data = nz_tla_13.df,
 aes(long, lat, group = group, fill = TLA == 76))+
-zoom_place("Auckland")()
+zoom_place("Auckland")
 }

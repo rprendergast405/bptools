@@ -6,7 +6,7 @@
 Creates a new R script with the headers and workflow mapped out in the same
 manner as a standard results scrpt from create_project()}
 \usage{
-create_script(name, project_dir = getwd(), location = "R")
+create_script(name, location = "R")
 }
 \arguments{
 \item{name}{The name for the new R script}

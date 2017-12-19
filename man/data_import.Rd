@@ -4,13 +4,13 @@
 \alias{data_import}
 \title{Import the processed data for a project}
 \usage{
-data_import(base_dir = getwd(), data_name = paste(gsub(".*/(?!$)|/$", "",
-  base_dir, perl = TRUE), "data.RData"))
+data_import(data_dir = file.path("data", "processed"),
+  r_dir = file.path("R"))
 }
 \arguments{
-\item{base_dir}{The base directory of the project}
+\item{data_dir}{The directory where the processed data lives}
 
-\item{data_name}{The name that the data object has. Defaults to "project name data.RData"}
+\item{r_dir}{The directory where the processing scripts live}
 }
 \value{
 imports the processed data into the global environment
