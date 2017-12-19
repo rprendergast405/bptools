@@ -13,7 +13,7 @@
 #' Labelling functions
 #'
 #' @description
-#' More comprehensive versions of \code{\link[scales]} functions for displaying numeric values in human-readable format.
+#' More comprehensive versions of \code{\link{scales}} functions for displaying numeric values in human-readable format.
 #' These functions better display negative values and allow for improved control over decimal places in comparison to the versions from \code{scales}.
 #'
 #' @param x Numeric variable to format
@@ -43,7 +43,7 @@
 #' }
 #' If there are others that you want to be implemented, let me (Bert) know
 #'
-#' @name mvl_labelers
+#' @name mvl_labellers
 NULL
 
 
@@ -52,7 +52,7 @@ NULL
 #' @examples
 #' dollar(1000000)
 #' dollar(c(-2000000, 15000000))
-#' @rdname mvl_labelers
+#' @rdname mvl_labellers
 #' @export dollar
 dollar <- function(x, dp = 0, form = "f", ...){
   paste0(ifelse(x < 0, "-", ""), "$", formatC(abs(x), digits = dp, format = form, big.mark = ",", ...))
@@ -60,7 +60,7 @@ dollar <- function(x, dp = 0, form = "f", ...){
 
 #' @examples
 #' percent(c(-0.20, 0.53))
-#' @rdname mvl_labelers
+#' @rdname mvl_labellers
 #' @export percent
 percent <- function(x, dp = 1, form = "f", ...){
   paste0(formatC(x * 100, digits = dp, format = form, big.mark = ",", ...), "%")
@@ -68,7 +68,7 @@ percent <- function(x, dp = 1, form = "f", ...){
 
 #' @examples
 #' dollar_change(c(-200, 15))
-#' @rdname mvl_labelers
+#' @rdname mvl_labellers
 #' @export dollar_change
 dollar_change <- function(x, dp = 0, form = "f", ...){
   paste0(ifelse(x < 0, "-", ""), ifelse(x > 0, "+", ""), "$", formatC(abs(x), digits = dp, format = form, big.mark = ",", ...))
@@ -76,7 +76,7 @@ dollar_change <- function(x, dp = 0, form = "f", ...){
 
 #' @examples
 #' percent_change(c(-0.20, 0.53))
-#' @rdname mvl_labelers
+#' @rdname mvl_labellers
 #' @export percent_change
 percent_change <- function(x, dp = 1, form = "f", ...){
   paste0(ifelse(x > 0, "+", ""), formatC(x * 100, digits = dp, format = form, big.mark = ",", ...), "%")
@@ -85,7 +85,7 @@ percent_change <- function(x, dp = 1, form = "f", ...){
 
 #' @examples
 #' comma_change(c(-2000000, 15000000))
-#' @rdname mvl_labelers
+#' @rdname mvl_labellers
 #' @export comma_change
 comma_change <- function(x, dp = 0, form = "f", ...){
   paste0(ifelse(x < 0, "-", ""), ifelse(x > 0, "+", ""), formatC(abs(x), digits = dp, format = form, big.mark = ",", ...))
@@ -97,7 +97,7 @@ comma_change <- function(x, dp = 0, form = "f", ...){
 #' @examples
 #' kdollar(1000000)
 #' kdollar(c(-2000000, 15000000))
-#' @rdname mvl_labelers
+#' @rdname mvl_labellers
 #' @export kdollar
 kdollar <- function(x, dp = 0, form = "f", ...){
   paste0(ifelse(x < 0, "-", ""), "$", formatC(abs(x)/1e3, digits = dp, format = form, big.mark = ",", ...), "k")
@@ -106,7 +106,7 @@ kdollar <- function(x, dp = 0, form = "f", ...){
 #' @examples
 #' kdollar(100000)
 #' kdollar(c(-20000, 15000000))
-#' @rdname mvl_labelers
+#' @rdname mvl_labellers
 #' @export kcomma
 kcomma <- function(x, dp = 0, form = "f", ...){
   paste0(ifelse(x < 0, "-", ""), formatC(abs(x)/1e3, digits = dp, format = form, big.mark = ",", ...), "k")
@@ -114,7 +114,7 @@ kcomma <- function(x, dp = 0, form = "f", ...){
 
 #' @examples
 #' kdollar_change(c(-200000, 15000))
-#' @rdname mvl_labelers
+#' @rdname mvl_labellers
 #' @export kdollar_change
 kdollar_change <- function(x, dp = 0, form = "f", ...){
   paste0(ifelse(x < 0, "-", ""), ifelse(x > 0, "+", ""), "$",
@@ -123,7 +123,7 @@ kdollar_change <- function(x, dp = 0, form = "f", ...){
 
 #' @examples
 #' kcomma_change(c(-2000000, 15000000))
-#' @rdname mvl_labelers
+#' @rdname mvl_labellers
 #' @export kcomma_change
 kcomma_change <- function(x, dp = 0, form = "f", ...){
   paste0(ifelse(x < 0, "-", ""), ifelse(x > 0, "+", ""),
@@ -136,7 +136,7 @@ kcomma_change <- function(x, dp = 0, form = "f", ...){
 #' @examples
 #' mdollar(1000000)
 #' mdollar(c(-2000000, 15000000))
-#' @rdname mvl_labelers
+#' @rdname mvl_labellers
 #' @export mdollar
 mdollar <- function(x, dp = 0, form = "f", ...){
   paste0(ifelse(x < 0, "-", ""), "$", formatC(abs(x)/1e6, digits = dp, format = form, big.mark = ",", ...), "M")
@@ -145,7 +145,7 @@ mdollar <- function(x, dp = 0, form = "f", ...){
 #' @examples
 #' mdollar(100000)
 #' mdollar(c(-20000, 15000000))
-#' @rdname mvl_labelers
+#' @rdname mvl_labellers
 #' @export mcomma
 mcomma <- function(x, dp = 0, form = "f", ...){
   paste0(ifelse(x < 0, "-", ""), formatC(abs(x)/1e6, digits = dp, format = form, big.mark = ",", ...), "M")
@@ -153,7 +153,7 @@ mcomma <- function(x, dp = 0, form = "f", ...){
 
 #' @examples
 #' mdollar_change(c(-2000000, 150000))
-#' @rdname mvl_labelers
+#' @rdname mvl_labellers
 #' @export mdollar_change
 mdollar_change <- function(x, dp = 0, form = "f", ...){
   paste0(ifelse(x < 0, "-", ""), ifelse(x > 0, "+", ""), "$",
@@ -162,7 +162,7 @@ mdollar_change <- function(x, dp = 0, form = "f", ...){
 
 #' @examples
 #' mcomma_change(c(-2000000, 15000000))
-#' @rdname mvl_labelers
+#' @rdname mvl_labellers
 #' @export mcomma_change
 mcomma_change <- function(x, dp = 0, form = "f", ...){
   paste0(ifelse(x < 0, "-", ""), ifelse(x > 0, "+", ""),
@@ -175,7 +175,7 @@ mcomma_change <- function(x, dp = 0, form = "f", ...){
 #' @examples
 #' bdollar(1000000)
 #' bdollar(c(-2000000, 15000000))
-#' @rdname mvl_labelers
+#' @rdname mvl_labellers
 #' @export bdollar
 bdollar <- function(x, dp = 0, form = "f", ...){
   paste0(ifelse(x < 0, "-", ""), "$", formatC(abs(x)/1e9, digits = dp, format = form, big.mark = ",", ...), "B")
@@ -184,7 +184,7 @@ bdollar <- function(x, dp = 0, form = "f", ...){
 #' @examples
 #' bdollar(100000)
 #' bdollar(c(-20000, 15000000))
-#' @rdname mvl_labelers
+#' @rdname mvl_labellers
 #' @export bcomma
 bcomma <- function(x, dp = 0, form = "f", ...){
   paste0(ifelse(x < 0, "-", ""), formatC(abs(x)/1e9, digits = dp, format = form, big.mark = ",", ...), "B")
@@ -192,7 +192,7 @@ bcomma <- function(x, dp = 0, form = "f", ...){
 
 #' @examples
 #' bdollar_change(c(-2000000, 150000))
-#' @rdname mvl_labelers
+#' @rdname mvl_labellers
 #' @export bdollar_change
 bdollar_change <- function(x, dp = 0, form = "f", ...){
   paste0(ifelse(x < 0, "-", ""), ifelse(x > 0, "+", ""), "$",
@@ -201,7 +201,7 @@ bdollar_change <- function(x, dp = 0, form = "f", ...){
 
 #' @examples
 #' bcomma_change(c(-2000000, 15000000))
-#' @rdname mvl_labelers
+#' @rdname mvl_labellers
 #' @export bcomma_change
 bcomma_change <- function(x, dp = 0, form = "f", ...){
   paste0(ifelse(x < 0, "-", ""), ifelse(x > 0, "+", ""),
