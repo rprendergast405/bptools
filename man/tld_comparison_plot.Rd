@@ -5,7 +5,7 @@
 \title{Comparison Plot of TLD Item Performance}
 \usage{
 tld_comparison_plot(con, product_tbl, group_name, align_weeks = FALSE,
-  index = FALSE)
+  index = FALSE, promo_week = TRUE)
 }
 \arguments{
 \item{con}{ODBC connection to bespoke}
