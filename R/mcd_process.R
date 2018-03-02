@@ -156,6 +156,18 @@ mcd_process <- function(dat){
     }
   }
 
+
+  if ("BUNCH_NAMEX" %in% colnames(dat)) {
+    if (is.character(dat[, "BUNCH_NAMEX"])) {
+      dat[dat[,"BUNCH_NAMEX"] == "McDonalds NZ", "BUNCH_NAMEX"] <- "McDonald's"
+
+      dat[,"BUNCH_NAMEX"] <- factor(dat[["BUNCH_NAMEX"]], levels = c("McDonald's", "QSR Competitors",
+                                                                     "Independent Takeaway", "Coffee Cafes Bakeries", "Restaurants"))
+
+      dat[, "QSR"] <- grepl("McD|QSR", dat[["BUNCH_NAMEX"]])
+    }
+  }
+
   #Format HVC
   if ("CUST_TYPE" %in% toupper(colnames(dat)) & !("SHVC_CUST_TYPE" %in% toupper(colnames(dat)))) {
     if (is.character(dat[, "CUST_TYPE"])) {
