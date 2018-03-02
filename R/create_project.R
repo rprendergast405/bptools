@@ -28,7 +28,7 @@ create_project <- function(project_name,
                            sub_dirs = NULL) {
 
   # The default sub-directories that should be created by the function
-  base_sub_dirs <- c("data", "data/processed", "R", "R/functions", "output", "output/tables", "output/figures", "Report")
+  base_sub_dirs <- c("data", "data/processed", "R", "R/functions", "output", "output/tables", "output/figures", "Report", "templates")
 
   # The root directory for the project takes the project name
   if (!is.null(within)) {
@@ -93,7 +93,7 @@ LaTeX: pdfLaTeX
   create_run_script(project_name = project_name, root_dir = root_dir)
   cat(" Done\n")
 
-  cat(paste0("  R/rmd/", project_name, " EDA.Rmd ..."))
+  cat(paste0("  ", project_name, ".Rmd ..."))
   create_eda_script(project_name = project_name, root_dir = root_dir)
   cat(" Done\n")
 
@@ -101,15 +101,21 @@ LaTeX: pdfLaTeX
   # create_sp_fn(root_dir = root_dir)
   # cat(" Done\n")
 
-  cat(paste0("Copying mvl_template.pptx to ", root_dir, " ..."))
+  cat(paste0("Copying templates to ", file.path(root_dir, "templates"), " ..."))
   file.copy(from = system.file("extdata", "mvl_template.pptx", package = "marketview"),  #file.path("M:/R/mvl_template.pptx"),
-            to = root_dir)
+            to = file.path(root_dir, "templates"))
 
   file.copy(from = system.file("extdata", "mvl_template_old.pptx", package = "marketview"), #file.path("M:/R/mvl_template_old.pptx"),
-            to = root_dir)
+            to = file.path(root_dir, "templates"))
 
   file.copy(from = system.file("extdata", "mcd_template.pptx", package = "marketview"), #file.path("M:/R/mvl_template_old.pptx"),
-            to = root_dir)
+            to = file.path(root_dir, "templates"))
+
+  file.copy(from = system.file("extdata", "Generic Banner.png", package = "marketview"), #file.path("M:/R/mvl_template_old.pptx"),
+            to = file.path(root_dir, "templates"))
+
+  file.copy(from = system.file("extdata", "mvlstyle.css", package = "marketview"), #file.path("M:/R/mvl_template_old.pptx"),
+            to = file.path(root_dir, "templates"))
   cat(" Done\n")
 
   cat("Project created successfully\n")
@@ -182,6 +188,14 @@ scale_colour_continuous <- scale_colour_mvlc
 scale_fill_discrete <- partial(scale_fill_mvl, palette = \"mcd\")
 scale_fill_continuous <- scale_fill_mvlc
 
+# make geom_col() reverse stack by default ----
+geom_col <- function(mapping = NULL, data = NULL, position = position_stack(reverse = TRUE), ...,
+                     width = NULL, na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) {
+  ggplot2::geom_col(mapping = mapping, data = data, position = position, ... = ...,
+                    width = width, na.rm = na.rm, show.legend = show.legend, inherit.aes = inherit.aes)
+}
+
+
 grDevices::windowsFonts(calb = \"Calibri Bold\",
                         cal = \"Calibri\",
                         hn = \"Helvetica Neue\",
@@ -200,7 +214,7 @@ print(x, ..., n = NULL, width = NULL)
 }
 # Set stringsAsFactors to FALSE
 options(\"stringsAsFactors\" = FALSE,
-        max.print\" = 200)
+        \"max.print\" = 200)
 
 library(httr)
 options(RCurlOptions = list(proxy = \"proxy.private.marketview.co.nz:3128\"))
@@ -315,14 +329,24 @@ section_num <- 1
 #' @return Creates a script within the directory specified.
 create_eda_script <- function(project_name, root_dir) {
   eda_text <- c("---
-title: \"", project_name, " EDA\"
-output: html_document
-editor_options:
-  chunk_output_type: console
+title: \"\"
+output:
+  html_document:
+    css: templates/mvlstyle.css
+    toc: TRUE
+    toc_float: TRUE
+    number_sections: TRUE
+  editor_options:
+    chunk_output_type: console
 ---
 
+![](templates/Generic Banner.png)
+
+# **", project_name, "** {-}
+*`r  gsub(\"^0\", \"\", format(Sys.Date(), \"%d %B, %Y\"))`*
+
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(fig.width = 12, fig.height = 8, fig.path = 'Figs/',
+knitr::opts_chunk$set(fig.width = 8, fig.height = 5, fig.path = 'output/figures',
                       echo = FALSE, warning = FALSE, message = FALSE)
 ```
 
@@ -342,7 +366,7 @@ data_import()
 
 ")
 
-  cat(paste(eda_text, collapse = ""), file = file.path(root_dir, paste0(project_name, " EDA.Rmd")))
+  cat(paste(eda_text, collapse = ""), file = file.path(root_dir, paste0(project_name, ".Rmd")))
 
 }
 
@@ -390,7 +414,7 @@ data_import()
 # 2. COMPILE THE REPORT ---------------------------------------------------------
 
 # create the report object ----
-ppt_report <- pptx(\" \", \"mvl_template.pptx\")
+ppt_report <- pptx(\" \", \"templates/mvl_template.pptx\")
 
 
 # Add a title slide ----
