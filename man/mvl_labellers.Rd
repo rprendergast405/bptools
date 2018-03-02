@@ -21,44 +21,46 @@
 \alias{bcomma_change}
 \title{Labelling functions}
 \usage{
-dollar(x, dp = 0, form = "f", ...)
+dollar(x, dp = 2, fill = "", form = "f", ...)
 
-percent(x, dp = 1, form = "f", ...)
+percent(x, dp = 1, fill = "", form = "f", ...)
 
-dollar_change(x, dp = 0, form = "f", ...)
+dollar_change(x, dp = 2, fill = "", form = "f", ...)
 
-percent_change(x, dp = 1, form = "f", ...)
+percent_change(x, dp = 1, fill = "", form = "f", ...)
 
-comma_change(x, dp = 0, form = "f", ...)
+comma_change(x, dp = 0, fill = "", form = "f", ...)
 
-kdollar(x, dp = 0, form = "f", ...)
+kdollar(x, dp = 1, fill = "", form = "f", ...)
 
-kcomma(x, dp = 0, form = "f", ...)
+kcomma(x, dp = 0, fill = "", form = "f", ...)
 
-kdollar_change(x, dp = 0, form = "f", ...)
+kdollar_change(x, dp = 0, fill = "", form = "f", ...)
 
-kcomma_change(x, dp = 0, form = "f", ...)
+kcomma_change(x, dp = 0, fill = "", form = "f", ...)
 
-mdollar(x, dp = 0, form = "f", ...)
+mdollar(x, dp = 1, fill = "", form = "f", ...)
 
-mcomma(x, dp = 0, form = "f", ...)
+mcomma(x, dp = 0, fill = "", form = "f", ...)
 
-mdollar_change(x, dp = 0, form = "f", ...)
+mdollar_change(x, dp = 1, fill = "", form = "f", ...)
 
-mcomma_change(x, dp = 0, form = "f", ...)
+mcomma_change(x, dp = 0, fill = "", form = "f", ...)
 
-bdollar(x, dp = 0, form = "f", ...)
+bdollar(x, dp = 1, fill = "", form = "f", ...)
 
-bcomma(x, dp = 0, form = "f", ...)
+bcomma(x, dp = 0, fill = "", form = "f", ...)
 
-bdollar_change(x, dp = 0, form = "f", ...)
+bdollar_change(x, dp = 1, fill = "", form = "f", ...)
 
-bcomma_change(x, dp = 0, form = "f", ...)
+bcomma_change(x, dp = 0, fill = "", form = "f", ...)
 }
 \arguments{
 \item{x}{Numeric variable to format}
 
 \item{dp}{The number of decimal points to display}
+
+\item{fill}{If there are missing values, how should they be displayed?}
 
 \item{...}{arguments passed to \code{format}.}
 }

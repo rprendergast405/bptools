@@ -4,7 +4,7 @@
 \alias{make_mb_df}
 \title{Create a data.frame of meshblock boundaries}
 \usage{
-make_mb_df(mb_map, mbs, tol = 25)
+make_mb_df(mb_map, mbs, tol = 25, agg = FALSE, agg_name = "aggregated")
 }
 \arguments{
 \item{mbs}{subset of the meshblocks to get}

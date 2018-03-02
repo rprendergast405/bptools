@@ -5,7 +5,7 @@
 \title{Create a new R Project.}
 \usage{
 mcd_post_campaign(campaign_name,
-  base_dir = "M:/clients/mcdonalds/2017/Business Insights/Contract Work/PROMO Windows Post Analyses",
+  base_dir = "M:/clients/mcdonalds/2018/Business Insights/Contract Work/POST CAMPAIGN ANALYSES",
   within = NULL, sub_dirs = NULL)
 }
 \arguments{

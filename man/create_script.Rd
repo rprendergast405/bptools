@@ -12,8 +12,6 @@ create_script(name, location = "R")
 \item{name}{The name for the new R script}
 
 \item{location}{Directory where the script should be created - default is the /R directory}
-
-\item{project_name}{Name of the project (should always be the current working directory)}
 }
 \description{
 Create a new R script

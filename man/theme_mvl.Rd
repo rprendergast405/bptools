@@ -4,7 +4,7 @@
 \alias{theme_mvl}
 \title{Marketview ggplot theme.}
 \usage{
-theme_mvl(base_size = 11, base_family = "hnb", plain_family = "hn",
+theme_mvl(base_size = 13, base_family = "hn", plain_family = "hn",
   text_colour = marketview::mvl_text)
 }
 \arguments{
