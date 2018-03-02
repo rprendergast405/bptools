@@ -1,3 +1,19 @@
+# marketview 0.5.8
+
+# What's New
+- scale_reorder(), from David Robinson
+- create_rmd() function for making a new markdown script with the default headers etc.
+
+# Changes
+- Updates to create_project(): added a /templates directory and updated the default markdown to be a bit fancier
+- option in make_cau_df and make_mb_df to aggregate the polygons - should be useful for making catchment outlines
+- BUNCH_NAMEX is now treated with mcd_process()
+- theme_mvl() update, no longer uses a bold font as the default
+
+# Bug Fixes
+- data_import() doesn't crash any more if there is no processing script or data. Just prints a message instead
+- tld_customer_data() drops tables on.exit(), so shouldn't litter the DB with tables if it crashes
+
 # marketview 0.5.7
 
 # What's New
