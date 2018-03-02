@@ -60,12 +60,29 @@ data_import <- function(data_dir = file.path("data", "processed"), r_dir = file.
   # When was the processing script last updated?
   proc_script <- file.path("R", grep("*.processing\\.R$", dir(r_dir), value = TRUE))
 
-  if (length(proc_script) > 0) processing_time <- file.info(proc_script)$mtime
-
   # When was the data last updated?
   data_file <- file.path(data_dir, grep("*.\\.RData$", dir(data_dir), value = TRUE, ignore.case = TRUE))
   if (length(data_file) == 0) return("No data found. Check that your processed data has the .RData file type.")
   if (length(proc_script) > 0) data_time <- file.info(data_file)$mtime
+
+
+
+  if (length(proc_script) > 0) processing_time <- file.info(proc_script)$mtime else processing_time <- NA
+
+  if (is.na(processing_time)) {
+    warning("There's no processing script.")
+  } else {
+
+    # When was the script updated?
+    cat(paste("Data processing script last updated", crayon::red(format(processing_time, "%H:%M:%S, %a %b %d")), "\n"))
+
+    # Warn if the script has been updated, but the data hasn't
+    data_time <- min(file.info(data_file)$mtime)
+    if (processing_time > data_time) {
+      warning("Your processing script has been updated more recently than your data.")
+    }
+
+  }
 
   # Warn if there are multiple files in the directory
   if (length(data_file) > 1) {
@@ -87,18 +104,12 @@ data_import <- function(data_dir = file.path("data", "processed"), r_dir = file.
     load(path, envir = .GlobalEnv)
   }
 
-  # When was the script updated?
-  cat(paste("Data processing script last updated", crayon::red(format(processing_time, "%H:%M:%S, %a %b %d")), "\n"))
 
   # Load the processed files
   data_files <- split(data_file, 1:length(data_file))
   lapply(data_files, load_verbose)
 
-  # Warn if the script has been updated, but the data hasn't
-  data_time <- min(file.info(data_file)$mtime)
-  if (processing_time > data_time) {
-    warning("Your processing script has been updated more recently than your data.")
-  }
+
 
 }
 
