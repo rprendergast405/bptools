@@ -1,0 +1,44 @@
+.skin-blue .main-header .navbar {
+  background-color: #78aa42;
+}
+.skin-blue .main-header .logo {
+  background-color: #78aa42;
+}
+.skin-blue .main-header .logo:hover {
+  background-color: #78aa42;
+}
+.main-header .logo {
+  font-family: "Helvetica Neue", sans-serif;
+  font-weight: bold;
+  font-size: 24px;
+}
+h3 {
+  font-family: "Helvetica Neue", sans-serif;
+  line-height: 1.1;
+}
+
+.tocify-item.list-group-item.active {
+  background-color:  #78aa42;
+  border-bottom-color:  #78aa42;
+}
+
+
+.nav-pills>li.active>a,
+.nav-pills>li.active>a:focus,
+.nav-pills>li.active>a:hover {
+   background-color: #00B9F2;
+}
+
+
+.nav-pills>li>a {
+    border-radius: 4px;
+}
+.nav>li>a {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+}
+a {
+    color: #00B9F2;
+    text-decoration: none;
+}
