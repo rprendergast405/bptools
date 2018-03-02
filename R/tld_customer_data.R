@@ -84,7 +84,7 @@ WHERE seqday BETWEEN {start_day} AND {end_day}")
   tld_final_qry <- glue::glue("create table mcd_cust{datetime}_5 compress nologging as
 select a.trans_id, a.seqday, a.store_id, a.menu_item_no, a.register_no,
 a.pos_type, mvcore.mcd_aggtime2(a.end_time) AS daypart_report_no, a.end_time,
-a.total_amount, a.quantity, a.item_price, a.item_type,
+a.total_amount, a.num_items AS total_items, a.quantity, a.item_price, a.item_type, a.base_plu,
 c.source_id, c.agex, c.gender, c.meshblock, c.cust_type
 from mcd.mcd_tld_data a
 inner join MCD.TRANS_CUSTOMER d on a.trans_id = d.trans_id
@@ -109,22 +109,26 @@ WHERE seqday BETWEEN {start_day} AND {end_day}")
   cat("Getting Final Data (6 of 6)\n")
   RODBC::sqlQuery(con, tld_final_qry)
 
-  # Drop the tables and return the data
-  cat("Dropping Tables\n")
-
-  RODBC::sqlDrop(con, toupper(glue::glue("mcd_cust{datetime}")))
-  RODBC::sqlDrop(con, toupper(glue::glue("mcd_cust{datetime}_2")))
-  RODBC::sqlDrop(con, toupper(glue::glue("mcd_cust{datetime}_3")))
-  RODBC::sqlDrop(con, toupper(glue::glue("mcd_cust{datetime}_4")))
-  tld_cust_data <- dplyr::as.tbl(sqlQuery(con, glue::glue("SELECT * FROM mcd_cust{datetime}_5")))
   if (keep_table) {
     cat("Saving Final Data Table\n")
     keep_qry <- glue::glue("CREATE TABLE {toupper(tablename)} COMPRESS NOLOGGING AS
                             SELECT * FROM mcd_cust{datetime}_5")
     RODBC::sqlQuery(DB, keep_qry)
   }
-  RODBC::sqlDrop(con, toupper(glue::glue("mcd_cust{datetime}_5")))
-  RODBC::sqlDrop(con, toupper(glue::glue("{tmp_tblname}")))
+
+  # get the final matched data
+  tld_cust_data <- dplyr::as.tbl(sqlQuery(con, glue::glue("SELECT * FROM mcd_cust{datetime}_5")))
+
+  # Drop the tables and return the data
+  on.exit({
+    cat("Dropping Tables\n")
+    RODBC::sqlDrop(con, toupper(glue::glue("mcd_cust{datetime}")))
+    RODBC::sqlDrop(con, toupper(glue::glue("mcd_cust{datetime}_2")))
+    RODBC::sqlDrop(con, toupper(glue::glue("mcd_cust{datetime}_3")))
+    RODBC::sqlDrop(con, toupper(glue::glue("mcd_cust{datetime}_4")))
+    RODBC::sqlDrop(con, toupper(glue::glue("mcd_cust{datetime}_5")))
+    RODBC::sqlDrop(con, toupper(glue::glue("{tmp_tblname}")))
+  })
 
 
 
