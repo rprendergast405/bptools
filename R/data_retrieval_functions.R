@@ -159,10 +159,22 @@ return(dat)
 #' @export make_mb_df
 #'
 #' @import sp
-make_mb_df <- function(mb_map, mbs, tol = 25){
+make_mb_df <- function(mb_map, mbs, tol = 25, agg = FALSE, agg_name = "aggregated"){
   # simplify and fortify the data
   mb_df <- mb_map %>%
-    subset(MB %in% mbs) %>%
+    subset(MB %in% mbs)
+
+  if (agg) {
+    mb_df$agg <- agg_name
+
+    mb_df <- mb_df %>%
+      sf::st_as_sf() %>%
+      aggregate(., list(.$agg), "first") %>%
+      sf::st_as_sf(sf_column_name = geometry) %>%
+      as("Spatial")
+    }
+
+  mb_df <- mb_df %>%
     rgeos::gSimplify(tol = tol, topologyPreserve = TRUE) %>%
     ggplot2::fortify(region = "id") %>%
     dplyr::left_join(mb_map@data, by = "id") %>%
@@ -182,20 +194,31 @@ make_mb_df <- function(mb_map, mbs, tol = 25){
 #' @export make_cau_df
 #'
 #' @import sp
-make_cau_df <- function(cau_map, caus) {
+make_cau_df <- function(cau_map, caus, tol = 25, agg = FALSE, agg_name = "aggregated") {
 
   cau_df <- cau_map %>%
-    subset(CAU %in% caus) %>%
-    rgeos::gSimplify(tol = 25, topologyPreserve = TRUE) %>%
+    subset(CAU %in% caus)
+
+  if (agg) {
+    cau_df$agg <- agg_name
+
+    cau_df <- cau_df %>%
+      sf::st_as_sf() %>%
+      aggregate(., list(.$agg), "first") %>%
+      sf::st_as_sf(sf_column_name = geometry) %>%
+      as("Spatial")
+  }
+
+  cau_df <- cau_df %>%
+    rgeos::gSimplify(tol = tol, topologyPreserve = TRUE) %>%
     ggplot2::fortify(region = "id") %>%
     dplyr::left_join(cau_map@data, by = "id") %>%
-    dplyr::select(long, lat, group, CAU, CAU_NAME) %>%
+    dplyr::select(long, lat, group, hole, CAU, CAU_NAME) %>%
     dplyr::mutate(CAU = as.integer(CAU)) %>%
     dplyr::distinct()
 
   return(cau_df)
 }
-
 
 
 #' Parse a String Vector for SQL Queries
