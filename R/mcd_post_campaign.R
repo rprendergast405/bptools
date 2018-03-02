@@ -23,12 +23,12 @@
 #' @return Logical, indicating that the project has been successfully created
 #' @export mcd_post_campaign
 mcd_post_campaign <- function(campaign_name,
-                              base_dir = "M:/clients/mcdonalds/2017/Business Insights/Contract Work/PROMO Windows Post Analyses",
+                              base_dir = "M:/clients/mcdonalds/2018/Business Insights/Contract Work/POST CAMPAIGN ANALYSES",
                               within = NULL,
                               sub_dirs = NULL) {
 
   # The default sub-directories that should be created by the function
-  base_sub_dirs <- c("data", "data/processed", "R", "R/rmd", "R/functions", "output", "output/tables", "output/figures", "Report")
+  base_sub_dirs <- c("data", "data/processed", "R", "R/functions", "output", "output/tables", "output/figures", "Report", "templates")
 
   # The root directory for the project takes the project name
   if (!is.null(within)) {
@@ -93,15 +93,21 @@ LaTeX: pdfLaTeX
   create_eda_script(project_name = campaign_name, root_dir = root_dir)
   cat(" Done\n")
 
-  cat(paste0("Copying mvl_template.pptx to ", root_dir, " ..."))
+  cat(paste0("Copying templates to ", file.path(root_dir, "templates"), " ..."))
   file.copy(from = system.file("extdata", "mvl_template.pptx", package = "marketview"),  #file.path("M:/R/mvl_template.pptx"),
-            to = root_dir)
+            to = file.path(root_dir, "templates"))
 
   file.copy(from = system.file("extdata", "mvl_template_old.pptx", package = "marketview"), #file.path("M:/R/mvl_template_old.pptx"),
-            to = root_dir)
+            to = file.path(root_dir, "templates"))
 
-  file.copy(from = system.file("extdata", "mcd_template.pptx", package = "marketview"),
-            to = root_dir)
+  file.copy(from = system.file("extdata", "mcd_template.pptx", package = "marketview"), #file.path("M:/R/mvl_template_old.pptx"),
+            to = file.path(root_dir, "templates"))
+
+  file.copy(from = system.file("extdata", "Generic Banner.png", package = "marketview"), #file.path("M:/R/mvl_template_old.pptx"),
+            to = file.path(root_dir, "templates"))
+
+  file.copy(from = system.file("extdata", "mvlstyle.css", package = "marketview"), #file.path("M:/R/mvl_template_old.pptx"),
+            to = file.path(root_dir, "templates"))
   cat(" Done\n")
 
   cat(paste0("Copying example_items.csv to ", root_dir, "/data ..."))
@@ -1199,22 +1205,21 @@ ppt_report %<>%
 
 
 # Do the item level findings ----
-for (item_group in unique(promo_items$group)) {
+for (product_group in unique(promo_items$item_group)) {
 
   items <- promo_items %>%
-    filter(group == item_group)
+    filter(group == product_group)
 
   item_data <- promo_item_data %>%
-    filter(group == item_group)
+    filter(group == product_group)
 
   # AWU plot ----
-  p <- tld_comparison_plot(items %>% rename(item = group, group = Item),
-                           group_name = item_group, con = DB) +
+  p <- tld_comparison_plot(items, group_name = product_group, con = DB) +
     scale_colour_mvl(palette = \"mcd\")
 
   ppt_report %<>%
     addSlide(\"Wide Picture Brief\") %>%
-    addTitle(paste(item_group, \"AWU Sales\")) %>%
+    addTitle(paste(product_group, \"AWU Sales\")) %>%
     addPlot(function() print(p), vector.graphic = FALSE)
 
   # Age & Gender ----
@@ -1229,8 +1234,8 @@ for (item_group in unique(promo_items$group)) {
 
   ppt_report %<>%
     addSlide(\"Table\") %>%
-    addTitle(paste(item_group, \"Customers Age & Gender\")) %>%
-    addParagraph(paste(item_group, \"Customers Age & Gender\")) %>%
+    addTitle(paste(product_group, \"Customers Age & Gender\")) %>%
+    addParagraph(paste(product_group, \"Customers Age & Gender\")) %>%
     addFlexTable(cust_ftbl)
 
   # Daypart ----
@@ -1241,8 +1246,8 @@ for (item_group in unique(promo_items$group)) {
 
   ppt_report %<>%
     addSlide(\"Table\") %>%
-    addTitle(paste(item_group, \"Customers by Daypart\")) %>%
-    addParagraph(paste(item_group, \"Customers by Daypart\")) %>%
+    addTitle(paste(product_group, \"Customers by Daypart\")) %>%
+    addParagraph(paste(product_group, \"Customers by Daypart\")) %>%
     addFlexTable(daypart_ftbl)
 
 # Region ----
@@ -1252,8 +1257,8 @@ for (item_group in unique(promo_items$group)) {
 
   ppt_report %<>%
     addSlide(\"Table\") %>%
-    addTitle(paste(item_group, \"Customers by Region\")) %>%
-    addParagraph(paste(item_group, \"Customers by Region\")) %>%
+    addTitle(paste(product_group, \"Customers by Region\")) %>%
+    addParagraph(paste(product_group, \"Customers by Region\")) %>%
     addFlexTable(region_ftbl)
 
   # POS ----
@@ -1263,8 +1268,8 @@ for (item_group in unique(promo_items$group)) {
 
   ppt_report %<>%
     addSlide(\"Table\") %>%
-    addTitle(paste(item_group, \"POS Types\")) %>%
-    addParagraph(paste(item_group, \"POS Types\")) %>%
+    addTitle(paste(product_group, \"POS Types\")) %>%
+    addParagraph(paste(product_group, \"POS Types\")) %>%
     addFlexTable(pos_ftbl)
 
 }
