@@ -29,8 +29,8 @@ grDevices::windowsFonts(calb = "Calibri Bold",
 #' library(ggplot2)
 #' p <- ggplot(data.frame(x = 1:5, y = 1:5)) + geom_point(aes(x, y))
 #' p + theme_mvl()
-theme_mvl <- function(base_size = 11, base_family = "hnb", plain_family = "hn", text_colour = marketview::mvl_text) {
-  if(!all(c("hn", "hnb") %in% names(grDevices::windowsFonts()))) {
+theme_mvl <- function(base_size = 13, base_family = "hn", plain_family = "hn", text_colour = marketview::mvl_text) {
+  if (!all(c("hn", "hnb") %in% names(grDevices::windowsFonts()))) {
     grDevices::windowsFonts(hn = "Helvetica Neue",
                             hnb = "Helvetica Neue Bold")
 
@@ -51,7 +51,7 @@ theme_mvl <- function(base_size = 11, base_family = "hnb", plain_family = "hn", 
                                                        debug = FALSE),
 
 
-                          legend.text = ggplot2::element_text(size = base_size, face = "plain", family = plain_family),
+                          legend.text = ggplot2::element_text(size = round(base_size * 0.9), face = "plain", family = plain_family),
                           legend.title = ggplot2::element_blank(),
                           legend.position = "top",
                           legend.direction = "horizontal",
@@ -63,7 +63,7 @@ theme_mvl <- function(base_size = 11, base_family = "hnb", plain_family = "hn", 
                           plot.title = ggplot2::element_text(size = round(base_size * 1.5), hjust = 0),
                           plot.margin = grid::unit(c(0.1, 0.1, 0.1, 0.1), "cm"),
 
-                          plot.caption = ggplot2::element_text(size = round(base_size * 0.9), family = plain_family, hjust = 1)
+                          plot.caption = ggplot2::element_text(size = round(base_size * 0.85), family = plain_family, hjust = 1)
                         )
   )
 }
@@ -389,30 +389,25 @@ zoom_definition <- function(shp_dat, x = 'long', y = 'lat', margin = 0, expand =
   centre_point <- c(mean(c(max(shp_dat[[x]]), min(shp_dat[[x]]))), mean(c(max(shp_dat[[y]]), min(shp_dat[[y]]))))
 
   #Calculate the longest dimension, x or y
-  x_length <- max(shp_dat[[x]]) - min(shp_dat[[x]])
-  y_length <- max(shp_dat[[y]]) - min(shp_dat[[y]])
+  x_length <- max(shp_dat[[x]]) - min(shp_dat[[x]]) + margin * 2
+  y_length <- max(shp_dat[[y]]) - min(shp_dat[[y]]) + margin * 2
 
-  # find the length to add to the centre point
-  search_space <- seq(min(x_length, x_length * ratio, y_length, y_length * ratio), max(x_length, x_length * ratio, y_length, y_length * ratio), length.out = 10000)
+  max_x <- max(x_length, x_length / ratio, y_length * ratio, y_length)
+  min_x <- min(x_length, x_length / ratio, y_length * ratio, y_length)
 
-  x_dim <- (min(search_space[search_space * ratio >= x_length & search_space >= y_length]) + margin) * ratio / 2
+  search_space <- seq(min_x - 100, max_x + 100, length.out = 100000)
+
+  x_dim <- min(search_space[search_space >= x_length & (search_space / ratio) >= y_length])
   y_dim <- x_dim / ratio
 
-
-
-
   #Calculate the box coordinates
-  max_coords <- centre_point + c(x_dim, y_dim)
-  min_coords <- centre_point - c(x_dim, y_dim)
+  max_coords <- centre_point + c(x_dim, y_dim) / 2
+  min_coords <- centre_point - c(x_dim, y_dim) / 2
 
   #Function to apply the zoom
-  #zoom_fn <- function(){
   ggplot2::coord_fixed(xlim = c(min_coords[1], max_coords[1]),
                        ylim = c(min_coords[2], max_coords[2]),
                        expand = expand)
-  #}
-
-  #return(zoom_fn)
 
 }
 
@@ -445,6 +440,9 @@ zoom_place <- function(place_name, margin = 20000, expand = FALSE, ratio = 1) {
     warning(paste("Zoom fn based on", place_name))
   }
 
+  if (ratio <= 0) {
+    stop("You can't have a plot with a negative aspect ratio. 'ratio' must be greater than 0")
+  }
 
   place_df <- mvldata::osm_places.df[mvldata::osm_places.df$name %in% place_name, ]
 
