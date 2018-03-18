@@ -119,6 +119,17 @@ WHERE seqday BETWEEN {start_day} AND {end_day}")
   # get the final matched data
   tld_cust_data <- dplyr::as.tbl(sqlQuery(con, glue::glue("SELECT * FROM mcd_cust{datetime}_5")))
 
+  # Add accurate sales and quantities for aggregating
+  tld_cust_data <- dplyr::mutate(
+    tld_cust_data,
+    quantity = dplyr::case_when(ITEM_TYPE == 5 ~ -QUANTITY,
+                                ITEM_TYPE == 49 ~ 0L,
+                                TRUE ~ QUANTITY),
+    sales = dplyr::case_when(ITEM_TYPE == 5 ~ -QUANTITY * ITEM_PRICE,
+                             ITEM_TYPE == 49 ~ -QUANTITY * ITEM_PRICE,
+                             TRUE ~ QUANTITY * ITEM_PRICE)
+  )
+
   # Drop the tables and return the data
   on.exit({
     cat("Dropping Tables\n")
