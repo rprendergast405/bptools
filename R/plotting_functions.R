@@ -29,7 +29,7 @@ grDevices::windowsFonts(calb = "Calibri Bold",
 #' library(ggplot2)
 #' p <- ggplot(data.frame(x = 1:5, y = 1:5)) + geom_point(aes(x, y))
 #' p + theme_mvl()
-theme_mvl <- function(base_size = 13, base_family = "hn", plain_family = "hn", text_colour = marketview::mvl_text) {
+theme_mvl <- function(base_size = 13, base_family = "hnb", plain_family = "hn", text_colour = marketview::mvl_text) {
   if (!all(c("hn", "hnb") %in% names(grDevices::windowsFonts()))) {
     grDevices::windowsFonts(hn = "Helvetica Neue",
                             hnb = "Helvetica Neue Bold")
@@ -37,9 +37,9 @@ theme_mvl <- function(base_size = 13, base_family = "hn", plain_family = "hn", t
   }
 
 
-  ggplot2::`%+replace%`(ggplot2::theme_minimal(base_size = base_size, base_family = base_family),
+  ggplot2::`%+replace%`(ggplot2::theme_minimal(base_size = base_size, base_family = plain_family),
                         ggplot2::theme(
-                          text = ggplot2::element_text(family = base_family,
+                          text = ggplot2::element_text(family = plain_family,
                                                        face = "plain",
                                                        colour = text_colour,
                                                        size = base_size,
@@ -59,6 +59,8 @@ theme_mvl <- function(base_size = 13, base_family = "hn", plain_family = "hn", t
 
                           panel.grid.minor.x = ggplot2::element_blank(),
                           panel.grid.minor.y = ggplot2::element_blank(),
+                          panel.spacing = unit(1, "cm"),
+                          strip.text = element_text(family = base_family),
 
                           plot.title = ggplot2::element_text(size = round(base_size * 1.5), hjust = 0),
                           plot.margin = grid::unit(c(0.1, 0.1, 0.1, 0.1), "cm"),
@@ -502,46 +504,52 @@ add_water <- function(rivers = TRUE, inland = TRUE, extra = TRUE,
                       fill = mvl_half_teal, colour = mvl_teal, size = 0.2,
                       hole_fill = mvl_half_grey) {
 
-  if(!any(rivers, inland, extra)) {
+  if (!any(rivers, inland, extra)) {
     stop("You need to add at least one layer to the plot")
   }
 
   dat <- data.frame()
 
-  if(rivers) {
-    dat <- dplyr::bind_rows(dat, mvldata::rivers.df)
+  if (rivers) {
+    water_dat <- mvldata::rivers.df
+
+    # spoof some polygon ids to make sure we have distinct groups
+    #water_dat$id <- as.numeric(water_dat$id) + max_id
+    water_dat$piece <- as.numeric(water_dat$piece)
+    water_dat$group <- paste("rivers", water_dat$group, sep = ".")
+
+    # make sure the dfs will bind
+    dat <- dplyr::bind_rows(dat, water_dat)
+
   }
 
-  if(inland) {
-    max_id <- max(as.numeric(dat$id)) + 1
+  if (inland) {
+    #max_id <- max(as.numeric(dat$id)) + 1
 
-    if(is.infinite(max_id)) max_id <- 1
+    #if(is.infinite(max_id)) max_id <- 1
 
     water_dat <- mvldata::inland_water.df
 
     # spoof some polygon ids to make sure we have distinct groups
-    water_dat$id <- as.numeric(water_dat$id) + max_id
+    #water_dat$id <- as.numeric(water_dat$id) + max_id
     water_dat$piece <- as.numeric(water_dat$piece)
-    water_dat$group <- paste(water_dat$id, water_dat$piece, sep = ".")
+    water_dat$group <- paste("inland", water_dat$group, sep = ".")
 
     # make sure the dfs will bind
-    dat$group <- as.character(dat$group)
-    dat$piece <- as.numeric(dat$piece)
-    dat$id <- as.numeric(dat$id)
     dat <- dplyr::bind_rows(dat, water_dat)
   }
 
-  if(extra) {
-    max_id <- max(as.numeric(dat$id)) + 1
+  if (extra) {
+   # max_id <- max(as.numeric(dat$id)) + 1
 
-    if(is.infinite(max_id)) max_id <- 1
+    #if(is.infinite(max_id)) max_id <- 1
 
     water_dat <- mvldata::extra_waters
 
     # spoof some polygon ids to make sure we have distinct groups
-    water_dat$id <- as.numeric(water_dat$id) + max_id
+    #water_dat$id <- as.numeric(water_dat$id) + max_id
     water_dat$piece <- as.numeric(water_dat$piece)
-    water_dat$group <- paste(water_dat$id, water_dat$piece, sep = ".")
+    water_dat$group <- paste("extra", water_dat$group, sep = ".")
 
     dat <- dplyr::bind_rows(dat, water_dat)
   }
