@@ -114,6 +114,9 @@ LaTeX: pdfLaTeX
   file.copy(from = system.file("extdata", "Generic Banner.png", package = "marketview"), #file.path("M:/R/mvl_template_old.pptx"),
             to = file.path(root_dir, "templates"))
 
+  file.copy(from = system.file("extdata", "Analytics Banner.jpg", package = "marketview"), #file.path("M:/R/mvl_template_old.pptx"),
+            to = file.path(root_dir, "templates"))
+
   file.copy(from = system.file("extdata", "mvlstyle.css", package = "marketview"), #file.path("M:/R/mvl_template_old.pptx"),
             to = file.path(root_dir, "templates"))
   cat(" Done\n")
@@ -340,13 +343,13 @@ output:
     chunk_output_type: console
 ---
 
-![](templates/Generic Banner.png)
+![](templates/Analytics Banner.jpg)
 
 # **", project_name, "** {-}
 *`r  gsub(\"^0\", \"\", format(Sys.Date(), \"%d %B, %Y\"))`*
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(fig.width = 8, fig.height = 5, fig.path = 'output/figures',
+knitr::opts_chunk$set(fig.width = 8, fig.height = 5, fig.path = 'output/figures/rmd/',
                       echo = FALSE, warning = FALSE, message = FALSE)
 ```
 
@@ -506,3 +509,14 @@ source(file.path(\"R\", \"3 ", project_name, " report.R\"))
 }
 
 
+# A Convenience function to make a MCD data request project
+
+
+#' @rdname create_project
+#' @export
+create_mcd_project <- function(project_name,
+                               base_dir = "M:/clients/mcdonalds/2018/Business Insights/Contract Work/Data Requests/",
+                               within = NULL,
+                               sub_dirs = NULL) {
+  create_project(project_name = project_name, base_dir = base_dir, within = within, sub_dirs = sub_dirs)
+}
