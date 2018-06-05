@@ -20,9 +20,63 @@ mcda_process <- function(dat) {
   }
 
   # IEO Categories
-  if (any(grepl("IEO_CATEGORY", names(dat), ignore.case = FALSE))) {
+  if (any(grepl("IEO_CATEGORY", names(dat), ignore.case = TRUE))) {
 
     ieo_var <- names(dat)[grepl("IEO_CATEGORY", names(dat), ignore.case = TRUE)]
+
+    # Tidy up any temporary groups
+    dat[[ieo_var]][dat[[ieo_var]] == "TBD"] <- "FSR Varied Menu"
+    dat[[ieo_var]][grepl("Caf", dat[[ieo_var]])] <- "Cafe"
+    dat[[ieo_var]][dat[[ieo_var]] == "Missing"] <- "FSR Varied Menu"
+    dat[[ieo_var]][dat[[ieo_var]] == "Coffee"] <- "Cafe"
+
+    ieo_levels <- unique(dat[[ieo_var]])
+
+    ieo_groups <- marketview::case_fwhen(ieo_levels == "McDonalds" ~ "McDonald's",
+                                         grepl("QSR", ieo_levels) ~ "QSR Competitors",
+                                         grepl("FSR", ieo_levels) ~ "FSR Competitors",
+                                         TRUE ~ "Coffee, Cafes, Bakeries")
+
+    ieo_segments <- marketview::case_fwhen(ieo_levels == "McDonalds" ~ "McDonald's",
+                                           ieo_levels == "QSR Burger" ~ "QSR Burger",
+                                           ieo_levels == "QSR Chicken" ~ "QSR Chicken",
+                                           ieo_levels == "QSR Pizza" ~ "QSR Pizza",
+                                           ieo_levels == "QSR Ethnic" ~ "QSR Ethnic",
+                                           ieo_levels == "QSR Sandwich/ Salad/ Juice" ~ "QSR Sandwich/Salad/Juice",
+                                           ieo_levels == "QSR Other" ~ "QSR Other",
+                                           grepl("FSR", ieo_levels) ~ "FSR Competitors",
+                                           TRUE ~ "Coffee, Cafes, Bakeries")
+
+
+    ieo_order <- c("McDonalds", "QSR Burger", "QSR Chicken", "QSR Pizza", "QSR Ethnic",
+                   "QSR Sandwich/Salad/Juice", "QSR Other", "FSR Asian",
+                   "FSR Bar and Grill", "FSR Buffet/Cafeteria", "FSR Casino/Hotel",
+                   "FSR Clubs", "FSR Entertainment", "FSR Italian", "FSR Other Ethnic",
+                   "FSR Pubs/Hotels", "FSR Steak/Seafood", "FSR Varied Menu", "Bakery",
+                   "Cafe")
+
+    ieo_labels <- c("McDonald's", "QSR Burger", "QSR Chicken", "QSR Pizza", "QSR Ethnic",
+                    "QSR Sandwich/Salad/Juice", "QSR Other", "FSR Asian",
+                    "FSR Bar and Grill", "FSR Buffet/Cafeteria", "FSR Casino/Hotel",
+                    "FSR Clubs", "FSR Entertainment", "FSR Italian", "FSR Other Ethnic",
+                    "FSR Pubs/Hotels", "FSR Steak/Seafood", "FSR Varied Menu", "Bakeries",
+                    "Cafes")
+
+    ieo_tbl <- tibble::tibble(
+      key = ieo_levels,
+      ieo_group = ieo_groups,
+      ieo_subgroup = factor(key, levels = ieo_order, labels = ieo_labels),
+      ieo_segment = ieo_segments
+    )
+    key_var <- "key"
+    dat <- dplyr::left_join(dat, ieo_tbl, by = setNames(key_var, ieo_var))
+  }
+
+
+  # IEO Categories
+  if (any(grepl("merchant_segment", names(dat), ignore.case = TRUE))) {
+
+    ieo_var <- names(dat)[grepl("merchant_segment", names(dat), ignore.case = TRUE)]
 
     # Tidy up any temporary groups
     dat[[ieo_var]][dat[[ieo_var]] == "TBD"] <- "FSR Varied Menu"
