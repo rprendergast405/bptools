@@ -1,16 +1,13 @@
 #' Comparison Plot of TLD Item Performance
 #'
 #' @param con ODBC connection to bespoke
-#' @param product_tbl Table of products to consider
+#' @param product_tbl Table of products to consider. Attributes should be: codes | item_name | start_week | end_week
 #' @param group_name Name for the plot title
 #' @param index Should AWUs be indexed to the first week?
 #' @param align_weeks Should the weeks be standardised to 'Week 1', 'Week 2', etc? Otherwise uses seqpromo_week
 #'
-#' @return
 #' @export tld_comparison_plot
-#'
-#' @examples
-tld_comparison_plot <- function(con, product_tbl, group_name, align_weeks = FALSE, index = FALSE, promo_week = TRUE) {
+tld_comparison_plot <- function(con, product_tbl, group_name = "", align_weeks = FALSE, index = FALSE, promo_week = TRUE) {
 
   # partial function to use with purrr::pmap
   tld_con <- purrr::partial(tld_sales_summary, con = con, group_name = "", promo_week = promo_week)
