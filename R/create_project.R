@@ -102,23 +102,29 @@ LaTeX: pdfLaTeX
   # cat(" Done\n")
 
   cat(paste0("Copying templates to ", file.path(root_dir, "templates"), " ..."))
-  file.copy(from = system.file("extdata", "mvl_template.pptx", package = "marketview"),  #file.path("M:/R/mvl_template.pptx"),
+  file.copy(from = system.file("extdata", "mvl_template.pptx", package = "marketview"),
             to = file.path(root_dir, "templates"))
 
-  file.copy(from = system.file("extdata", "mvl_template_old.pptx", package = "marketview"), #file.path("M:/R/mvl_template_old.pptx"),
+  file.copy(from = system.file("extdata", "mvl_template_old.pptx", package = "marketview"),
             to = file.path(root_dir, "templates"))
 
-  file.copy(from = system.file("extdata", "mcd_template.pptx", package = "marketview"), #file.path("M:/R/mvl_template_old.pptx"),
+  file.copy(from = system.file("extdata", "mcd_template.pptx", package = "marketview"),
             to = file.path(root_dir, "templates"))
 
-  file.copy(from = system.file("extdata", "Generic Banner.png", package = "marketview"), #file.path("M:/R/mvl_template_old.pptx"),
+  file.copy(from = system.file("extdata", "mvl_a4_template.pptx", package = "marketview"),
             to = file.path(root_dir, "templates"))
 
-  file.copy(from = system.file("extdata", "Analytics Banner.jpg", package = "marketview"), #file.path("M:/R/mvl_template_old.pptx"),
+  file.copy(from = system.file("extdata", "Generic Banner.png", package = "marketview"),
             to = file.path(root_dir, "templates"))
 
-  file.copy(from = system.file("extdata", "mvlstyle.css", package = "marketview"), #file.path("M:/R/mvl_template_old.pptx"),
+  file.copy(from = system.file("extdata", "Analytics Banner.jpg", package = "marketview"),
             to = file.path(root_dir, "templates"))
+
+  file.copy(from = system.file("extdata", "mvlstyle.css", package = "marketview"),
+            to = file.path(root_dir, "templates"))
+
+  file.copy(from = system.file("extdata", "New Job Briefing Form DIGITAL.docx", package = "marketview"),
+            to = file.path(root_dir))
   cat(" Done\n")
 
   cat("Project created successfully\n")
@@ -417,7 +423,7 @@ data_import()
 # 2. COMPILE THE REPORT ---------------------------------------------------------
 
 # create the report object ----
-ppt_report <- pptx(\" \", \"templates/mvl_template.pptx\")
+ppt_report <- pptx(\" \", system.file(\"extdata\", \"mvl_template.pptx\", package = \"marketview\"))
 
 
 # Add a title slide ----
