@@ -1,12 +1,14 @@
 Package: marketview
 Type: Package
 Title: Functions and Objects for Analysis & Reporting at Marketview
-Version: 0.5.8
+Version: 0.5.9
 Authors@R: c(person("Bert", "Prendergast", email = "robertp@marketview.co.nz",
                     role = c("aut", "cre")),
              person("Sam", "Harvey", email = "samh@marketview.co.nz",
                     role = "ctb"),
              person("Jeremy", "Webster", comment = "PhD.", email = "jeremyw@marketview.co.nz",
+                    role = "ctb"),
+             person("Jo", "Anderson", email = "joannaa@marketview.co.nz",
                     role = "ctb"))
 Description: Marketview package contains functions that are used in
   day-to-day analysis and reporting at Marketview, such as;

@@ -1,3 +1,21 @@
+# marketview 0.5.9
+
+# What's New
+- added mcda_process() for Australian IEO data
+- New mvl_a4_template.pptx for A4 PPT reports. It doesn't have very many slide layouts yet.
+- create_rmd() will import the templates to the project directory if they don't already exist
+- new themes etc
+- Added nztm_to_latlon() and latlon_to_nztm()
+
+# Small Changes
+- added the 'real-world' sales and quantities to tld_customer_data() output
+- updated the banner in the default rmd script
+- added bold facet titles back into theme_mvl()
+- Updates to the mcd_post_campaign() report defaults
+
+# Bug Fixes
+- fixed bug in add_water()
+
 # marketview 0.5.8
 
 # What's New
