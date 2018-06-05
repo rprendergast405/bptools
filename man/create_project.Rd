@@ -2,10 +2,15 @@
 % Please edit documentation in R/create_project.R
 \name{create_project}
 \alias{create_project}
+\alias{create_mcd_project}
 \title{Create a new R Project.}
 \usage{
 create_project(project_name, base_dir = "M:/clients", within = NULL,
   sub_dirs = NULL)
+
+create_mcd_project(project_name,
+  base_dir = "M:/clients/mcdonalds/2018/Business Insights/Contract Work/Data Requests/",
+  within = NULL, sub_dirs = NULL)
 }
 \arguments{
 \item{project_name}{The name that the project will take}

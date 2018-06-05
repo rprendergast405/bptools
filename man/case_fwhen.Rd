@@ -11,11 +11,14 @@ case_fwhen(...)
 determines which values match this case. The right hand side (RHS)
 provides the replacement value.
 
-The LHS must evaluate to a logical vector. Each logical vector can
-either have length 1 or a common length. All RHSs must evaluate to
-the same type of vector.
+The LHS must evaluate to a logical vector. The RHS does need to be
+logical, but all RHSs must evaluate to the same type of vector.
 
-These dots are evaluated with \link[rlang:dots_list]{explicit splicing}.}
+Both LHS and RHS may have the same length of either 1 or \code{n}. The
+value of \code{n} must be consistent across all cases. The case of
+\code{n == 0} is treated as a variant of \code{n != 1}.
+
+These dots support \link[rlang:tidy-dots]{tidy dots} features.}
 }
 \description{
 This function allows you to vectorise multiple if and else if statements. It is an R equivalent of the SQL CASE WHEN statement.

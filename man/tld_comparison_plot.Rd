@@ -4,13 +4,13 @@
 \alias{tld_comparison_plot}
 \title{Comparison Plot of TLD Item Performance}
 \usage{
-tld_comparison_plot(con, product_tbl, group_name, align_weeks = FALSE,
+tld_comparison_plot(con, product_tbl, group_name = "", align_weeks = FALSE,
   index = FALSE, promo_week = TRUE)
 }
 \arguments{
 \item{con}{ODBC connection to bespoke}
 
-\item{product_tbl}{Table of products to consider}
+\item{product_tbl}{Table of products to consider. Attributes should be: codes | item_name | start_week | end_week}
 
 \item{group_name}{Name for the plot title}
 
