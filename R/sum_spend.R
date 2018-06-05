@@ -1,7 +1,6 @@
 #' Add Spending across Given Attributes
 #'
 #' A convenience function for quickly adding the spending across attributes.
-#' \code{sum_spend(dat, att)} is shorthand for \code{dat %>% group_by(att) %>% summarise(SPEND = sum(SPEND, na.rm = TRUE)) %>% ungroup()}
 #'
 #' @param dat A data frame to add the spending
 #' @param ... Attributes to group by

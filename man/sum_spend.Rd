@@ -11,3 +11,6 @@ sum_spend(dat, ...)
 
 \item{...}{Attributes to group by}
 }
+\description{
+A convenience function for quickly adding the spending across attributes.
+}
