@@ -44,6 +44,8 @@ catchment_picker <- function(spending = NULL, location = NULL, map_shapefile = m
     spend_map.spdf$CAU <- as.character(spend_map.spdf$CAU)
     spend_map.spdf@data$SPEND <- spend_map.spdf@data$TLA
   } else {
+    spending <- sum_spend(spending, CAU)
+
     spend_map.spdf$CAU <- as.character(spend_map.spdf$CAU)
     spending$CAU <- as.character(spending$CAU)
 
