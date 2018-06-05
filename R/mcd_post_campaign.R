@@ -176,6 +176,8 @@ case when b.merch_tla between 1 and 11 then 'Auckland' when b.merch_tla between 
 # Code data
 generic_df %<>%
   mutate_if(is.factor,  as.character) %>%
+  mutate(DAYPART_REPORT_NO = as.integer(DAYPART_REPORT_NO),
+         AGE_NO = as.integer(AGE_NO)) %>%
   mcd_process() %>%
   mutate(MCD_REGION = as.character(MCD_REGION)) %>%
   mutate(MCD_REGION = ifelse(is.na(MCD_REGION), \"NI Provincial\", as.character(MCD_REGION))) %>%
@@ -200,7 +202,7 @@ promo_item_dates <- promo_items %>%
   mutate(WEEK_SPAN = map2(start_week, end_week, function(x, y) return(x:y))) %>%
   unnest() %>%
   left_join(sqlQuery(DB, \"SELECT seqpromo_week AS week_span, seqday FROM mcd.mcd_promo_week_dates\")) %>%
-  select(codes, Item, group, SEQDAY)
+  select(codes, item_name, item_group, SEQDAY)
 
 promo_item_data <- tld_customer_data(
   con = DB,
@@ -552,6 +554,150 @@ ft <- setFlexTableWidths(ft, c(2.5, 3.5, rep((21.42 - 6) / (dim(temp2)[2] - 2), 
 assign(envir = .GlobalEnv, paste('section', section_num, 'ft', tab_num, sep = \"_\"), ft)
 
 tab_num <- tab_num + 1
+
+
+# Age share change
+
+temp <- generic_df %>%
+  filter(qsr) %>%
+  group_by(age, poi, ieo_segment) %>%
+  summarise(spend = sum(spend, na.rm = T)) %>%
+  group_by(age, poi) %>%
+  mutate(share. = spend/sum(spend)) %>%
+  filter(ieo_segment == \"McDonald's\") %>%
+  group_by(age) %>%
+  mutate(share_change. = share.[1] - share.) %>%
+  setDT() %>%
+  dcast(age ~ poi, value.var = c('share.', 'share_change.'))
+
+no_diff <- -1 * (which(apply(temp[, -c(1)], 2, function(x) {all(x == 0)})) + 1)
+
+temp %<>%
+  select(no_diff)
+
+tempb <- generic_df %>%
+  group_by(age, poi, ieo_segment) %>%
+  summarise(spend = sum(spend, na.rm = T)) %>%
+  group_by(age, poi) %>%
+  mutate(share. = spend/sum(spend)) %>%
+  filter(ieo_segment == \"McDonald's\") %>%
+  group_by(age) %>%
+  mutate(share_change. = share.[1] - share.) %>%
+  setDT() %>%
+  dcast(age ~ poi, value.var = c('share.', 'share_change.'))
+
+no_diff <- -1 * (which(apply(tempb[, -c(1)], 2, function(x) {all(x == 0)})) + 1)
+
+tempb %<>%
+  select(no_diff)
+
+temp2 <- temp %>%
+  setNames(gsub(\" \", \"_\", names(.))) %>%
+  mutate_at(vars(contains(\"change\")), funs(percent_change(., dp = 1))) %>%
+  mutate_if(is.numeric, percent) %>%
+  setNames(gsub(\"_\", \" \", names(.))) %>%
+  setNames(gsub(\"age\", \"Age\", names(.))) %>%
+  setNames(gsub(\"share. \", \"\", names(.), fixed = T)) %>%
+  setNames(gsub(\"share change. \", \"Change - \", names(.), fixed = T)) %>%
+  mutate_all(as.character)
+
+temp2b <- tempb %>%
+  setNames(gsub(\" \", \"_\", names(.))) %>%
+  mutate_at(vars(contains(\"change\")), funs(percent_change(., dp = 1))) %>%
+  mutate_if(is.numeric, percent) %>%
+  setNames(gsub(\"_\", \" \", names(.))) %>%
+  setNames(gsub(\"age\", \"Age\", names(.))) %>%
+  setNames(gsub(\"share. \", \"\", names(.), fixed = T)) %>%
+  setNames(gsub(\"share change. \", \"Change - \", names(.), fixed = T)) %>%
+  mutate_all(as.character)
+
+temp_f <- rbind(rep(\"QSR Market Share\", dim(temp2)[2]),
+                names(temp2),
+                temp2,
+                rep(\"IEO Market Share\", dim(temp2)[2]),
+                names(temp2b),
+                temp2b)
+
+ft <- flextable_leaf_joined(temp_f, pr = c(1, 3 + dim(temp2)[1]), hr = c(1:2, 3 + dim(temp2)[1], 4 + dim(temp2)[1]), size = 9) %>%
+  flextable_negatives()
+
+
+assign(envir = .GlobalEnv, paste('section', section_num, 'ft', tab_num, sep = \"_\"), ft)
+
+tab_num <- tab_num + 1
+
+
+# Daypart share change
+
+temp <- generic_df %>%
+  filter(qsr) %>%
+  group_by(daypart, poi, ieo_segment) %>%
+  summarise(spend = sum(spend, na.rm = T)) %>%
+  group_by(daypart, poi) %>%
+  mutate(share. = spend/sum(spend)) %>%
+  filter(ieo_segment == \"McDonald's\") %>%
+  group_by(daypart) %>%
+  mutate(share_change. = share.[1] - share.) %>%
+  setDT() %>%
+  dcast(daypart ~ poi, value.var = c('share.', 'share_change.'))
+
+no_diff <- -1 * (which(apply(temp[, -c(1)], 2, function(x) {all(x == 0)})) + 1)
+
+temp %<>%
+  select(no_diff)
+
+tempb <- generic_df %>%
+  group_by(daypart, poi, ieo_segment) %>%
+  summarise(spend = sum(spend, na.rm = T)) %>%
+  group_by(daypart, poi) %>%
+  mutate(share. = spend/sum(spend)) %>%
+  filter(ieo_segment == \"McDonald's\") %>%
+  group_by(daypart) %>%
+  mutate(share_change. = share.[1] - share.) %>%
+  setDT() %>%
+  dcast(daypart ~ poi, value.var = c('share.', 'share_change.'))
+
+no_diff <- -1 * (which(apply(tempb[, -c(1)], 2, function(x) {all(x == 0)})) + 1)
+
+tempb %<>%
+  select(no_diff)
+
+temp2 <- temp %>%
+  setNames(gsub(\" \", \"_\", names(.))) %>%
+  mutate_at(vars(contains(\"change\")), funs(percent_change(., dp = 1))) %>%
+  mutate_if(is.numeric, percent) %>%
+  setNames(gsub(\"_\", \" \", names(.))) %>%
+  setNames(gsub(\"daypart\", \"Daypart\", names(.))) %>%
+  setNames(gsub(\"share. \", \"\", names(.), fixed = T)) %>%
+  setNames(gsub(\"share change. \", \"Change - \", names(.), fixed = T)) %>%
+  mutate_all(as.character)
+
+temp2b <- tempb %>%
+  setNames(gsub(\" \", \"_\", names(.))) %>%
+  mutate_at(vars(contains(\"change\")), funs(percent_change(., dp = 1))) %>%
+  mutate_if(is.numeric, percent) %>%
+  setNames(gsub(\"_\", \" \", names(.))) %>%
+  setNames(gsub(\"daypart\", \"Daypart\", names(.))) %>%
+  setNames(gsub(\"share. \", \"\", names(.), fixed = T)) %>%
+  setNames(gsub(\"share change. \", \"Change - \", names(.), fixed = T)) %>%
+  mutate_all(as.character)
+
+temp_f <- rbind(rep(\"QSR Market Share\", dim(temp2)[2]),
+                names(temp2),
+                temp2,
+                rep(\"IEO Market Share\", dim(temp2)[2]),
+                names(temp2b),
+                temp2b)
+
+ft <- flextable_leaf_joined(temp_f, pr = c(1, 3 + dim(temp2)[1]), hr = c(1:2, 3 + dim(temp2)[1], 4 + dim(temp2)[1]), size = 9) %>%
+  flextable_negatives()
+
+
+assign(envir = .GlobalEnv, paste('section', section_num, 'ft', tab_num, sep = \"_\"), ft)
+
+tab_num <- tab_num + 1
+
+
 
 # Section 2 - HVC performance review ---------------------------------------
 
@@ -1072,9 +1218,9 @@ item_breakdown <- function(df, var) {
   quo_var <- enquo(var)
 
   df %>%
-    filter(!is.na(Item),
+    filter(!is.na(item_name),
     !is.na(!!quo_var)) %>%
-    group_by(Item, !!quo_var) %>%
+    group_by(item_name, !!quo_var) %>%
     summarise(trans = n_distinct(TRANS_ID)) %>%
     mutate(trans = trans / sum(trans),
     trans = percent(trans)) %>%
@@ -1084,7 +1230,7 @@ item_breakdown <- function(df, var) {
 # 2. COMPILE THE REPORT ---------------------------------------------------------
 
 # create the report object ----
-ppt_report <- pptx(\" \", \"mvl_template.pptx\")
+ppt_report <- pptx(\" \", system.file(\"extdata\", \"mvl_template.pptx\", package = \"marketview\"))
 
 
 # Add a title slide ----
@@ -1096,9 +1242,10 @@ ppt_report <- ppt_report %>%
 
 # Add Content -------------------------------------------------------------
 
-# Add definitions
+# Add key findings
 ppt_report %<>%
-  addSlide(\"McDefinitions\")
+  addSlide(\"Text\") %>%
+  addTitle(\"Key Findings\")
 
 #--------------------------------------------------------------------------
 # Generic data sections
@@ -1208,10 +1355,21 @@ ppt_report %<>%
 for (product_group in unique(promo_items$item_group)) {
 
   items <- promo_items %>%
-    filter(group == product_group)
+    filter(item_group == product_group)
 
   item_data <- promo_item_data %>%
-    filter(group == product_group)
+    filter(item_group == product_group)
+
+  # Set the levels for FSB
+  if (grepl(\"FSB\", product_group)) {
+    fsb_flavours <- unique(item_data$item_name)
+    coke_flavours <- grep(\"coke\", fsb_flavours, ignore.case = TRUE, value = TRUE)
+    other_flavours <- fsb_flavours[fsb_flavours %in% coke_flavours == FALSE]
+    fsb_levels <- c(coke_flavours, other_flavours)
+    item_data$item_name <- factor(item_data$item_name, levels = fsb_levels)
+  }
+
+
 
   # AWU plot ----
   p <- tld_comparison_plot(items, group_name = product_group, con = DB) +
@@ -1221,6 +1379,25 @@ for (product_group in unique(promo_items$item_group)) {
     addSlide(\"Wide Picture Brief\") %>%
     addTitle(paste(product_group, \"AWU Sales\")) %>%
     addPlot(function() print(p), vector.graphic = FALSE)
+
+  # Repurpose the AWU line plot to make a bar chart - useful when considering a total group, rather than making comparisons between items
+  p$layers <- NULL
+
+  p <- p +
+    geom_col(aes(fill = item_name, group = item_name), position = \"stack\") +
+    scale_fill_mvl(palette = \"mcd\") +
+    guides(fill = ggplot2::guide_legend(nrow = 2, byrow = TRUE)) +
+    geom_text(aes(label = case_when(awu > 10 ~ comma(round(awu)), TRUE ~ \"\"),
+                  x = week_name, y = awu, group = item_name),
+              position = position_stack(vjust = 0.5, reverse = FALSE),
+              colour = \"white\", family = \"hn\", inherit.aes = FALSE)
+
+
+  ppt_report %<>%
+    addSlide(\"Wide Picture Brief\") %>%
+    addTitle(paste(product_group, \"AWU Sales\")) %>%
+    addPlot(function() print(p), vector.graphic = FALSE)
+
 
   # Age & Gender ----
   cust_ftbl <- item_data %>%
@@ -1237,6 +1414,19 @@ for (product_group in unique(promo_items$item_group)) {
     addTitle(paste(product_group, \"Customers Age & Gender\")) %>%
     addParagraph(paste(product_group, \"Customers Age & Gender\")) %>%
     addFlexTable(cust_ftbl)
+
+  # CUST_TYPE ----
+  custtype_ftbl <- item_data %>%
+    item_breakdown(CUST_TYPE) %>%
+    ft_leaf()
+
+  ppt_report %<>%
+    addSlide(\"Table\") %>%
+    addTitle(paste(product_group, \"Customers by HVC or LVC\")) %>%
+    addParagraph(paste(product_group, \"Customers by HVC or LVC\")) %>%
+    addFlexTable(custtype_ftbl)
+
+
 
   # Daypart ----
   daypart_ftbl <- item_data %>%
