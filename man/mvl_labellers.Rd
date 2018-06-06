@@ -3,6 +3,7 @@
 \name{mvl_labellers}
 \alias{mvl_labellers}
 \alias{dollar}
+\alias{comma}
 \alias{percent}
 \alias{dollar_change}
 \alias{percent_change}
@@ -22,6 +23,8 @@
 \title{Labelling functions}
 \usage{
 dollar(x, dp = 2, fill = "", form = "f", ...)
+
+comma(x, dp = 0, fill = "", form = "f", ...)
 
 percent(x, dp = 1, fill = "", form = "f", ...)
 
@@ -96,6 +99,8 @@ If there are others that you want to be implemented, let me (Bert) know
 \examples{
 dollar(1000000)
 dollar(c(-2000000, 15000000))
+comma(100000)
+comma(c(-20000, 15000000))
 percent(c(-0.20, 0.53))
 dollar_change(c(-200, 15))
 percent_change(c(-0.20, 0.53))
