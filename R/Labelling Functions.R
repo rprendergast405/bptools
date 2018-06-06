@@ -67,6 +67,21 @@ dollar <- function(x, dp = 2, fill = "", form = "f", ...){
 }
 
 #' @examples
+#' comma(100000)
+#' comma(c(-20000, 15000000))
+#' @rdname mvl_labellers
+#' @export comma
+comma <- function(x, dp = 0, fill = "", form = "f", ...){
+  na_x <- is.na(x)
+
+  out <- paste0(ifelse(x < 0, "-", ""), formatC(abs(x), digits = dp, format = form, big.mark = ",", ...))
+
+  out[na_x] <- fill
+
+  return(out)
+}
+
+#' @examples
 #' percent(c(-0.20, 0.53))
 #' @rdname mvl_labellers
 #' @export percent
