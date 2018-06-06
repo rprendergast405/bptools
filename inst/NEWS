@@ -1,60 +1,61 @@
 # marketview 0.5.9
 
-# What's New
+## What's New
+- added mvl_init() - a function for initialising the workspace in one go
 - added mcda_process() for Australian IEO data
 - New mvl_a4_template.pptx for A4 PPT reports. It doesn't have very many slide layouts yet.
 - create_rmd() will import the templates to the project directory if they don't already exist
 - new themes etc
 - Added nztm_to_latlon() and latlon_to_nztm()
 
-# Small Changes
+## Small Changes
 - added the 'real-world' sales and quantities to tld_customer_data() output
 - updated the banner in the default rmd script
 - added bold facet titles back into theme_mvl()
 - Updates to the mcd_post_campaign() report defaults
 
-# Bug Fixes
+## Bug Fixes
 - fixed bug in add_water()
 
 # marketview 0.5.8
 
-# What's New
+## What's New
 - scale_reorder(), from David Robinson
 - create_rmd() function for making a new markdown script with the default headers etc.
 
-# Changes
+## Changes
 - Updates to create_project(): added a /templates directory and updated the default markdown to be a bit fancier
 - option in make_cau_df and make_mb_df to aggregate the polygons - should be useful for making catchment outlines
 - BUNCH_NAMEX is now treated with mcd_process()
 - theme_mvl() update, no longer uses a bold font as the default
 
-# Bug Fixes
+## Bug Fixes
 - data_import() doesn't crash any more if there is no processing script or data. Just prints a message instead
 - tld_customer_data() drops tables on.exit(), so shouldn't litter the DB with tables if it crashes
 
 # marketview 0.5.7
 
-# What's New
+## What's New
 - flextable_positives()
 - added more labelling functions such as mdollar_change etc.
 
-# Changes
+## Changes
 - "mcd" colour palette has been updated as per Nik's feeback
 - add_placenames() uses the shadowtext package if it's available. Would recommend installing it
 - data_import() has had an overhaul, it's not more verbose and should be more flexible
 - added an option to set the tolerance in make_mb_df()
 - added more default options to the initialise script from create_project(), which should help with consistency
 
-# Bug Fixes
+## Bug Fixes
 - updated tld_customer_data() to avoid the strange Oracle bug
 
 # marketview 0.5.6
 
-# What's New
+## What's New
 - added "fssi" colour palette to scale_mvl()
 - new add_placenames() function for adding city/town/suburb names to a map
 
-# Changes
+## Changes
 - New default packages in create_project()
 - cleaned up the default directories in create_project()
 - updated mcd_post_campaign() with Jeremy's feedback
@@ -62,39 +63,39 @@
 - safer tablenames in tld_customer_data()
 - added an option for tld_sales_summary() to get promo_week sales or Monday-Sunday sales
 
-# Bug Fixes
+## Bug Fixes
 - catchment_picker() was not correctly filling polygons - fixed
 - fixed a bug with comparing the same item in multiple time periods in mcd_post_campaign()
 
 # marketview 0.5.5
 
-# What's New
+## What's New
 - Several new tld_() functions. There could still be some bugs in these so let me know if anything goes awry
 
-# Changes
+## Changes
 - catchment_picker() has had a facelift! And should also run a bit quicker and have a cleaner environment
 - Updated TLD section in mcd_post_campaign()
 
 # marketview 0.5.4
 
-# What's New
+## What's New
 - file_spellchecker() will check a script to see if character elements contain spelling errors
 - mcd_post_campaign() similar to create_project: makes a new McDonald's post-campaign project with standard scripts for the report
 - create_script() function to make a new script with headers and data_import() etc.
 
-# Changes
+## Changes
 - theme_map_minimal() is now called theme_map(), and theme_map() becomes theme_map_old(). I never used theme_map, so it is annoying to have to type _minimal() every time. Sorry for any broken code
 
 # marketview 0.5.3
 
-# What's New
+## What's New
 - Added case_fwhen() function to give ordered factor results when using case_when() statements
 - parse_seqmonth() converts integer SEQMONTH attributes to Date
 
-# Bug Fixes
+## Bug Fixes
 - Fixed a bad join in bnz_spend_origin() which was duplicating some spending (whoops)
 
-# Small Changes
+## Small Changes
 - add_basemap() will now plot holes. Still not ideally implemented to deal with islands within lakes ie rotorua
 - Improved the way that the bounding box is defined in zoom_definiton() with ratio != 1
 - default legend.box in theme_mvl() etc. is now "vertical"

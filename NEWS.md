@@ -1,7 +1,6 @@
 # marketview 0.5.9
 
 ## What's New
-- added mvl_init() - a function for initialising the workspace in one go
 - added mcda_process() for Australian IEO data
 - New mvl_a4_template.pptx for A4 PPT reports. It doesn't have very many slide layouts yet.
 - create_rmd() will import the templates to the project directory if they don't already exist
