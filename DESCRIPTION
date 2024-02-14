@@ -1,8 +1,8 @@
-Package: marketview
+Package: bptools
 Type: Package
-Title: Functions and Objects for Analysis & Reporting at Marketview
+Title: Functions and Objects for Analysis & Reporting
 Version: 0.5.9
-Authors@R: c(person("Bert", "Prendergast", email = "robertp@marketview.co.nz",
+Authors@R: c(person("Bert", "Prendergast", email = "rprendergast405@gmail.com",
                     role = c("aut", "cre")),
              person("Sam", "Harvey", email = "samh@marketview.co.nz",
                     role = "ctb"),
@@ -10,11 +10,11 @@ Authors@R: c(person("Bert", "Prendergast", email = "robertp@marketview.co.nz",
                     role = "ctb"),
              person("Jo", "Anderson", email = "joannaa@marketview.co.nz",
                     role = "ctb"))
-Description: Marketview package contains functions that are used in
-  day-to-day analysis and reporting at Marketview, such as;
+Description: bptools package contains functions that are used in
+  day-to-day analysis and reporting, such as;
     * Data importing/exporting functions
-    * project creation tool
-    * Marketview colour palette
+    * Project creation tool
+    * Colour palettes
     * Common ggplot themes
 License: What license is it under?
 LazyData: TRUE
@@ -22,7 +22,6 @@ Imports:
     scales,
     RODBC,
     ggplot2,
-    ReporteRs,
     qdap,
     stringr,
     sp,

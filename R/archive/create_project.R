@@ -23,7 +23,7 @@
 #' @return Logical, indicating that the project has been successfully created
 #' @export create_project
 create_project <- function(project_name,
-                           base_dir,
+                           base_dir = "M:/clients",
                            within = NULL,
                            sub_dirs = NULL) {
 
@@ -102,28 +102,28 @@ LaTeX: pdfLaTeX
   # cat(" Done\n")
 
   cat(paste0("Copying templates to ", file.path(root_dir, "templates"), " ..."))
-  file.copy(from = system.file("extdata", "mvl_template.pptx", package = "bptools"),
+  file.copy(from = system.file("extdata", "mvl_template.pptx", package = "marketview"),
             to = file.path(root_dir, "templates"))
 
-  file.copy(from = system.file("extdata", "mvl_template_old.pptx", package = "bptools"),
+  file.copy(from = system.file("extdata", "mvl_template_old.pptx", package = "marketview"),
             to = file.path(root_dir, "templates"))
 
-  file.copy(from = system.file("extdata", "mcd_template.pptx", package = "bptools"),
+  file.copy(from = system.file("extdata", "mcd_template.pptx", package = "marketview"),
             to = file.path(root_dir, "templates"))
 
-  file.copy(from = system.file("extdata", "mvl_a4_template.pptx", package = "bptools"),
+  file.copy(from = system.file("extdata", "mvl_a4_template.pptx", package = "marketview"),
             to = file.path(root_dir, "templates"))
 
-  file.copy(from = system.file("extdata", "Generic Banner.png", package = "bptools"),
+  file.copy(from = system.file("extdata", "Generic Banner.png", package = "marketview"),
             to = file.path(root_dir, "templates"))
 
-  file.copy(from = system.file("extdata", "Analytics Banner.jpg", package = "bptools"),
+  file.copy(from = system.file("extdata", "Analytics Banner.jpg", package = "marketview"),
             to = file.path(root_dir, "templates"))
 
-  file.copy(from = system.file("extdata", "mvlstyle.css", package = "bptools"),
+  file.copy(from = system.file("extdata", "mvlstyle.css", package = "marketview"),
             to = file.path(root_dir, "templates"))
 
-  file.copy(from = system.file("extdata", "New Job Briefing Form DIGITAL.docx", package = "bptools"),
+  file.copy(from = system.file("extdata", "New Job Briefing Form DIGITAL.docx", package = "marketview"),
             to = file.path(root_dir))
   cat(" Done\n")
 
@@ -171,7 +171,7 @@ library(forcats)
 library(scales)         # axis labelling functions
 library(lubridate)      # time/date functions
 library(readxl)
-library(bptools)
+library(marketview)
 library(mvldata)
 library(glue)
 library(ReporteRs)
@@ -192,10 +192,10 @@ DB <- odbcConnect(dsn = \"MVIEW\", uid = \"bespoke\", pwd = \"bespoke\", believe
 theme_set(theme_mvl())
 
 # set colour palettes -----
-scale_colour_discrete <- partial(scale_colour_mvl, palette = \"mvl\")
-scale_colour_continuous <- partial(scale_colour_mvlc, palette = \"Sky\")
-scale_fill_discrete <- partial(scale_fill_mvl, palette = \"mvl\")
-scale_fill_continuous <- partial(scale_fill_mvlc, palette = \"Sky\")
+scale_colour_discrete <- partial(scale_colour_mvl, palette = \"mcd\")
+scale_colour_continuous <- scale_colour_mvlc
+scale_fill_discrete <- partial(scale_fill_mvl, palette = \"mcd\")
+scale_fill_continuous <- scale_fill_mvlc
 
 # make geom_col() reverse stack by default ----
 geom_col <- function(mapping = NULL, data = NULL, position = position_stack(reverse = TRUE), ...,
@@ -209,8 +209,7 @@ grDevices::windowsFonts(calb = \"Calibri Bold\",
                         cal = \"Calibri\",
                         hn = \"Helvetica Neue\",
                         hnb = \"Helvetica Neue Bold\",
-                        cen = \"Century Gothic\",
-                        geo = \"Georgia Italic\")
+                        cen = \"Century Gothic\")
 
 # Set ReporteRs defaults
 options(\"ReporteRs-default-font\" = \"Helvetica Neue\",
@@ -227,6 +226,9 @@ options(\"stringsAsFactors\" = FALSE,
         \"max.print\" = 200)
 
 library(httr)
+options(RCurlOptions = list(proxy = \"proxy.private.marketview.co.nz:3128\"))
+options(rsconnect.http = \"rcurl\")
+set_config(use_proxy(url = \"proxy.private.marketview.co.nz\", port = 3128))
 
 ")
 
@@ -421,7 +423,7 @@ data_import()
 # 2. COMPILE THE REPORT ---------------------------------------------------------
 
 # create the report object ----
-ppt_report <- pptx(\" \", system.file(\"extdata\", \"mvl_template.pptx\", package = \"bptools\"))
+ppt_report <- pptx(\" \", system.file(\"extdata\", \"mvl_template.pptx\", package = \"marketview\"))
 
 
 # Add a title slide ----

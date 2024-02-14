@@ -83,7 +83,7 @@ mvl_leaf <- grDevices::rgb(120, 170, 66, maxColorValue = 255)
 
 #' @rdname mvl_colourpal
 #' @export mvl_half_leaf
-mvl_half_leaf <- grDevices::rgb(167, 205, 126, maxColorValue = 255)
+mvl_half_leaf <- grDevices::rgb(140, 198, 63, maxColorValue = 255)
 
 #' @rdname mvl_colourpal
 #' @export mvl_stone
@@ -118,19 +118,3 @@ mvl_royal2 <- "#3124e0"
 #' @rdname mvl_colourpal
 #' @export mvl_fuchsia
 mvl_fuchsia <- "#e024d3"
-
-#' @rdname mvl_colourpal
-#' @export mvl_up_green
-mvl_up_green <- "#8cc63f"
-
-#' @rdname mvl_colourpal
-#' @export mvl_half_stone
-mvl_half_stone <- "#a4a5a7"
-
-#' @rdname mvl_colourpal
-#' @export mvl_half_sky
-mvl_half_sky <- "#b3edff"
-
-#' @rdname mvl_colourpal
-#' @export mvl_half_plum
-mvl_half_plum <- "#e49be3"

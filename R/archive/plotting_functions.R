@@ -1,7 +1,7 @@
 # plotting_functions.R
 # -------------------------------------------------------------------------
 # A script containing some functions commonly used when producing figures
-# for reporting
+# for Marketview reporting
 # -------------------------------------------------------------------------
 # Created by Bert on 05-07-2016
 # -------------------------------------------------------------------------
@@ -14,23 +14,27 @@ grDevices::windowsFonts(calb = "Calibri Bold",
                         hn = "Helvetica Neue",
                         hnb = "Helvetica Neue Bold")
 
-#' ggplot theme.
+#' Marketview ggplot theme.
 #'
-#'A minimal theme for plots that looks okay in a ppt report.
+#'A minimal theme for plots that looks okay in a Marketview ppt report.
 #'
 #' @param base_size The base size for fonts
 #' @param base_family The base family for fonts
 #' @param plain_family The plain family for fonts (used in legend text)
 #'
 #' @return A theme object to be added to ggplot objects
-#' @export theme_bp
+#' @export theme_mvl
 #'
 #' @examples
 #' library(ggplot2)
 #' p <- ggplot(data.frame(x = 1:5, y = 1:5)) + geom_point(aes(x, y))
-#' p + theme_bp()
-theme_bp <- function(base_size = 13, base_family = "hnb", plain_family = "hn", text_colour = "black") {
+#' p + theme_mvl()
+theme_mvl <- function(base_size = 13, base_family = "hnb", plain_family = "hn", text_colour = marketview::mvl_text) {
+  if (!all(c("hn", "hnb") %in% names(grDevices::windowsFonts()))) {
+    grDevices::windowsFonts(hn = "Helvetica Neue",
+                            hnb = "Helvetica Neue Bold")
 
+  }
 
 
   ggplot2::`%+replace%`(ggplot2::theme_minimal(base_size = base_size, base_family = plain_family),
@@ -56,12 +60,11 @@ theme_bp <- function(base_size = 13, base_family = "hnb", plain_family = "hn", t
                           panel.grid.minor.x = ggplot2::element_blank(),
                           panel.grid.minor.y = ggplot2::element_blank(),
                           panel.spacing = unit(1, "cm"),
-                          strip.text = ggplot2::element_text(family = base_family),
+                          strip.text = element_text(family = base_family),
 
                           plot.title = ggplot2::element_text(size = round(base_size * 1.5), hjust = 0),
                           plot.margin = grid::unit(c(0.1, 0.1, 0.1, 0.1), "cm"),
 
-                          plot.subtitle = ggplot2::element_text(family = "geo", hjust = 0),
                           plot.caption = ggplot2::element_text(size = round(base_size * 0.85), family = plain_family, hjust = 1)
                         )
   )
@@ -119,9 +122,9 @@ theme_mvl_old <- function(base_size = 12, base_family = "calb", plain_family = "
   )
 }
 
-#' ggplot map theme (old version).
+#' Marketview ggplot map theme (old version).
 #'
-#'A theme for maps that looks okay in a ppt report.
+#'A theme for maps that looks okay in a Marketview ppt report.
 #'Similar to \code{\link{theme_mvl}} but it has a blue background, no axis labels,
 #'and a floating legend.
 #'
@@ -136,7 +139,7 @@ theme_mvl_old <- function(base_size = 12, base_family = "calb", plain_family = "
 #' library(ggplot2)
 #' p <- ggplot(data.frame(x = 1:5, y = 1:5)) + geom_point(aes(x, y))
 #' p + theme_map()
-theme_map_old <- function(base_size = 11, base_family = "hnb", plain_family = "hn", text_colour = "black") {
+theme_map_old <- function(base_size = 11, base_family = "hnb", plain_family = "hn", text_colour = marketview::mvl_text) {
   if(!all(c("hn", "hnb") %in% names(grDevices::windowsFonts()))) {
     grDevices::windowsFonts(hn = "Helvetica Neue",
                             hnb = "Helvetica Neue Bold")
@@ -179,7 +182,7 @@ theme_map_old <- function(base_size = 11, base_family = "hnb", plain_family = "h
   )
 }
 
-#' ggplot map theme (minimal).
+#' Marketview ggplot map theme (minimal).
 #'
 #'A minimal theme for maps that is more suitable for faceted plots.
 #'
@@ -194,7 +197,7 @@ theme_map_old <- function(base_size = 11, base_family = "hnb", plain_family = "h
 #' library(ggplot2)
 #' p <- ggplot(data.frame(x = 1:5, y = 1:5)) + geom_point(aes(x, y))
 #' p + theme_map_minimal()
-theme_map <- function(base_size = 11, base_family = "hnb", plain_family = "hn", text_colour = "black") {
+theme_map <- function(base_size = 11, base_family = "hnb", plain_family = "hn", text_colour = marketview::mvl_text) {
   ggplot2::`%+replace%`(theme_mvl(base_size = base_size, base_family = base_family, text_colour = text_colour),
     ggplot2::theme(
       axis.text.x = ggplot2::element_blank(),
@@ -211,7 +214,7 @@ theme_map <- function(base_size = 11, base_family = "hnb", plain_family = "hn", 
 }
 
 
-#' ggplot map theme (minimal).
+#' Marketview ggplot map theme (minimal).
 #'
 #'A minimal theme for maps that is more suitable for faceted plots.
 #'
@@ -258,7 +261,7 @@ theme_mcd <- function (base_size = 11, base_family = "cenb", plain_family = "cen
       legend.title = ggplot2::element_blank(),
       legend.position = "top", legend.direction = "horizontal",
       panel.grid.major.x = ggplot2::element_blank(),
-      panel.grid.major.y = ggplot2::element_line(colour = bptools::mvl_half_grey, size = 0.2),
+      panel.grid.major.y = ggplot2::element_line(colour = marketview::mvl_half_grey, size = 0.2),
       plot.title = ggplot2::element_text(size = round(base_size * 1.5), hjust = 0),
       plot.margin = grid::unit(c(0.1, 0.1, 0.1, 0.1), "cm"),
       plot.background = element_rect(fill = '#f2f2f2', colour = NA),
@@ -317,6 +320,43 @@ bounding_box <- function(long_limits, lat_limits, draw_border = TRUE) {
     }
 
 }
+
+
+#' Add a Marketview footnote to a plot.
+#'
+#' Adds a footer to the current plot with a datestamp and the Marketview
+#' logo.
+#'
+#' @param footnote_text The text for the footnote to display
+#' @param size The size of the footnote text
+#' @param color The colour of the footnote text
+#' @param mvl_png The location of the Marketview logo
+#'
+#' @return Adds a footnote to the current plot
+#' @export make_footnote
+make_footnote <- function(footnote_text = paste(format(Sys.time(), "%d %b %Y")),
+                         size = 0.7,
+                         color = "grey",
+                         mvl_png = "M:/mvl_office/Rebrand/Logo PNGs/Marketview_Logo.png") {
+
+
+  grid::pushViewport(grid::viewport())
+
+  grid::grid.text(label= footnote_text ,
+            x = grid::unit(1,"npc") - grid::unit(2, "mm"),
+            y = grid::unit(2, "mm"),
+            just = c("right", "bottom"),
+            gp = grid::gpar(cex = size, col = color, fontface = "italic"))
+
+  grid::grid.raster(png::readPNG(mvl_png),
+              x = grid::unit(0,"npc") - grid::unit(2, "mm"),
+              y = grid::unit(0,"npc") - grid::unit(5, "mm"),
+              height = grid::unit(2, "cm"),
+              just = c("left", "bottom"))
+
+  grid::popViewport()
+}
+
 
 
 
@@ -429,7 +469,7 @@ zoom_place <- function(place_name, margin = 20000, expand = FALSE, ratio = 1) {
 #' @param size width of the border line
 #'
 #' @export add_basemap
-add_basemap <- function(data = mvldata::nz_tla_06.df, fill = mvl_half_grey, colour = mvl_stone, size = 0.2, hole_fill = "white") {
+add_basemap <- function(data = mvldata::nz_tla_06.df, fill = mvl_half_grey, colour = mvl_grey, size = 0.2, hole_fill = "white") {
 
   if ("hole" %in% names(data)) {
     obj <- list(ggplot2::geom_polygon(data = data, ggplot2::aes(x = long, y = lat, group = group),
@@ -535,7 +575,7 @@ add_water <- function(rivers = TRUE, inland = TRUE, extra = TRUE,
 #' @param tla Optional argument to only show the suburbs of a given set of TLA ids (2006 TLA definition)
 #'
 #' @export add_placenames
-add_placenames <- function(data = mvldata::sparse_places.df, colour = "black", bgcolour = "white", size = 3, tla = NULL) {
+add_placenames <- function(data = mvldata::sparse_places.df, colour = mvl_text, fillcolour = "white", size = 3, tla = NULL) {
 
 
   if (!is.null(tla)) {
@@ -549,9 +589,9 @@ add_placenames <- function(data = mvldata::sparse_places.df, colour = "black", b
 
   if ("shadowtext" %in% installed.packages()[, "Package"]) {
     obj <- list(shadowtext::geom_shadowtext(data = dat, ggplot2::aes(x = long, y = lat, label = name),
-                                            color = colour, bg.color = bgcolour, size = size, inherit.aes = FALSE, family = "hn"),
+                                            color = fillcolour, bgcolor = colour, size = size, inherit.aes = FALSE, family = "hn"),
                 shadowtext::geom_shadowtext(data = mvldata::major_places.df, ggplot2::aes(x = long, y = lat, label = name),
-                                            color = colour, bg.color = bgcolour, size = size, inherit.aes = FALSE, family = "hn")
+                                            color = fillcolour, bgcolor = colour, size = size, inherit.aes = FALSE, family = "hnb")
     )
   } else {
     obj <- list(ggplot2::geom_text(data = dat, ggplot2::aes(x = long, y = lat, label = name),
@@ -564,27 +604,4 @@ add_placenames <- function(data = mvldata::sparse_places.df, colour = "black", b
 
 
   return(obj)
-}
-
-#' Add CAU Labels to a Map
-#'
-#' @param sp_dat A SpatialPolygonsDataFrame of the CAU boundaries
-#' @param size text size
-#' @param family text family
-#' @param colour text colour
-#' @param ... other arguments passed to \code{\link[ggplot2]{layer}}
-#'
-#' @export cau_names
-cau_names <- function(sp_dat = mvldata::nz_cau_13.spdf, size = 1.5, family = "hn", colour = mvl_grey, ...) {
-  catchment_labels <- as.data.frame(sp::coordinates(sp_dat))
-  names(catchment_labels) <- c("long", "lat")
-
-  catchment_labels <- bind_cols(catchment_labels, sp_dat@data)
-
-  obj <- ggplot2::geom_text(ggplot2::aes(long, lat, label = CAU_NAME), data = catchment_labels,
-                           size = size, family = family, colour = colour, inherit.aes = FALSE,
-                           check_overlap = TRUE, ...)
-
-  return(obj)
-
 }

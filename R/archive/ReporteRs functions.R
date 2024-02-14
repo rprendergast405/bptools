@@ -21,7 +21,7 @@
 #' flextable_teal(head(cars))
 flextable_teal <- function(df, size = 12, padding = size / 2) {
   # Create the FlexTable of the data
-  df_ft <- ReporteRs::FlexTable(df, header.cell.props = ReporteRs::cellProperties(background.color = bptools::mvl_teal, padding.top = padding, padding.bottom = padding),
+  df_ft <- ReporteRs::FlexTable(df, header.cell.props = ReporteRs::cellProperties(background.color = marketview::mvl_teal, padding.top = padding, padding.bottom = padding),
                                 header.text.props = ReporteRs::textProperties(color = "white", font.size = size, font.family = "Calibri", font.weight = "bold"),
                                 header.par.props = ReporteRs::parProperties(text.align = "center"),
                                 body.cell.props = ReporteRs::cellProperties(padding.top = padding, padding.bottom = padding),
@@ -30,7 +30,7 @@ flextable_teal <- function(df, size = 12, padding = size / 2) {
   )
 
   # Add the 'zebra' cell fill
-  df_ft <- ReporteRs::setZebraStyle(df_ft, odd = "white", even = bptools::mvl_half_teal)
+  df_ft <- ReporteRs::setZebraStyle(df_ft, odd = "white", even = marketview::mvl_half_teal)
 
   # Set the cell borders
   df_ft <- ReporteRs::setFlexTableBorders(df_ft, inner.vertical = ReporteRs::borderProperties( color="white", style="solid"),
@@ -64,16 +64,16 @@ ft_teal <- function(df, size = 12, padding = size / 2) {
 #' flextable_dark(head(cars))
 flextable_dark <- function(df, size = 12, padding = size / 2) {
   # Create the FlexTable of the data
-  df_ft <- ReporteRs::FlexTable(df, header.cell.props = ReporteRs::cellProperties(background.color = bptools::mvl_blue, padding.top = padding, padding.bottom = padding),
+  df_ft <- ReporteRs::FlexTable(df, header.cell.props = ReporteRs::cellProperties(background.color = marketview::mvl_blue, padding.top = padding, padding.bottom = padding),
                                 header.text.props = ReporteRs::textProperties(color = "white", font.size = size, font.family = "Calibri", font.weight = "bold"),
                                 header.par.props = ReporteRs::parProperties(text.align = "center"),
                                 body.cell.props = ReporteRs::cellProperties(padding.top = padding, padding.bottom = padding),
                                 body.par.props = ReporteRs::parProperties(text.align = "center"),
-                                body.text.props = ReporteRs::textProperties(color = bptools::mvl_blue, font.size = size, font.family = "Calibri")
+                                body.text.props = ReporteRs::textProperties(color = marketview::mvl_blue, font.size = size, font.family = "Calibri")
   )
 
   # Add the 'zebra' cell fill
-  df_ft <- ReporteRs::setZebraStyle(df_ft, odd = "grey95", even = bptools::mvl_half_grey)
+  df_ft <- ReporteRs::setZebraStyle(df_ft, odd = "grey95", even = marketview::mvl_half_grey)
 
   # Set the cell borders
   df_ft <- ReporteRs::setFlexTableBorders(df_ft, inner.vertical = ReporteRs::borderProperties( color = "white", style= "solid"),
@@ -109,10 +109,10 @@ ft_dark <- function(df, size = 12, padding = size / 2) {
 #' ft_ex <- flextable_teal(df_ex)
 #' ft_ex <- flextable_row_highlight(ft_ex, which(df_ex$dist == max(df_ex$dist)))
 flextable_row_highlight <- function(ft, rows, cols = 1:ft$numcol){
-  ft[rows, cols, side = "top"] = ReporteRs::borderProperties(color = mvl_citrus, width = 2)
-  ft[rows, cols, side = "bottom"] = ReporteRs::borderProperties(color = mvl_citrus, width = 2)
-  ft[rows, min(cols), side = "left"] = ReporteRs::borderProperties(color = mvl_citrus, width = 2)
-  ft[rows, max(cols), side = "right"] = ReporteRs::borderProperties(color = mvl_citrus, width = 2)
+  ft[rows, cols, side = "top"] = ReporteRs::borderProperties(color = "gold", width = 2)
+  ft[rows, cols, side = "bottom"] = ReporteRs::borderProperties(color = "gold", width = 2)
+  ft[rows, min(cols), side = "left"] = ReporteRs::borderProperties(color = "gold", width = 2)
+  ft[rows, max(cols), side = "right"] = ReporteRs::borderProperties(color = "gold", width = 2)
 
   return(ft)
 }
@@ -142,7 +142,7 @@ ft_row_highlight <- function(ft, rows, cols = 1:ft$numcol) {
 #' ft_ex <- flextable_teal(df_ex)
 #' ft_ex <- flextable_cell_bold(ft_ex, which(df_ex$speed > 7), "speed", "forestgreen")
 
-flextable_cell_bold <- function(ft, rows = ft$numrow, cols = 1:ft$numcol, colour = bptools::mvl_text){
+flextable_cell_bold <- function(ft, rows = ft$numrow, cols = 1:ft$numcol, colour = marketview::mvl_text){
   existing_props <- ReporteRs::textProperties(font.size = ft$body.text.props[]$font.size,
                                               font.weight = ft$body.text.props[]$font.weight,
                                               font.style = ft$body.text.props[]$font.style,
@@ -157,7 +157,7 @@ flextable_cell_bold <- function(ft, rows = ft$numrow, cols = 1:ft$numcol, colour
 
 #' @rdname flextable_cell_bold
 #' @export ft_cell_bold
-ft_cell_bold <- function(ft, rows = ft$numrow, cols = 1:ft$numcol, colour = bptools::mvl_text){
+ft_cell_bold <- function(ft, rows = ft$numrow, cols = 1:ft$numcol, colour = marketview::mvl_text){
   flextable_cell_bold(ft, rows, cols, colour)
 }
 
@@ -181,11 +181,11 @@ flextable_black <- function(df, size = 12, padding = size / 2) {
                                 header.par.props = ReporteRs::parProperties(text.align = "center"),
                                 body.cell.props = ReporteRs::cellProperties(padding.top = padding, padding.bottom = padding),
                                 body.par.props = ReporteRs::parProperties(text.align = "center"),
-                                body.text.props = ReporteRs::textProperties(color = bptools::mvl_text, font.size = size, font.family = "Helvetica Neue")
+                                body.text.props = ReporteRs::textProperties(color = marketview::mvl_text, font.size = size, font.family = "Helvetica Neue")
   )
 
   # Add the 'zebra' cell fill
-  df_ft <- ReporteRs::setZebraStyle(df_ft, odd = "grey90", even = bptools::mvl_half_grey)
+  df_ft <- ReporteRs::setZebraStyle(df_ft, odd = "grey90", even = marketview::mvl_half_grey)
 
   # Set the cell borders
   df_ft <- ReporteRs::setFlexTableBorders(df_ft, inner.vertical = ReporteRs::borderProperties( color="white", style="solid"),
@@ -220,12 +220,12 @@ ft_black <- function(df, size = 12, padding = size / 2) {
 #' flextable_leaf(head(cars))
 flextable_leaf <- function(df, size = 12, padding = size / 2) {
   # Create the FlexTable of the data
-  df_ft <- ReporteRs::FlexTable(df, header.cell.props = ReporteRs::cellProperties(background.color = bptools::mvl_leaf, padding.top = padding, padding.bottom = padding),
+  df_ft <- ReporteRs::FlexTable(df, header.cell.props = ReporteRs::cellProperties(background.color = marketview::mvl_leaf, padding.top = padding, padding.bottom = padding),
                                 header.text.props = ReporteRs::textProperties(color = "white", font.size = size, font.family = "Helvetica Neue", font.weight = "bold"),
                                 header.par.props = ReporteRs::parProperties(text.align = "center"),
                                 body.cell.props = ReporteRs::cellProperties(padding.top = padding, padding.bottom = padding),
                                 body.par.props = ReporteRs::parProperties(text.align = "center"),
-                                body.text.props = ReporteRs::textProperties(color = bptools::mvl_text, font.size = size, font.family = "Helvetica Neue")
+                                body.text.props = ReporteRs::textProperties(color = marketview::mvl_text, font.size = size, font.family = "Helvetica Neue")
   )
 
   # Add the 'zebra' cell fill
@@ -271,7 +271,7 @@ flextable_leaf_joined <- function(df, pr, hr,
                                 header.columns = F,
                                 body.cell.props = ReporteRs::cellProperties(padding.top = padding,
                                                                             padding.bottom = padding), body.par.props = ReporteRs::parProperties(text.align = "center"),
-                                body.text.props = ReporteRs::textProperties(color = bptools::mvl_text,
+                                body.text.props = ReporteRs::textProperties(color = marketview::mvl_text,
                                                                             font.size = size, font.family = "Helvetica Neue"))
 
   df_ft <- ReporteRs::setZebraStyle(df_ft, odd = grDevices::rgb(236,
@@ -285,7 +285,7 @@ flextable_leaf_joined <- function(df, pr, hr,
   }
 
   #Format the heading rows
-  df_ft[i = hr] <- ReporteRs::cellProperties(background.color = bptools::mvl_leaf,
+  df_ft[i = hr] <- ReporteRs::cellProperties(background.color = marketview::mvl_leaf,
                                              padding.top = padding, padding.bottom = padding)
 
   df_ft[i = hr] <- ReporteRs::textProperties(color = "white",
@@ -316,8 +316,8 @@ ft_leaf_joined <- function(df, pr, hr,
 #' Highlight Negative Cell Values in Red
 #'
 #' A function to highlight any negative values in a FlexTable for given column names.
-#' This should work regardless of the formatting - character values such as those returned by \code{bptools::dollar()} or
-#' \code{bptools::percent()} will be dealt with if I've done this right.
+#' This should work regardless of the formatting - character values such as those returned by \code{marketview::dollar()} or
+#' \code{marketview::percent()} will be dealt with if I've done this right.
 #'
 #' @param ftbl A FlexTable object to format
 #' @param col_names The names of the columns in which to highlight the negatives
@@ -346,17 +346,7 @@ flextable_negatives <- function(ftbl, col_names = names(ftbl$vals)) {
 
       neg_ind <- c(neg_ind, neg_zero)
       # Highlight the negative values in the flextable
-      #ftbl <- bptools::flextable_cell_bold(ftbl, neg_ind, ind, bptools::mvl_red)
-
-      existing_props <- ReporteRs::textProperties(font.size = ftbl$body.text.props[]$font.size,
-                                                  font.weight = ftbl$body.text.props[]$font.weight,
-                                                  font.style = ftbl$body.text.props[]$font.style,
-                                                  underlined = ftbl$body.text.props[]$underlined,
-                                                  font.family = ftbl$body.text.props[]$font.family,
-                                                  vertical.align = ftbl$body.text.props[]$vertical.align)
-
-      ftbl[neg_ind, ind] <- ReporteRs::chprop(existing_props, color = bptools::mvl_red)
-
+      ftbl <- marketview::flextable_cell_bold(ftbl, neg_ind, ind, marketview::mvl_red)
     }
   }
   return(ftbl)
@@ -365,8 +355,8 @@ flextable_negatives <- function(ftbl, col_names = names(ftbl$vals)) {
 #' Highlight Increased Cell Values in Green
 #'
 #' A function to highlight any positive values in a FlexTable for given column names.
-#' This requires values to be formatted using \code{bptools::dollar_change()} or
-#' \code{bptools::percent_change()} (or similar).
+#' This requires values to be formatted using \code{marketview::dollar_change()} or
+#' \code{marketview::percent_change()} (or similar).
 #'
 #' @param ftbl A FlexTable object to format
 #' @param col_names The names of the columns in which to highlight the positives
@@ -393,7 +383,7 @@ flextable_positives <- function(ftbl, col_names = names(ftbl$vals)) {
       neg_ind <- which(grepl("\\+", col_vals))
 
       # Highlight the negative values in the flextable
-      ftbl <- bptools::flextable_cell_bold(ftbl, neg_ind, ind, bptools::mvl_green)
+      ftbl <- marketview::flextable_cell_bold(ftbl, neg_ind, ind, marketview::mvl_green)
     }
   }
   return(ftbl)
@@ -414,7 +404,7 @@ ft_negatives <- function(ftbl, col_names = names(ftbl$vals)) {
 
 #' Set the Column Widths of a FlexTable Object
 #'
-#' @param ft a Flextable created by FlexTable() or bptools::flextable() functions
+#' @param ft a Flextable created by FlexTable() or marketview::flextable() functions
 #' @param col_widths A vector of the relative widths that you would like the columns to take
 #' @param table_length The total width of the FLextable in centimeters
 #'
@@ -437,75 +427,4 @@ flextable_widths <- function(ft, col_widths = rep(1, ft$numcol), table_length = 
 #' @export ft_widths
 ft_widths <- function(ft, col_widths = rep(1, ft$numcol), table_length = 21.42) {
   flextable_widths(ft, col_widths, table_length)
-}
-
-
-
-#' Flextable using the new Marketview Style Guide
-#'
-#' @param df The data which should populate the flextable
-#' @param size Which size should the resulting FlexTable's text be?
-#' @param padding How much padding should there be around the text?
-#'
-#' @export flextable_mvl
-flextable_mvl <- function(df, size = 12, padding = size/2){
-
-  df_ft <- ReporteRs::FlexTable(df,
-                                header.cell.props = ReporteRs::cellProperties(background.color = "#58595b", padding.top = padding, padding.bottom = padding),
-                                header.text.props = ReporteRs::textProperties(color = "white", font.size = size, font.family = "Helvetica Neue", font.weight = "bold"),
-                                header.par.props = ReporteRs::parProperties(text.align = "center"),
-                                body.cell.props = ReporteRs::cellProperties(padding.top = padding, padding.bottom = padding),
-                                body.par.props = ReporteRs::parProperties(text.align = "center"),
-                                body.text.props = ReporteRs::textProperties(color = "black", font.size = size, font.family = "Helvetica Neue"))
-
-  df_ft <- ReporteRs::setZebraStyle(df_ft, odd = "white", even = grDevices::rgb(220, 220, 220, maxColorValue = 255))
-  df_ft <- ReporteRs::setFlexTableBorders(df_ft,
-                                          inner.vertical = ReporteRs::borderProperties(color = "white", style = "solid"),
-                                          inner.horizontal = ReporteRs::borderProperties(color = "white", style = "solid"),
-                                          outer.vertical = ReporteRs::borderProperties(color = "white", style = "solid"),
-                                          outer.horizontal = ReporteRs::borderProperties(color = "white", style = "solid"))
-
-  df_ft$vals <- df
-
-  return(df_ft)
-}
-
-#' @rdname flextable_mvl
-#' @export ft_mvl
-ft_mvl <- function(df, size = 12, padding = size / 2) {
-  flextable_mvl(df, size, padding)
-}
-
-
-#' Highlight the 'Total' Rows/Columns using the new Marketview Style Guide
-#'
-#' @param ft The flextable object to highlight
-#' @param rows The index of the rows that should be highlighted
-#' @param cols The columns of the cells that should be highlighted
-#'
-#' @export flextable_totals
-flextable_totals <- function(ft, rows = ft$numrow, cols = 1:ft$numcol)
-{
-  existing_props <- ReporteRs::textProperties(font.size = ft$body.text.props[]$font.size,
-                                              font.weight = ft$body.text.props[]$font.weight, font.style = ft$body.text.props[]$font.style,
-                                              underlined = ft$body.text.props[]$underlined, font.family = ft$body.text.props[]$font.family,
-                                              vertical.align = ft$body.text.props[]$vertical.align)
-
-  ft[rows, cols] <- ReporteRs::chprop(existing_props, font.weight = "bold", color = "white")
-  ft[rows, cols] = ReporteRs::cellProperties(background.color = mvl_sky, padding = 4)
-  ft <- ReporteRs::setFlexTableBorders(ft,
-                                       inner.vertical = ReporteRs::borderProperties(color = "white", style = "solid"),
-                                       inner.horizontal = ReporteRs::borderProperties(color = "white", style = "solid"),
-                                       outer.vertical = ReporteRs::borderProperties(color = "white", style = "solid"),
-                                       outer.horizontal = ReporteRs::borderProperties(color = "white", style = "solid"))
-
-
-  return(ft)
-}
-
-
-#' @rdname flextable_totals
-#' @export ft_totals
-ft_totals <- function(ft, rows = ft$numrow, cols = 1:ft$numcol){
-  flextable_totals(ft, rows, cols)
 }

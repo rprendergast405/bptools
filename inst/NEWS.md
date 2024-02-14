@@ -1,4 +1,4 @@
-# marketview 0.5.9
+# bptools 0.5.9
 
 ## What's New
 - added mcda_process() for Australian IEO data
@@ -16,7 +16,7 @@
 ## Bug Fixes
 - fixed bug in add_water()
 
-# marketview 0.5.8
+# bptools 0.5.8
 
 ## What's New
 - scale_reorder(), from David Robinson
@@ -32,7 +32,7 @@
 - data_import() doesn't crash any more if there is no processing script or data. Just prints a message instead
 - tld_customer_data() drops tables on.exit(), so shouldn't litter the DB with tables if it crashes
 
-# marketview 0.5.7
+# bptools 0.5.7
 
 ## What's New
 - flextable_positives()
@@ -48,7 +48,7 @@
 ## Bug Fixes
 - updated tld_customer_data() to avoid the strange Oracle bug
 
-# marketview 0.5.6
+# bptools 0.5.6
 
 ## What's New
 - added "fssi" colour palette to scale_mvl()
@@ -66,7 +66,7 @@
 - catchment_picker() was not correctly filling polygons - fixed
 - fixed a bug with comparing the same item in multiple time periods in mcd_post_campaign()
 
-# marketview 0.5.5
+# bptools 0.5.5
 
 ## What's New
 - Several new tld_() functions. There could still be some bugs in these so let me know if anything goes awry
@@ -75,7 +75,7 @@
 - catchment_picker() has had a facelift! And should also run a bit quicker and have a cleaner environment
 - Updated TLD section in mcd_post_campaign()
 
-# marketview 0.5.4
+# bptools 0.5.4
 
 ## What's New
 - file_spellchecker() will check a script to see if character elements contain spelling errors
@@ -85,7 +85,7 @@
 ## Changes
 - theme_map_minimal() is now called theme_map(), and theme_map() becomes theme_map_old(). I never used theme_map, so it is annoying to have to type _minimal() every time. Sorry for any broken code
 
-# marketview 0.5.3
+# bptools 0.5.3
 
 ## What's New
 - Added case_fwhen() function to give ordered factor results when using case_when() statements
@@ -101,7 +101,7 @@
 - mcd_process() now deals with data from the mcd_bp_final_card_dataset2 table
 - pal_mvl() gives greys when it runs out of qualitative colours
 
-# marketview 0.5.2
+# bptools 0.5.2
 
 ## Small Changes
 - Slight update to diverging colour palettes in pal_mvl()
@@ -112,7 +112,7 @@
 - create_project() no longer uses the base_dir argument in script templates
 - zoom_definition() no longer needs to be added as a function to a ggplot object ie p = p + zoom_definition(shp_dat)() is now p = p + zoom_definition(shp_dat)
 
-# marketview 0.5.1
+# bptools 0.5.1
 
 ## What's New
 - zoom_place() for map boundaries based on place names
@@ -134,7 +134,7 @@
 - fixed a bug in make_mb_df() & make_cau_df() where duplicate polygons could be introduced
 
 
-# marketview 0.5
+# bptools 0.5
 
 ## What's New
 - Added scale_mvl() functions for creating using MVL branded colour/fill scales
@@ -157,7 +157,7 @@
 - mcd_process() will only process columns that are character variables, and leaves factors unchanged
 - better theme_mcd()
 
-# marketview 0.4.0
+# bptools 0.4.0
 
 ## What's New:
 * Added mvl_process() to treat the new standard analytics atributes
@@ -183,7 +183,7 @@
 * Changed the attribute type in 06 CAU data frames from character to integer
 * Fixed bugs with make_cau_df() and make_mb_df()
 
-# marketview 0.3.0
+# bptools 0.3.0
 
 ## What's New:
 * Updated to reflect the company re-brand:
@@ -192,7 +192,7 @@
     - Updated ggplot themes to use Helvetica Neue fonts (the former theme_mvl() is available as theme_mvl_old())
     - create_project() now imports the new PowerPoint template (as well as the old template as mvl_template_old.pptx). It should work as per the old template, but the ordering oof some of the content might have changed in some slide masters, so just be sure to double-check that everything is added in the right order.
 
-# marketview 0.2.3
+# bptools 0.2.3
 
 ## What's New:
 * Added get_meshblock_data() to import meshblock shapefiles
@@ -209,7 +209,7 @@
 * Updated flextable_row_highlight() to be able to highlight particular cells, rather than entire rows only
 * Scripts created by create_project() now use import_data() rather than a big mess of code
 
-# marketview 0.2.2
+# bptools 0.2.2
 
 ## What's New
 * Added some wrappers for ReporteRs functions which make dealing with FlexTables easier
@@ -226,7 +226,7 @@
   - imports mvl_template.pptx to the base directory for use with ReporteRs
   - output_archive is now moved to its own function, rather than ad-hoc code
 
-# marketview 0.2.1
+# bptools 0.2.1
 
 ## What's New
 * Added zoom_definition() to make selecting plot areas in maps easier
@@ -238,7 +238,7 @@
 * Added regional aggregation and a QSR indicator to mcd_process()
 
 
-# marketview 0.2.0
+# bptools 0.2.0
 
 ## What's new
 * Added catchment_picker() - a shiny app to identify and save a catchment for a merchant (requires shiny, leaflet, sp, rgeos, rgdal)
@@ -250,7 +250,7 @@
 * mcd_process imputes "" when CUST_TYPE is null
 * renamed the attributes of nz_cau_13.spdf & nz_cau_06.spdf to be consistent
 
-# marketview 0.1.6
+# bptools 0.1.6
 
 ## What's new
 * Updated theme_mvl to include more distinct grid lines - the version without them is theme_mvl_old
@@ -264,7 +264,7 @@
 ## Bug fixes
 * Fixed the theme_mcd
 
-# marketview 0.1.5
+# bptools 0.1.5
 
 ## What's new
 * Added CAU and MB maps for Tauranga
@@ -275,7 +275,7 @@
 * Small updates to create_project
 
 
-# marketview 0.1.4
+# bptools 0.1.4
 
 ## What's New
 * Added shapefiles for NZ CAUs because I had to use that data this morning.
@@ -285,7 +285,7 @@
 * `create_project` has been updated to create scripts that are ready to use with the correct project name and directories.
 
 
-# marketview 0.1.3
+# bptools 0.1.3
 
 ## What's New
 * Added a `NEWS.md` file to track changes to the package.

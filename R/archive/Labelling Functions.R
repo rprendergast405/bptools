@@ -1,4 +1,4 @@
-# labelling_functions.R
+# mvl_functions.R
 # -------------------------------------------------------------------------
 # A script with useful functions for displaying numeric values in publications
 # that humans will be reading
